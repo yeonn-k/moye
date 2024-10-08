@@ -1,0 +1,6 @@
+{
+  "extends": ["react-app", "plugin:prettier/recommended"],
+  "rules": {
+    "prettier/prettier": "error" // Prettier 규칙을 ESLint 오류로 표시
+  }
+}

@@ -4,6 +4,7 @@ const theme: DefaultTheme = {
   color: {
     paleGreen: '#DBF7D2',
     green: '#2DB400',
+    lightGreen: '#90E572',
     darkGreen: '#2C910A',
     deepGreen: '#134303',
     paleCoral: '#FFD4C6',

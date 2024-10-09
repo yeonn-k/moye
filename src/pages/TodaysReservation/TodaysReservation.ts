@@ -1,13 +1,10 @@
 import styled from 'styled-components';
 
-interface CardProps {
-  color: string;
-}
-
 export const S = {
   TodaysReservation: styled.div`
     margin: 0 auto;
     margin-top: 80px;
+    box-sizing: border-box;
 
     width: 1440px;
   `,
@@ -21,6 +18,7 @@ export const S = {
     width: 1386px;
     height: 426px;
     padding: 18px;
+    box-sizing: border-box;
 
     border: 3px solid ${(props) => props.theme.color.green};
     border-radius: 5px;
@@ -72,11 +70,9 @@ export const S = {
     width: 1386px;
     height: 404px;
   `,
-  Card: styled.div<CardProps>`
+  Card: styled.div`
     width: 448px;
     height: 404px;
-    margin-top: 20px;
-    border-radius: 5px;
-    background-color: ${(props) => props.color};
+    background-color: ${(props) => props.theme.color.paleCoral};
   `,
 };

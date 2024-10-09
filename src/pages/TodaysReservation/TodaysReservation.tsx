@@ -25,9 +25,9 @@ const TodaysReservation = () => {
         <S.TimelineBox></S.TimelineBox>
       </S.UpperBox>
       <S.DashBoardBox>
-        <S.Card />
-        <S.Card />
-        <S.Card />
+        <S.Card color={(props) => props.theme.color.paleCoral} />
+        <S.Card color={(props) => props.theme.color.paleGreen} />
+        <S.Card color={(props) => props.theme.color.paleNavy} />
       </S.DashBoardBox>
     </S.TodaysReservation>
   );

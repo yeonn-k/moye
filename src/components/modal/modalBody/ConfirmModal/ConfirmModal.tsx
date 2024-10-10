@@ -1,10 +1,13 @@
-import React from 'react';
 import { S } from './ConfirmModal';
 
-const ConfirmModal = () => {
+interface ConfirmModalProps {
+  onClose: () => void;
+}
+
+const ConfirmModal = ({ onClose }: ConfirmModalProps) => {
   return (
     <S.ModalBox>
-      <S.ModalCloseButton>&times;</S.ModalCloseButton>
+      <S.ModalCloseButton onClick={onClose}>&times;</S.ModalCloseButton>
 
       <S.ModalText>확인하시겠습니까?</S.ModalText>
 

@@ -9,6 +9,7 @@ function App() {
       <ThemeProvider theme={theme}>
         <GlobalStyle />
         <AppRouter />
+        {/* <Modal /> */}
       </ThemeProvider>
     </>
   );

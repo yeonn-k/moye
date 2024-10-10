@@ -1,22 +1,24 @@
-import type { Dispatch, SetStateAction } from 'react';
+import { ReactNode, MouseEvent } from 'react';
 import { S } from './ModalBox.ts';
-import ConfirmModal from '../modalBody/ConfirmModal/ConfirmModal.tsx';
+import { useDispatch } from 'react-redux';
+import { closeModal } from '../../../store/slices/modal/modalSlice';
 
 interface ModalBoxProps {
-  isModalOpen: boolean;
-  setIsModalOpen: Dispatch<SetStateAction<boolean>>;
+  children: ReactNode;
 }
 
-const ModalBox = ({ isModalOpen, setIsModalOpen }: ModalBoxProps) => {
+const ModalBox = ({ children }: ModalBoxProps) => {
+  const dispatch = useDispatch();
+
+  const handleModalDimClick = (e: MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      dispatch(closeModal());
+    }
+  };
   return (
-    <>
-      {isModalOpen && (
-        <S.ModalContainer>
-          {/* ModalBody: 모달 열림 상태 별 조건 부 렌더링 */}
-          {/* <ConfirmModal /> */}
-        </S.ModalContainer>
-      )}
-    </>
+    <S.ModalContainer onClick={handleModalDimClick}>
+      {children}
+    </S.ModalContainer>
   );
 };
 

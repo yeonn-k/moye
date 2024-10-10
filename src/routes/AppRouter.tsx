@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import EntryPoint from '../pages/EntryPoint/EntryPoint.tsx';
 import Login from '../pages/Login/Login.tsx';
+import SignUp from '../pages/SignUp/SignUp.tsx';
 
 function AppRouter() {
   const router = createBrowserRouter([
@@ -11,6 +12,10 @@ function AppRouter() {
     {
       path: '/login',
       element: <Login />,
+    },
+    {
+      path: '/signup',
+      element: <SignUp />,
     },
   ]);
   return <RouterProvider router={router} />;

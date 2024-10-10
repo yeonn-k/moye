@@ -1,5 +1,6 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Main from '../components/Main';
+import StoreDetail from '../pages/StoreDetail/StoreDetail.tsx';
 
 function AppRouter() {
   const router = createBrowserRouter([
@@ -17,7 +18,7 @@ function AppRouter() {
         },
         {
           path: 'store',
-          element: <div>This is store page</div>,
+          element: <StoreDetail />,
         },
       ],
     },

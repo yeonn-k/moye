@@ -61,6 +61,8 @@ export const S = {
     height: 326px;
     border-radius: 5px;
     border: 4px solid #89e46a;
+
+    padding: 24px;
   `,
 
   DashBoardBox: styled.section`

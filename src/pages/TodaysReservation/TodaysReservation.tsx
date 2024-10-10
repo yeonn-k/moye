@@ -1,6 +1,7 @@
 import React from 'react';
 import { S } from './TodaysReservation';
 import UserInput from '../../components/common/UserInput/UserInput.tsx';
+import TimelineBox from './TimelineBox/TimelineBox.tsx';
 
 const TodaysReservation = () => {
   return (
@@ -22,7 +23,9 @@ const TodaysReservation = () => {
             />
           </S.InputBox>
         </S.FlexBox>
-        <S.TimelineBox></S.TimelineBox>
+        <S.TimelineBox>
+          <TimelineBox />
+        </S.TimelineBox>
       </S.UpperBox>
       <S.DashBoardBox>
         <S.Card />

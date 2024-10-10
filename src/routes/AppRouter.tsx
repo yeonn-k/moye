@@ -1,12 +1,12 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import Main from '../components/Main';
+import EntryPoint from '../pages/EntryPoint/EntryPoint.tsx';
 import Login from '../pages/Login/Login.tsx';
 
 function AppRouter() {
   const router = createBrowserRouter([
     {
       path: '/',
-      element: <Main />,
+      element: <EntryPoint />,
     },
     {
       path: '/login',

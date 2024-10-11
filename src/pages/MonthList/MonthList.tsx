@@ -2,8 +2,14 @@ import React from 'react';
 import { S } from './MonthList';
 import Dropdown from '../../components/common/Dropdown/Dropdown.tsx';
 import CalendarWrap from './CalendarWrap/CalendarWrap.tsx';
+import { useDispatch } from 'react-redux';
+import { openModal } from '../../store/slices/modal/modalSlice.ts';
 
 const MonthList = () => {
+  const dispatch = useDispatch();
+  const handleOpenSearchModal = () => {
+    dispatch(openModal('search'));
+  };
   return (
     <S.MonthList>
       <S.FlexBoxBetween>
@@ -13,7 +19,7 @@ const MonthList = () => {
         </S.FlexBox>
         <S.AlignCenter>
           <Dropdown />
-          <S.SearchBtn>
+          <S.SearchBtn onClick={handleOpenSearchModal}>
             <S.IconImg />
           </S.SearchBtn>
         </S.AlignCenter>

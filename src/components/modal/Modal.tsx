@@ -19,8 +19,8 @@ const Modal = () => {
     switch (modalType) {
       case 'confirm':
         return <ConfirmModal onClose={handleModalCloseButtonClick} />;
-      // case 'search':
-      //   return <SearchModal onClose={handleModalCloseButtonClick} />;
+      case 'search':
+        return <SearchModal onClose={handleModalCloseButtonClick} />;
       default:
         return null;
     }

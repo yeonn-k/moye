@@ -93,7 +93,7 @@ const EditStoreDetail = () => {
               </div>
             </li>
             <li>
-              <label htmlFor="address">매장 주소</label>
+              <label htmlFor="address">주소</label>
               <div>
                 <input
                   type="text"
@@ -104,7 +104,7 @@ const EditStoreDetail = () => {
               </div>
             </li>
             <li>
-              <label htmlFor="phoneNumber">매장 전화번호</label>
+              <label htmlFor="phoneNumber">전화번호</label>
               <div>
                 <input
                   type="text"
@@ -116,7 +116,7 @@ const EditStoreDetail = () => {
               </div>
             </li>
             <li>
-              <label htmlFor="numberOfSeats">매장 좌석 수</label>
+              <label htmlFor="numberOfSeats">좌석 수</label>
               <div>
                 <input
                   type="number"
@@ -142,7 +142,7 @@ const EditStoreDetail = () => {
               </div>
             </li>
             <li>
-              <label htmlFor="introduction">매장 소개글</label>
+              <label htmlFor="introduction">소개글</label>
               <div>
                 <input
                   type="text"
@@ -153,7 +153,7 @@ const EditStoreDetail = () => {
               </div>
             </li>
             <li>
-              <span>매장 영업시간</span>
+              <span>영업시간</span>
               <div>
                 평일&nbsp;
                 <ESD.TimeInput
@@ -197,7 +197,7 @@ const EditStoreDetail = () => {
               </div>
             </li>
             <li>
-              <span>매장 휴식시간</span>
+              <span>휴식시간</span>
               <div>
                 평일&nbsp;
                 <ESD.TimeInput
@@ -243,37 +243,43 @@ const EditStoreDetail = () => {
           </ul>
         </ESD.BodyLeft>
         <ESD.BodyRight>
-          <div>
-            매장 사진 업로드
-            <img
-              src="imageUrl"
-              alt="storeImage"
-              onClick={() => {
-                let list = [''];
-                closedDays.forEach((item) => list.push(dayOfTheWeeks[item]));
-                console.log(list);
-                console.log(inputs);
-              }}
-            />
-          </div>
           <ul>
             <li>
-              <label htmlFor="storeName">매장 정기 휴무일 설정</label>
-              {dayOfTheWeeks.map((day, index) => (
-                <>
-                  <input
-                    id={index.toString()}
-                    type="checkbox"
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                      changeHandler(e.currentTarget.checked, index);
-                    }}
-                    checked={closedDays.includes(index) ? true : false}
-                  />
-                  {day}
-                </>
-              ))}
+              <img
+                src="imageUrl"
+                alt="사진 업로드"
+                onClick={() => {
+                  let list = [''];
+                  closedDays.forEach((item) => list.push(dayOfTheWeeks[item]));
+                  console.log(list);
+                  console.log(inputs);
+                }}
+              />
             </li>
-            <li></li>
+            <li>
+              <span>정기 휴무일</span>
+              <div>
+                {dayOfTheWeeks.map((day, index) => (
+                  <label>
+                    <input
+                      id={index.toString()}
+                      type="checkbox"
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        changeHandler(e.currentTarget.checked, index);
+                      }}
+                      checked={closedDays.includes(index) ? true : false}
+                    />
+                    <span>{day}</span>
+                  </label>
+                ))}
+              </div>
+            </li>
+            <li>
+              <span>비정기 휴무일</span>
+              <div>
+                <button>달력에서 추가하기</button>
+              </div>
+            </li>
           </ul>
         </ESD.BodyRight>
       </ESD.Body>

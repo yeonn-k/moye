@@ -48,6 +48,31 @@ export const ESD = {
       border: 2px solid ${(props) => props.theme.color.green};
       border-radius: 5px;
     }
+    button {
+      padding: 8px 12px;
+      border: 2px solid ${(props) => props.theme.color.green};
+      border-radius: 10px;
+      background: transparent;
+      cursor: pointer;
+    }
+    li div label {
+      cursor: pointer;
+      input {
+        display: none;
+      }
+      span {
+        width: 30px;
+        position: relative;
+        display: inline-block;
+        background: white;
+        margin: 4px 4px;
+        padding: 4px 8px;
+        color: ${(props) => props.theme.color.green};
+        border: 1px solid ${(props) => props.theme.color.green};
+        border-radius: 10px;
+        font-size: 13px;
+      }
+    }
   `,
   TimeInput: styled.input`
     width: 50px;

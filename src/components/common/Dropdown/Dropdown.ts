@@ -1,7 +1,9 @@
 import styled from 'styled-components';
 
 interface DropdownProps {
-  open: boolean;
+  open?: boolean;
+  width?: string;
+  height?: string;
 }
 
 export const S = {
@@ -13,42 +15,60 @@ export const S = {
     border-right: 1px solid ${(props) => props.theme.color.green};
     border-bottom: ${(props) =>
       props.open ? 'none' : `1px solid ${props.theme.color.green}`};
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    border-bottom-left-radius: ${(props) => (props.open ? 'none' : '10px')};
-    border-bottom-right-radius: ${(props) => (props.open ? 'none' : '10px')};
-    width: 100px;
-    height: 30px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-left-radius: ${(props) => (props.open ? 'none' : '5px')};
+    border-bottom-right-radius: ${(props) => (props.open ? 'none' : '5px')};
+    width: ${(props) => props.width};
+    height: ${(props) => props.height};
     display: flex;
-    justify-content: center;
     align-items: center;
+    padding-left: 12px;
+    background-color: #fff;
   `,
   DropdownButton: styled.button`
     background: none;
     cursor: pointer;
-    border-radius: 10px;
+    border-radius: 5px;
     outline: none;
     border: none;
     z-index: 99;
   `,
   DropdownList: styled.div<DropdownProps>`
+    display: flex;
+    gap: 2px;
     position: absolute;
-    width: 100%;
-    border-radius: 10px;
+    width: 102%;
+    border-radius: 5px;
     border: 1px solid ${(props) => props.theme.color.green};
     font-size: 13px;
     margin-top: 15px;
     display: ${(props) => (props.open ? 'block' : 'none')};
-    padding-top: 15px;
     top: -16px;
     left: -1px;
+    background-color: #fff;
+    padding: 3px;
   `,
-  DropdownItem: styled.div`
-    margin: 20px 0;
-    padding: 3px 22px;
+  DropdownItem: styled.div<DropdownProps>`
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    height: ${(props) => props.height};
+    padding: 3px 14px;
+    border-radius: 5px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
+    &:first-child {
+      margin-top: 28px;
+    }
+    &:hover {
+      background-color: ${(props) => props.theme.color.paleGreen};
+    }
   `,
   DropdownArrowDown: styled.div`
+    position: absolute;
+    right: 12px;
     width: 0;
     height: 0;
     border-left: 5px solid transparent;
@@ -58,6 +78,8 @@ export const S = {
     cursor: pointer;
   `,
   DropdownArrowUp: styled.div`
+    position: absolute;
+    right: 12px;
     width: 0;
     height: 0;
     z-index: 99;

@@ -4,6 +4,7 @@ import EntryPoint from '../pages/EntryPoint/EntryPoint.tsx';
 import Login from '../pages/Login/Login.tsx';
 import SignUp from '../pages/SignUp/SignUp.tsx';
 import ReservationList from '../pages/TodaysReservation/TodaysReservation.tsx';
+import OwnerProfile from '../pages/OwnerProfile/OwnerProfile.tsx';
 
 function AppRouter() {
   const router = createBrowserRouter([
@@ -22,6 +23,10 @@ function AppRouter() {
     {
       path: '/today',
       element: <TodaysReservation />,
+    },
+    {
+      path: '/owner',
+      element: <OwnerProfile />,
     },
   ]);
   return <RouterProvider router={router} />;

@@ -1,23 +1,44 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
+import { useDispatch } from 'react-redux';
 import { S } from './Login';
+import { loginService } from '../../services/auth/authService';
+import { loginAction } from '../../store/slices/auth/authSlice';
 // import ConfirmButton from '../../components/common/ConfirmButton/ConfirmButton.tsx';
 // import UserInput from '../../components/common/UserInput/UserInput.tsx';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [userForm, setUserForm] = useState({
+    email: '',
+    password: '',
+  });
+  const dispatch = useDispatch();
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleUserFormChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    if (name === 'email') {
-      setEmail(value);
-    } else if (name === 'password') {
-      setPassword(value);
-    }
+    setUserForm((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
   };
 
-  const handleSubmitButtonClick = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmitButtonClick = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const { email, password } = userForm;
+    if (userForm.email === '' || userForm.password === '') {
+      return;
+    }
+    try {
+      // TODO: DB 연결 후 테스트 필요
+      const response = await loginService(email, password);
+      dispatch(
+        loginAction({
+          token: response.data.body.access,
+          user: response.data.body.user,
+        }),
+      );
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   return (
@@ -32,15 +53,15 @@ const Login = () => {
             name="email"
             placeholder="이메일"
             type="email"
-            value={email}
-            onChange={handleInputChange}
+            value={userForm.email}
+            onChange={handleUserFormChange}
           />
           <S.UserInput
             name="password"
             placeholder="비밀번호"
             type="password"
-            value={password}
-            onChange={handleInputChange}
+            value={userForm.password}
+            onChange={handleUserFormChange}
           />
         </S.UserInputBox>
         {/* <ConfirmButton action="confirm" /> */}

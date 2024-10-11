@@ -15,7 +15,7 @@ const StoreDetail = () => {
     <>
       <SD.TopBar>
         <p>매장이름</p>
-        <Link to="edit">
+        <Link to="edit" state={{ data: storeData.id }}>
           <button onClick={handleEditStoreClick}>편집</button>
         </Link>
       </SD.TopBar>

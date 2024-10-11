@@ -55,6 +55,9 @@ export const ESD = {
       background: transparent;
       cursor: pointer;
     }
+    li span {
+      width: 25%;
+    }
     li div label {
       cursor: pointer;
       input {
@@ -71,6 +74,21 @@ export const ESD = {
         border: 1px solid ${(props) => props.theme.color.green};
         border-radius: 10px;
         font-size: 13px;
+        transition: 0.5s;
+        user-select: none;
+        overflow: hidden;
+      }
+      span:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: white;
+      }
+      input:checked ~ span {
+        color: white;
+        background: ${(props) => props.theme.color.darkGreen};
       }
     }
   `,

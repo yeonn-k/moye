@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ESD } from './EditStoreDetail';
 import { useLocation } from 'react-router-dom';
 
@@ -27,11 +27,22 @@ const EditStoreDetail = () => {
   const location = useLocation(); // access to location.state
   const [inputs, setInputs] = useState(initialState);
   const [closedDays, setClosedDays] = useState<number[]>([]);
+  const [imgFile, setImgFile] = useState('');
+  const imgRef = useRef();
   const handleStoreDetailsInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputs({
       ...inputs,
       [e.target.name]: e.target.value,
     });
+  };
+  const handleHourInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const hour = Number(e.target.value);
+    if (!isNaN(hour) && hour >= 0 && hour <= 24) {
+      setInputs({
+        ...inputs,
+        [e.target.name]: e.target.value,
+      });
+    }
   };
   const changeHandler = (checked: boolean, id: number) => {
     if (checked) {
@@ -41,7 +52,13 @@ const EditStoreDetail = () => {
     }
   };
   const handleUploadPictureClick = () => {
-    console.log('사진 업로드');
+    const file = imgRef.current.files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setImgFile(reader.result);
+    };
+    // console.log('사진 업로드');
   };
   const handlePostFormClick = () => {
     console.log('폼 제출');
@@ -129,7 +146,7 @@ const EditStoreDetail = () => {
               </div>
             </li>
             <li>
-              <label htmlFor="numberPerTable">테이블 당 예약 가능한 인원</label>
+              <label htmlFor="numberPerTable">테이블 최대 인원</label>
               <div>
                 <input
                   type="number"
@@ -245,16 +262,19 @@ const EditStoreDetail = () => {
         <ESD.BodyRight>
           <ul>
             <li>
-              <img
-                src="imageUrl"
-                alt="사진 업로드"
-                onClick={() => {
-                  let list = [''];
-                  closedDays.forEach((item) => list.push(dayOfTheWeeks[item]));
-                  console.log(list);
-                  console.log(inputs);
-                }}
-              />
+              <div>
+                <img
+                  src={imgFile ? imgFile : '../StoreDetail/halloween.jpg'}
+                  alt="프로필 이미지"
+                />
+                <input
+                  type="file"
+                  accept="image/*"
+                  id="profileImg"
+                  onChange={handleUploadPictureClick}
+                  ref={imgRef}
+                />
+              </div>
             </li>
             <li>
               <span>정기 휴무일</span>

@@ -10,7 +10,9 @@ const Nav = () => {
   return (
     <N.NavBar>
       <div>
-        <img className="nav_logo" src="프로젝트로고url" alt="navLogo"></img>
+        <Link to="/">
+          <img className="nav_logo" src="프로젝트로고url" alt="navLogo"></img>
+        </Link>
       </div>
       <N.NavMenu>
         <li>

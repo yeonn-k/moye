@@ -23,6 +23,11 @@ export const S = {
     border: 3px solid ${(props) => props.theme.color.green};
     border-radius: 5px;
   `,
+  FlexBox: styled.div`
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+  `,
   Todays: styled.span`
     font-size: 28px;
     font-weight: 700;
@@ -42,13 +47,6 @@ export const S = {
     border-radius: 5px;
     border: 1px solid ${(props) => props.theme.color.lightGreen};
   `,
-  FlexBox: styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-  `,
-
   SearchIcon: styled.div`
     margin-left: 5px;
     width: 18px;

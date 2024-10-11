@@ -3,6 +3,7 @@ import TodaysReservation from '../pages/TodaysReservation/TodaysReservation.tsx'
 import EntryPoint from '../pages/EntryPoint/EntryPoint.tsx';
 import Login from '../pages/Login/Login.tsx';
 import SignUp from '../pages/SignUp/SignUp.tsx';
+import ReservationList from '../pages/TodaysReservation/TodaysReservation.tsx';
 
 function AppRouter() {
   const router = createBrowserRouter([

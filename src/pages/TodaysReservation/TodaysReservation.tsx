@@ -24,7 +24,9 @@ const TodaysReservation = () => {
             />
           </S.InputBox>
         </S.FlexBox>
-        <S.TimelineBox>{/* <TimelineBox /> */}</S.TimelineBox>
+        <S.TimelineBox>
+          <TimelineBox />
+        </S.TimelineBox>
       </S.UpperBox>
       <CanvanBoard />
     </S.TodaysReservation>

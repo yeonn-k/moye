@@ -1,4 +1,4 @@
-import Timeline, { DateHeader } from 'react-calendar-timeline';
+import Timeline, { TimelineHeaders, DateHeader } from 'react-calendar-timeline';
 import moment from 'moment';
 import 'react-calendar-timeline/lib/Timeline.css';
 
@@ -82,10 +82,10 @@ const TimelineBox = () => {
       lineHeight={48}
       itemHeightRatio={0.8}
     >
-      <DateHeader
-        unit="hour" // 시간 단위로 헤더 표시
-        labelFormat="HH" // 시간을 HH 형식으로 표시
-      />
+      {/* <TimelineHeaders> */}
+      <DateHeader unit="hour" />
+      <DateHeader />
+      {/* </TimelineHeaders> */}
     </Timeline>
   );
 };

@@ -64,17 +64,4 @@ export const S = {
 
     padding: 24px;
   `,
-
-  DashBoardBox: styled.section`
-    display: flex;
-    justify-content: space-between;
-
-    width: 1386px;
-    height: 404px;
-  `,
-  Card: styled.div`
-    width: 448px;
-    height: 404px;
-    background-color: ${(props) => props.theme.color.paleCoral};
-  `,
 };

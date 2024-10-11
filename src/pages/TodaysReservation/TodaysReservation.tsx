@@ -2,6 +2,7 @@ import React from 'react';
 import { S } from './TodaysReservation';
 import UserInput from '../../components/common/UserInput/UserInput.tsx';
 import TimelineBox from './TimelineBox/TimelineBox.tsx';
+import CanvanBoard from './CanvanBoard/CanvanBoard.tsx';
 
 const TodaysReservation = () => {
   return (
@@ -23,15 +24,9 @@ const TodaysReservation = () => {
             />
           </S.InputBox>
         </S.FlexBox>
-        <S.TimelineBox>
-          <TimelineBox />
-        </S.TimelineBox>
+        <S.TimelineBox>{/* <TimelineBox /> */}</S.TimelineBox>
       </S.UpperBox>
-      <S.DashBoardBox>
-        <S.Card />
-        <S.Card />
-        <S.Card />
-      </S.DashBoardBox>
+      <CanvanBoard />
     </S.TodaysReservation>
   );
 };

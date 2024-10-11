@@ -1,3 +1,4 @@
+import React from 'react';
 import { S } from './OwnerProfile';
 
 const OwnerProfile = () => {

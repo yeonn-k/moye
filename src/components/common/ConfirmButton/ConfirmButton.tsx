@@ -10,7 +10,7 @@ interface ConfirmButtonProps {
 const ConfirmButton = ({ action, width, height }: ConfirmButtonProps) => {
   return (
     <S.ConfirmButton action={action} width={width} height={height}>
-      확인
+      {action === 'confirm' ? '확인' : '취소'}
     </S.ConfirmButton>
   );
 };

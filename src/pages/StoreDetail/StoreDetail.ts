@@ -1,14 +1,7 @@
 import styled from 'styled-components';
 
 export const SD = {
-  StoreDetail: styled.div`
-    height: 100%;
-  `,
-  StoreDetailBody: styled.div`
-    padding: 8px 12px;
-    display: flex;
-  `,
-  StoreDetailTopBar: styled.div`
+  TopBar: styled.div`
     margin: 0px 12px;
     padding: 8px 12px;
     justify-content: space-between;
@@ -21,21 +14,36 @@ export const SD = {
       font-weight: bold;
       color: ${(props) => props.theme.color.green};
     }
+    button {
+      padding: 8px 12px;
+      border: 2px solid ${(props) => props.theme.color.green};
+      border-radius: 10px;
+      background: transparent;
+      cursor: pointer;
+    }
   `,
-  StoreDetailBodyLeft: styled.div`
+  Body: styled.div`
+    padding: 8px 12px;
+    display: flex;
+    height: 100%;
+  `,
+  BodyLeft: styled.div`
     padding: 8px 12px;
     width: 40%;
+    li {
+      margin: 12px 8px;
+    }
     span {
       font-weight: bold;
     }
     img {
-      width: 600px;
-      height: 400px;
+      width: 80%;
       object-fix: contain;
       border: 1px solid;
+      margin: 12px 24px;
     }
   `,
-  StoreDetailBodyRight: styled.div`
+  BodyRight: styled.div`
     padding: 8px 12px;
     width: 60%;
   `,

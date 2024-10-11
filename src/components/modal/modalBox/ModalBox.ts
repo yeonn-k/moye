@@ -12,7 +12,6 @@ export const S = {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: ${(props) => props.theme.color.gray};
-    opacity: 0.8;
+    background-color: rgba(0, 0, 0, 0.5);
   `,
 };

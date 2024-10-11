@@ -1,26 +1,26 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface ModalState {
-  isConfirmModalOpen: boolean;
+  modalType: string;
 }
 
 const initialState: ModalState = {
-  isConfirmModalOpen: false,
+  modalType: '',
 };
 
 const modalSlice = createSlice({
   name: 'modal',
   initialState,
   reducers: {
-    openConfirmModal(state) {
-      state.isConfirmModalOpen = true;
+    openModal(state, action: PayloadAction<string>) {
+      state.modalType = action.payload;
     },
-    // 모든 모달의 상태를 false로 업데이트하는 메서드
+    // 모든 모달의 상태를 ''로 업데이트하는 메서드
     closeModal(state) {
-      state.isConfirmModalOpen = false;
+      state.modalType = '';
     },
   },
 });
 
-export const { openConfirmModal, closeModal } = modalSlice.actions;
+export const { openModal, closeModal } = modalSlice.actions;
 export default modalSlice.reducer;

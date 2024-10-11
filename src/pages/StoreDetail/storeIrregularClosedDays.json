@@ -1,0 +1,22 @@
+{
+  "weekdayOpeningHour": "10:00",
+  "weekdayClosingHour": "22:00",
+  "weekendOpeningHour": "11:00",
+  "weekendClosedHour": "23:00",
+  "weekdayBreakStart": "14:00",
+  "weekdayBreakEnd": "17:00",
+  "weekendBreakStart": "14:00",
+  "weekendBreakEnd": "17:00",
+  "regularClosedDays": [0, 1],
+  "irregularClosedDays": [
+    {
+      "date": "2024-10-10"
+    },
+    {
+      "date": "2024-10-14"
+    },
+    {
+      "date": "2024-10-16"
+    }
+  ]
+}

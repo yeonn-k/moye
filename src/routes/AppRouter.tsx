@@ -1,9 +1,9 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import TodaysReservation from '../pages/TodaysReservation/TodaysReservation.tsx';
 import EntryPoint from '../pages/EntryPoint/EntryPoint.tsx';
 import Login from '../pages/Login/Login.tsx';
 import SignUp from '../pages/SignUp/SignUp.tsx';
-import ReservationList from '../pages/TodaysReservation/TodaysReservation.tsx';
+import TodaysReservation from '../pages/TodaysReservation/TodaysReservation.tsx';
+import MonthList from '../pages/MonthList/MonthList.tsx';
 import OwnerProfile from '../pages/OwnerProfile/OwnerProfile.tsx';
 
 function AppRouter() {
@@ -23,6 +23,10 @@ function AppRouter() {
     {
       path: '/today',
       element: <TodaysReservation />,
+    },
+    {
+      path: '/month',
+      element: <MonthList />,
     },
     {
       path: '/owner',

@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import defaultAvatar from '../../assets/images/defaultAvatar.png';
 
 export const S = {
   OwnerProfileBox: styled.div`
@@ -27,7 +28,9 @@ export const S = {
     width: 180px;
     height: 180px;
     border-radius: 50%;
-    background-color: ${(props) => props.theme.color.gray};
+    background-image: url(${defaultAvatar});
+    background-size: cover;
+    background-position: center;
   `,
   AvatarSelectButton: styled.button`
     all: unset;
@@ -89,7 +92,7 @@ export const S = {
   AddMyStoreLink: styled(Link)`
     width: 280px;
     height: 280px;
-    background-color: #d9d9d9;
+    background-color: ${(props) => props.theme.color.paleGray};
     border-radius: 10px;
     display: flex;
     align-items: center;

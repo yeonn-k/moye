@@ -29,6 +29,20 @@ interface LoginResponse {
   };
 }
 
+interface GetUserRequest {
+  email: string;
+}
+
+interface GetUserResponse {
+  status: number;
+  data: {
+    body: {
+      name: string;
+      phone: string;
+    };
+  };
+}
+
 export const signUpService = async ({
   email,
   name,
@@ -65,6 +79,19 @@ export const loginService = async ({ email, password }: LoginRequest) => {
     }
   } catch (e) {
     console.error('로그인 에러: ', e);
+  }
+};
+
+export const getUserByEmailService = async ({ email }: GetUserRequest) => {
+  try {
+    const response: GetUserResponse = await api.get(`/users?email=${email}`);
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      return null;
+    }
+  } catch (e) {
+    console.error('회원 조회 에러: ', e);
   }
 };
 

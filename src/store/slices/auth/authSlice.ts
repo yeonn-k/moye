@@ -4,6 +4,7 @@ export interface LoginUser {
   id: number;
   email: string;
   name: string | null;
+  phone: string | null;
   avatarUrl: string | null;
 }
 
@@ -28,12 +29,21 @@ const authSlice = createSlice({
       state.token = action.payload.token;
       state.user = action.payload.user;
     },
-    logout(state) {
+    updateUserProfileAction(state, action: PayloadAction<Partial<LoginUser>>) {
+      if (state.user) {
+        state.user = {
+          ...state.user,
+          ...action.payload,
+        };
+      }
+    },
+    logoutAction(state) {
       state.token = null;
       state.user = null;
     },
   },
 });
 
-export const { loginAction, logout } = authSlice.actions;
+export const { loginAction, logoutAction, updateUserProfileAction } =
+  authSlice.actions;
 export default authSlice.reducer;

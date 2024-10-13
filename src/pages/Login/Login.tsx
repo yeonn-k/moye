@@ -46,6 +46,7 @@ const Login = () => {
           id: decoded.id,
           email: loginForm.email,
           name: null,
+          phone: null,
           avatarUrl: null,
         };
 

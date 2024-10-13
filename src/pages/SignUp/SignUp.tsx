@@ -1,7 +1,11 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { S } from './SignUp';
+import { signUpService } from '../../services/auth/authService';
 
 const SignUp = () => {
+  // TODO: 이메일 등록 여부 중복 체크 로직, 버튼 추가
+
   const [userForm, setUserForm] = useState({
     email: '',
     password: '',
@@ -9,6 +13,7 @@ const SignUp = () => {
     name: '',
     phone: '',
   });
+  const navigate = useNavigate();
 
   const handleUserFormChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -18,9 +23,22 @@ const SignUp = () => {
     }));
   };
 
-  const handleSubmitButtonClick = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmitButtonClick = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(userForm);
+    const { email, password, name, phone } = userForm;
+    const signUpForm = { email, password, name, phone };
+    if (!email || !password || !name || !phone) {
+      return;
+    }
+    try {
+      const response = await signUpService(signUpForm);
+      if (response) {
+        // TODO: 회원가입 완료 안내 표시는 어떻게 할 지 고민해보기
+        navigate('/login');
+      }
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   return (

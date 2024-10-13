@@ -8,7 +8,6 @@ import OwnerProfile from '../pages/OwnerProfile/OwnerProfile.tsx';
 import StoreDetail from '../pages/StoreDetail/StoreDetail.tsx';
 import EditStoreDetail from '../pages/EditStoreDetail/EditStoreDetail.tsx';
 
-
 function AppRouter() {
   const router = createBrowserRouter([
     {

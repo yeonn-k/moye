@@ -1,9 +1,10 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
 import { S } from './Login';
 import { loginService } from '../../services/auth/authService';
 import { loginAction } from '../../store/slices/auth/authSlice';
-// import ConfirmButton from '../../components/common/ConfirmButton/ConfirmButton.tsx';
 // import UserInput from '../../components/common/UserInput/UserInput.tsx';
 
 const Login = () => {
@@ -12,6 +13,7 @@ const Login = () => {
     password: '',
   });
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleUserFormChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -24,18 +26,38 @@ const Login = () => {
   const handleSubmitButtonClick = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const { email, password } = userForm;
+    const loginForm = { email, password };
     if (userForm.email === '' || userForm.password === '') {
       return;
     }
     try {
-      // TODO: DB 연결 후 테스트 필요
-      const response = await loginService(email, password);
-      dispatch(
-        loginAction({
-          token: response.data.body.access,
-          user: response.data.body.user,
-        }),
-      );
+      const response = await loginService(loginForm);
+      if (response) {
+        const jwtToken = response.data.body.access;
+        const decoded: {
+          exp: number;
+          iat: number;
+          id: number;
+          jti: string;
+          role: string;
+        } = jwtDecode(jwtToken);
+
+        const loginUser = {
+          id: decoded.id,
+          email: loginForm.email,
+          name: null,
+          avatarUrl: null,
+        };
+
+        dispatch(
+          loginAction({
+            token: response.data.body.access,
+            user: loginUser,
+          }),
+        );
+
+        navigate('/owner');
+      }
     } catch (e) {
       console.error(e);
     }
@@ -64,7 +86,6 @@ const Login = () => {
             onChange={handleUserFormChange}
           />
         </S.UserInputBox>
-        {/* <ConfirmButton action="confirm" /> */}
         <S.SubmitButton>로그인</S.SubmitButton>
         <S.SignUpPrompt>
           <S.SignUpPromptMessage>계정이 없으신가요?</S.SignUpPromptMessage>

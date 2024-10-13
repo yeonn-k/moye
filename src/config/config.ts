@@ -1,4 +1,4 @@
-export const URL = 'localhost:5000';
+export const URL = 'http://localhost:5000';
 
 export const APIS = {
   login: `${URL}/login`,

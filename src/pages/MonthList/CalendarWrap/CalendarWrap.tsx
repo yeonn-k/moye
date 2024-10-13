@@ -1,40 +1,64 @@
 import Calendar from 'react-calendar';
 import { S } from './CalendarWrap';
+import axios from 'axios';
+import { URL } from '../../../config/config';
+import { useEffect, useState } from 'react';
 
 interface ItemMap {
   [key: string]: { accept: number; pending: number; cancel: number };
 }
 
-const CalendarWrap = () => {
-  const items: ItemMap = {
-    '2024-10-11': { accept: 2, pending: 3, cancel: 1 },
-    '2024-10-14': { accept: 2, pending: 3, cancel: 1 },
+interface MonthListProps {
+  year: number;
+  month: number;
+  date: number;
+}
+
+const CalendarWrap = ({ year, month, date }: MonthListProps) => {
+  const storeId = 1;
+  const [items, setItems] = useState<ItemMap>({});
+
+  const getItems = async (month: number) => {
+    try {
+      const res = await axios.get(
+        `${URL}/reservations/${storeId}/stores?month=${month}`,
+      );
+      console.log(res);
+      setItems(res.body);
+    } catch (err) {
+      console.error('❌ getMonthlyList: ', err);
+    }
   };
 
-  const tileContent = ({ date }: { date: Date }) => {
-    const dateKey = date.toISOString().split('T')[0];
+  useEffect(() => {
+    getItems(month);
+  }, []);
+
+  const tileContent = () => {
+    const dateKey = `${year}-${month}-${date}`;
+
     if (items[dateKey]) {
-      const { accept, pending, cancel } = items[dateKey];
+      const { ACCEPT, PENDING, CANCEL } = items[dateKey];
       return (
         <S.ItemBox>
           <S.Item>
             <S.AcceptIcon />
             <div>
-              {accept}
+              {ACCEPT}
               <S.LilText>건</S.LilText>
             </div>
           </S.Item>
           <S.Item>
             <S.PendingIcon />
             <div>
-              {pending}
+              {PENDING}
               <S.LilText>건</S.LilText>
             </div>
           </S.Item>
           <S.Item>
             <S.CancelIcon />
             <div>
-              {cancel}
+              {CANCEL}
               <S.LilText>건</S.LilText>
             </div>
           </S.Item>

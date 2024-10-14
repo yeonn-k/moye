@@ -1,16 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ESD } from './EditStoreDetail';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const initialState = {
   name: '',
   businessName: '',
-  businessNumber: '',
+  businessRegistrationNumber: '',
   address: '',
-  phoneNumber: '',
-  numberOfSeats: '',
+  contact: '',
+  totalSeats: '',
   numberPerTable: '',
-  introduction: '',
+  description: '',
   weekdayOpen: '',
   weekdayClose: '',
   weekendOpen: '',
@@ -21,14 +23,17 @@ const initialState = {
   weekendBreakEnd: '',
 };
 
-const dayOfTheWeeks = ['월', '화', '수', '목', '금', '토', '일'];
+const dayOfTheWeeks = ['일', '월', '화', '수', '목', '금', '토'];
 
 const EditStoreDetail = () => {
   const location = useLocation(); // access to location.state
   const [inputs, setInputs] = useState(initialState);
-  const [closedDays, setClosedDays] = useState<number[]>([]);
+  const [regularClosedDays, setRegularClosedDays] = useState<number[]>([]);
   const [imgFile, setImgFile] = useState('');
+  const [selectedClosedDate, setSelectedClosedDate] = useState(new Date());
+  const [irregularClosedDays, setIrregularClosedDays] = useState<Date[]>([]);
   const imgRef = useRef();
+  const navigate = useNavigate();
   const handleStoreDetailsInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputs({
       ...inputs,
@@ -46,9 +51,9 @@ const EditStoreDetail = () => {
   };
   const changeHandler = (checked: boolean, id: number) => {
     if (checked) {
-      setClosedDays([...closedDays, id]);
+      setRegularClosedDays([...regularClosedDays, id]);
     } else {
-      setClosedDays(closedDays.filter((item) => item !== id));
+      setRegularClosedDays(regularClosedDays.filter((item) => item !== id));
     }
   };
   const handleUploadPictureClick = () => {
@@ -61,17 +66,29 @@ const EditStoreDetail = () => {
     // console.log('사진 업로드');
   };
   const handlePostFormClick = () => {
-    console.log('폼 제출');
+    console.log('inputs: ', inputs);
+    console.log('closedDays:', regularClosedDays);
+    console.log('imgFile: ', imgFile);
+    console.log('location: ', location);
+    // 사진은 별도의 POST로 분리하여 요청하기
+  };
+  const handleCancleFormClick = () => {
+    alert('취소하시겠습니까?');
+    navigate('/store');
   };
   const handleIrregularClosedDaysClick = () => {
-    console.log('run: 비정기 휴무일 달력에서 설정하기');
+    setIrregularClosedDays([...irregularClosedDays, selectedClosedDate]);
+    console.log(selectedClosedDate);
+  };
+  const handleIrregularClosedDateChange = (date: Date) => {
+    setSelectedClosedDate(date);
   };
 
   useEffect(() => console.log(location.state), []);
 
   return (
     <ESD.EditStoreDetail>
-      <ESD.TopBar>매장 등록</ESD.TopBar>
+      <ESD.TopBar>매장 편집</ESD.TopBar>
       <ESD.Body>
         <ESD.BodyLeft>
           <ul>
@@ -263,10 +280,7 @@ const EditStoreDetail = () => {
           <ul>
             <li>
               <div>
-                <img
-                  src={imgFile ? imgFile : '../StoreDetail/halloween.jpg'}
-                  alt="프로필 이미지"
-                />
+                <img src={imgFile ? imgFile : '../StoreDetail/halloween.jpg'} />
                 <input
                   type="file"
                   accept="image/*"
@@ -287,7 +301,7 @@ const EditStoreDetail = () => {
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         changeHandler(e.currentTarget.checked, index);
                       }}
-                      checked={closedDays.includes(index) ? true : false}
+                      checked={regularClosedDays.includes(index) ? true : false}
                     />
                     <span>{day}</span>
                   </label>
@@ -297,12 +311,27 @@ const EditStoreDetail = () => {
             <li>
               <span>비정기 휴무일</span>
               <div>
-                <button>달력에서 추가하기</button>
+                <DatePicker
+                  selected={selectedClosedDate}
+                  onChange={handleIrregularClosedDateChange}
+                />
+                <button onClick={handleIrregularClosedDaysClick}>
+                  달력에서 추가하기
+                </button>
               </div>
             </li>
           </ul>
+          <ul>
+            {irregularClosedDays.map((item) => {
+              return <li>{item.toDateString()}</li>;
+            })}
+          </ul>
         </ESD.BodyRight>
       </ESD.Body>
+      <ESD.ConfirmBar>
+        <button onClick={handlePostFormClick}>확인</button>
+        <button onClick={handleCancleFormClick}>취소</button>
+      </ESD.ConfirmBar>
     </ESD.EditStoreDetail>
   );
 };

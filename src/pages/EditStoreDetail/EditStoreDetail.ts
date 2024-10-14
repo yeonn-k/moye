@@ -92,6 +92,17 @@ export const ESD = {
       }
     }
   `,
+  ConfirmBar: styled.div`
+    text-align: center;
+    button {
+      margin: 10px 20px;
+      background: white;
+      border: 2px solid ${(props) => props.theme.color.green};
+      border-radius: 5px;
+      width: 60px;
+      height: 40px;
+    }
+  `,
   TimeInput: styled.input`
     width: 50px;
     text-align: center;

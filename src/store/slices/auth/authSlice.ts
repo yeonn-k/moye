@@ -5,7 +5,6 @@ export interface LoginUser {
   email: string;
   name: string | null;
   phone: string | null;
-  stores: number[] | null;
   avatarUrl: string | null;
 }
 

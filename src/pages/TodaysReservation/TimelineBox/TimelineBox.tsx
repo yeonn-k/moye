@@ -1,6 +1,22 @@
 import { S } from './TimelineBox';
 
-const TimelineBox = () => {
+interface TimelineBoxProps {
+  items: Items[];
+}
+
+interface Items {
+  name: string;
+  count: number;
+  startTime: string;
+  endTime: string;
+  phone: string;
+  estatus: string;
+}
+
+const TimelineBox = ({ items }: TimelineBoxProps) => {
+  const lastNums = (phone: string) => {
+    return phone.slice(-4, phone.length);
+  };
   return (
     <S.TimelineBox>
       <S.TimeBox>
@@ -25,14 +41,13 @@ const TimelineBox = () => {
         <S.Cell></S.Cell>
 
         <S.ItemGrid>
-          <S.Item>김지연 (3명) 0000</S.Item>
-          <S.Item>김지연 (3명) 0000</S.Item>
-          <S.Item>김지연 (3명) 0000</S.Item>
-          <S.Item>김지연 (3명) 0000</S.Item>
-          <S.Item>김지연 (3명) 0000</S.Item>
-          <S.Item>김지연 (3명) 0000</S.Item>
-          <S.Item>김지연 (3명) 0000</S.Item>
-          <S.Item>김지연 (3명) 0000</S.Item>
+          {items.map((item) => {
+            return (
+              <S.Item>
+                {item.name} ({item.count}명) {lastNums(item.phone)}
+              </S.Item>
+            );
+          })}
         </S.ItemGrid>
       </S.Grid>
     </S.TimelineBox>

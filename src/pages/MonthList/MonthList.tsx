@@ -13,12 +13,6 @@ interface Items {
   [key: string]: { ACCEPT: number; PENDING: number; CANCEL: number };
 }
 
-interface Item {
-  ACCEPT: number;
-  PENDING: number;
-  CANCEL: number;
-}
-
 const MonthList = () => {
   const [count, setCount] = useState(0);
   const [selected, setSelected] = useState('');

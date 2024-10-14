@@ -1,5 +1,20 @@
 import api from '../api';
 
+interface Store {
+  address: string;
+  businessName: string;
+  businessRegistrationNumber: string;
+  contact: string;
+  id: number;
+  name: string;
+  registerDate: string;
+  registerUser: string;
+  seatCount: number;
+  tableCount: number;
+  updateDate: string;
+  updateUser: string;
+}
+
 interface SignupRequest {
   email: string;
   name: string;
@@ -39,6 +54,19 @@ interface GetUserResponse {
     body: {
       name: string;
       phone: string;
+    };
+  };
+}
+
+interface GetStoresRequest {
+  userId: number;
+}
+
+interface GetStoresResponse {
+  status: number;
+  data: {
+    body: {
+      stores: Store[];
     };
   };
 }
@@ -92,6 +120,17 @@ export const getUserByEmailService = async ({ email }: GetUserRequest) => {
     }
   } catch (e) {
     console.error('회원 조회 에러: ', e);
+  }
+};
+
+export const getStoresByIdService = async ({ userId }: GetStoresRequest) => {
+  try {
+    const response: GetStoresResponse = await api.get(`/users/${userId}`);
+    if (response.status === 200) {
+      return response.data.body.stores;
+    }
+  } catch (e) {
+    console.error('가게 조회 에러', e);
   }
 };
 

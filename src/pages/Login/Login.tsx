@@ -47,6 +47,7 @@ const Login = () => {
           email: loginForm.email,
           name: null,
           phone: null,
+          stores: null,
           avatarUrl: null,
         };
 

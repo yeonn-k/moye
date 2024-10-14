@@ -4,20 +4,33 @@ import ConfirmButton from '../../../../components/common/ConfirmButton/ConfirmBu
 
 interface OuterCardProps {
   status: string;
+  item: Items;
 }
-const InnerCard = ({ status }: OuterCardProps) => {
+
+interface Items {
+  name: string;
+  count: number;
+  startTime: string;
+  endTime: string;
+  phone: string;
+  status: string;
+}
+
+const InnerCard = ({ status, item }: OuterCardProps) => {
   return (
     <S.Card>
       <S.FlexBox>
         <S.Icon status={status} />
-        <S.GuestName>김지연</S.GuestName>
+        <S.GuestName>{item.name}</S.GuestName>
       </S.FlexBox>
       <S.Line status={status} />
       <S.PendingFlexBox>
         <div>
-          <S.Content>인원: 3명</S.Content>
-          <S.Content>시간: 10:00 - 12:00</S.Content>
-          <S.Content>연락처: 010-0000-0000</S.Content>
+          <S.Content>인원: {item.count}명</S.Content>
+          <S.Content>
+            시간: {item.startTime} - {item.endTime}
+          </S.Content>
+          <S.Content>연락처: {item.phone}</S.Content>
         </div>
         {status === 'pending' && (
           <S.BtnFlex>

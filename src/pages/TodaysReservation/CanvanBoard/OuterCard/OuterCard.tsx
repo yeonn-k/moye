@@ -4,24 +4,34 @@ import { S } from './OuterCard';
 
 interface CanvanBoardProps {
   status: string;
+  filtered: Items[];
 }
 
-const OuterCard = ({ status }: CanvanBoardProps) => {
+interface Items {
+  name: string;
+  count: number;
+  startTime: string;
+  endTime: string;
+  phone: string;
+  status: string;
+}
+
+const OuterCard = ({ status, filtered }: CanvanBoardProps) => {
   return (
     <S.CardBox>
       <S.TitleBox>
         <S.CardName>예약 확정</S.CardName>
         <S.Amount>
-          2<S.LilFont>건</S.LilFont>
+          {filtered.length}
+          <S.LilFont>건</S.LilFont>
         </S.Amount>
       </S.TitleBox>
       <S.Line status={status} />
       <S.ColorBox status={status}>
         <S.ScrollBox>
-          <InnerCard status={status} />
-          <InnerCard status={status} />
-          <InnerCard status={status} />
-          <InnerCard status={status} />
+          {filtered.map((item) => {
+            return <InnerCard status={status} item={item} />;
+          })}
         </S.ScrollBox>
       </S.ColorBox>
     </S.CardBox>

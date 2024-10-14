@@ -15,7 +15,7 @@ interface Items {
   startTime: string;
   endTime: string;
   phone: string;
-  estatus: string;
+  status: string;
 }
 
 const TodaysReservation = ({}) => {
@@ -66,7 +66,7 @@ const TodaysReservation = ({}) => {
           <TimelineBox items={items} />
         </S.TimelineBox>
       </S.UpperBox>
-      <CanvanBoard />
+      <CanvanBoard items={items} />
     </S.TodaysReservation>
   );
 };

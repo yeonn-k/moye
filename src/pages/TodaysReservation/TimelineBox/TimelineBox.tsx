@@ -10,7 +10,7 @@ interface Items {
   startTime: string;
   endTime: string;
   phone: string;
-  estatus: string;
+  status: string;
 }
 
 const TimelineBox = ({ items }: TimelineBoxProps) => {

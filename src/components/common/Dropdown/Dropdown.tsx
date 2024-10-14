@@ -1,12 +1,21 @@
 import React, { useState } from 'react';
 import { S } from './Dropdown';
 
+interface DropdownProps {
+  options?: string[];
+  onSelect?: (selectedItem: string) => void;
+  width?: string;
+  height?: string;
+  setSelected: (selected: string) => void;
+}
+
 const Dropdown = ({
   options = ['옵션 1', '옵션 2', '옵션 3'],
   onSelect = async () => {},
   width = '100px',
   height = '30px',
-}) => {
+  setSelected,
+}: DropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(options[0]);
 
@@ -18,6 +27,7 @@ const Dropdown = ({
     onSelect();
     setSelectedItem(option);
     setIsOpen(false);
+    setSelected(option);
   };
 
   return (

@@ -8,6 +8,7 @@ interface DropdownProps {
 
 export const S = {
   DropdownContainer: styled.div<DropdownProps>`
+    z-index: 1;
     position: relative;
     display: inline-block;
     border-top: 1px solid ${(props) => props.theme.color.green};

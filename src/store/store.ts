@@ -13,7 +13,6 @@ const loadAuthState = () => {
           email: null,
           name: null,
           phone: null,
-          stores: null,
           avatarUrl: null,
         },
       };

@@ -55,8 +55,6 @@ const OwnerProfile = () => {
       try {
         const result = await getStoresByIdService({ userId: loginUser.id });
         if (!result) return;
-        // TODO: storeIds를 배열로 전역 상태에 저장하는 로직 구현 필요
-        // const storeIds = result.map((store) => store.id);
         setStores(result);
       } catch (e) {
         console.error('가게 조회 에러: ', e);
@@ -95,7 +93,9 @@ const OwnerProfile = () => {
             <>
               {stores.map((store) => (
                 <S.MyStoreItem key={store.id}>
-                  <Link to="/owner">{store.businessName}</Link>
+                  <Link to={`/today?storeId=${store.id}`}>
+                    {store.businessName}
+                  </Link>
                 </S.MyStoreItem>
               ))}
             </>

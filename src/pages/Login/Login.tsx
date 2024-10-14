@@ -50,6 +50,8 @@ const Login = () => {
           avatarUrl: null,
         };
 
+        console.log(response.data);
+
         dispatch(
           loginAction({
             token: response.data.body.access,

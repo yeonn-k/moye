@@ -1,67 +1,33 @@
 import Calendar from 'react-calendar';
 import { S } from './CalendarWrap';
-import axios from 'axios';
-import { URL } from '../../../config/config';
-import { useEffect, useState } from 'react';
-
-interface ItemMap {
-  [key: string]: { accept: number; pending: number; cancel: number };
-}
 
 interface MonthListProps {
-  year: number;
-  month: number;
-  date: number;
+  selected: string;
+  items: { [key: string]: { ACCEPT: number; PENDING: number; CANCEL: number } };
 }
 
-const CalendarWrap = ({ year, month, date }: MonthListProps) => {
-  const storeId = 1;
-  const [items, setItems] = useState<ItemMap>({});
+const CalendarWrap = ({ selected, items }: MonthListProps) => {
+  const tileContent = ({ date }: { date: Date }) => {
+    const dateKey = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 
-  const getItems = async (month: number) => {
-    try {
-      const res = await axios.get(
-        `${URL}/reservations/${storeId}/stores?month=${month}`,
+    const renderItem = (count: number, Icon: React.FC) =>
+      count > 0 && (
+        <S.Item>
+          <Icon />
+          <div>
+            {count}
+            <S.LilText>건</S.LilText>
+          </div>
+        </S.Item>
       );
-      console.log(res);
-      setItems(res.body);
-    } catch (err) {
-      console.error('❌ getMonthlyList: ', err);
-    }
-  };
-
-  useEffect(() => {
-    getItems(month);
-  }, []);
-
-  const tileContent = () => {
-    const dateKey = `${year}-${month}-${date}`;
-
     if (items[dateKey]) {
       const { ACCEPT, PENDING, CANCEL } = items[dateKey];
+
       return (
         <S.ItemBox>
-          <S.Item>
-            <S.AcceptIcon />
-            <div>
-              {ACCEPT}
-              <S.LilText>건</S.LilText>
-            </div>
-          </S.Item>
-          <S.Item>
-            <S.PendingIcon />
-            <div>
-              {PENDING}
-              <S.LilText>건</S.LilText>
-            </div>
-          </S.Item>
-          <S.Item>
-            <S.CancelIcon />
-            <div>
-              {CANCEL}
-              <S.LilText>건</S.LilText>
-            </div>
-          </S.Item>
+          {renderItem(ACCEPT, S.AcceptIcon)}
+          {renderItem(PENDING, S.PendingIcon)}
+          {renderItem(CANCEL, S.CancelIcon)}
         </S.ItemBox>
       );
     }

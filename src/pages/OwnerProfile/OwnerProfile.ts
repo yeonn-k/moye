@@ -89,6 +89,19 @@ export const S = {
     gap: 10px;
     margin: 20px 0;
   `,
+  MyStoreItem: styled.li`
+    width: 280px;
+    height: 280px;
+    background-color: ${(props) => props.theme.color.paleNavy};
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    text-decoration: none;
+    color: #000;
+    cursor: pointer;
+  `,
   AddMyStoreLink: styled(Link)`
     width: 280px;
     height: 280px;

@@ -13,6 +13,7 @@ const loadAuthState = () => {
           email: null,
           name: null,
           phone: null,
+          stores: null,
           avatarUrl: null,
         },
       };
@@ -34,11 +35,7 @@ store.subscribe(() => {
     'auth',
     JSON.stringify({
       token: state.auth.token,
-      user: {
-        id: state.auth.user?.id,
-        email: state.auth.user?.email,
-        avatarUrl: state.auth.user?.avatarUrl,
-      },
+      user: state.auth.user,
     }),
   );
 });

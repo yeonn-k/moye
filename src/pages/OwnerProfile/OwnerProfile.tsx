@@ -1,12 +1,33 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { updateUserProfileAction } from '../../store/slices/auth/authSlice';
 import { S } from './OwnerProfile';
 import { RootState } from '../../store/store';
-import { getUserByEmailService } from '../../services/auth/authService';
+import {
+  getUserByEmailService,
+  getStoresByIdService,
+} from '../../services/auth/authService';
 import { formatPhoneNumber } from '../../utils/format/formaPhoneNumber';
 
+// TODO: interface 외부 파일로 관리 필요
+interface Store {
+  address: string;
+  businessName: string;
+  businessRegistrationNumber: string;
+  contact: string;
+  id: number;
+  name: string;
+  registerDate: string;
+  registerUser: string;
+  seatCount: number;
+  tableCount: number;
+  updateDate: string;
+  updateUser: string;
+}
+
 const OwnerProfile = () => {
+  const [stores, setStores] = useState<Store[]>([]);
   const loginUser = useSelector((state: RootState) => state.auth.user);
   const dispatch = useDispatch();
 
@@ -26,6 +47,22 @@ const OwnerProfile = () => {
       }
     };
     fetchUserByEmail();
+  }, [loginUser, dispatch]);
+
+  useEffect(() => {
+    const fetchStoresById = async () => {
+      if (!loginUser) return;
+      try {
+        const result = await getStoresByIdService({ userId: loginUser.id });
+        if (!result) return;
+        // TODO: storeIds를 배열로 전역 상태에 저장하는 로직 구현 필요
+        // const storeIds = result.map((store) => store.id);
+        setStores(result);
+      } catch (e) {
+        console.error('가게 조회 에러: ', e);
+      }
+    };
+    fetchStoresById();
   }, [loginUser, dispatch]);
 
   return (
@@ -54,7 +91,16 @@ const OwnerProfile = () => {
       <S.MyStoreSection>
         <S.MyStoreTitle>나의 가게</S.MyStoreTitle>
         <S.MyStoreList>
-          <S.AddMyStoreLink to="/#">+ 매장 등록</S.AddMyStoreLink>
+          {stores.length > 0 && (
+            <>
+              {stores.map((store) => (
+                <S.MyStoreItem key={store.id}>
+                  <Link to="/owner">{store.businessName}</Link>
+                </S.MyStoreItem>
+              ))}
+            </>
+          )}
+          <S.AddMyStoreLink to="/owner">+ 매장 등록</S.AddMyStoreLink>
         </S.MyStoreList>
       </S.MyStoreSection>
     </S.OwnerProfileBox>

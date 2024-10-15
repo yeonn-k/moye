@@ -1,11 +1,13 @@
-export const URL = 'http://localhost:5001';
+const URL = process.env.REACT_APP_API_URL;
+const PORT = process.env.REACT_APP_API_PORT;
+export const BASE_URL = `${URL}:${PORT}`;
 
 export const APIS = {
-  login: `${URL}/login`,
-  signup: `${URL}/signup`,
-  today: `${URL}/today`,
-  month: `${URL}/month`,
-  owner: `${URL}/owner`,
-  store: `${URL}/store`,
-  storeEdit: `${URL}/store/edit`,
+  login: `${BASE_URL}/login`,
+  signup: `${BASE_URL}/signup`,
+  today: `${BASE_URL}/today`,
+  month: `${BASE_URL}/month`,
+  owner: `${BASE_URL}/owner`,
+  store: `${BASE_URL}/store`,
+  storeEdit: `${BASE_URL}/store/edit`,
 };

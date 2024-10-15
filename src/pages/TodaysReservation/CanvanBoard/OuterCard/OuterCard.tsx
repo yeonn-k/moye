@@ -1,27 +1,48 @@
 import React from 'react';
+
 import InnerCard from '../InnerCard/InnerCard.tsx';
-import { S } from './OuterCard';
+
+import { S } from './OuterCard.style.ts';
+import { isGetAccessorDeclaration } from 'typescript';
 
 interface CanvanBoardProps {
   status: string;
+  filtered: Items[];
 }
 
-const OuterCard = ({ status }: CanvanBoardProps) => {
+interface Items {
+  name: string;
+  count: number;
+  startTime: string;
+  endTime: string;
+  phone: string;
+  status: string;
+}
+
+const OuterCard = ({ status, filtered }: CanvanBoardProps) => {
+  const statusTitle = () => {
+    if (status === 'accept') {
+      return '예약 확정';
+    }
+    if (status === 'pending') {
+      return '대기 중';
+    } else return '지나간 예약';
+  };
   return (
     <S.CardBox>
       <S.TitleBox>
-        <S.CardName>예약 확정</S.CardName>
+        <S.CardName>{statusTitle()}</S.CardName>
         <S.Amount>
-          2<S.LilFont>건</S.LilFont>
+          {filtered.length}
+          <S.LilFont>건</S.LilFont>
         </S.Amount>
       </S.TitleBox>
       <S.Line status={status} />
       <S.ColorBox status={status}>
         <S.ScrollBox>
-          <InnerCard status={status} />
-          <InnerCard status={status} />
-          <InnerCard status={status} />
-          <InnerCard status={status} />
+          {filtered.map((item, idx) => {
+            return <InnerCard key={idx} status={status} item={item} />;
+          })}
         </S.ScrollBox>
       </S.ColorBox>
     </S.CardBox>

@@ -7,48 +7,90 @@ import MonthList from '../pages/MonthList/MonthList.tsx';
 import OwnerProfile from '../pages/OwnerProfile/OwnerProfile.tsx';
 import StoreDetail from '../pages/StoreDetail/StoreDetail.tsx';
 import EditStoreDetail from '../pages/EditStoreDetail/EditStoreDetail.tsx';
+import ProtectedRoute from './protectedRoute/ProtectedRoute.tsx';
+import PublicRoute from './publicRoute/PublicRoute.tsx';
 
 function AppRouter() {
   const router = createBrowserRouter([
     {
       path: '/',
-      element: <EntryPoint />,
+      element: (
+        <PublicRoute>
+          <EntryPoint />
+        </PublicRoute>
+      ),
     },
     {
       path: '/login',
-      element: <Login />,
+      element: (
+        <PublicRoute>
+          <Login />
+        </PublicRoute>
+      ),
     },
     {
       path: '/signup',
-      element: <SignUp />,
+      element: (
+        <PublicRoute>
+          <SignUp />
+        </PublicRoute>
+      ),
     },
     {
       path: '/today',
-      element: <TodaysReservation />,
+      element: (
+        <ProtectedRoute>
+          <TodaysReservation />
+        </ProtectedRoute>
+      ),
     },
     {
       path: '/month',
-      element: <MonthList />,
+      element: (
+        <ProtectedRoute>
+          <MonthList />
+        </ProtectedRoute>
+      ),
     },
     {
       path: '/owner',
-      element: <OwnerProfile />,
+      element: (
+        <ProtectedRoute>
+          <OwnerProfile />
+        </ProtectedRoute>
+      ),
     },
     {
       path: '/dashboard',
-      element: <div>This is dashboard page</div>,
+      element: (
+        <ProtectedRoute>
+          <div>This is dashboard page</div>
+        </ProtectedRoute>
+      ),
     },
     {
       path: '/list',
-      element: <div>This is list page</div>,
+      element: (
+        <ProtectedRoute>
+          <div>This is list page</div>
+        </ProtectedRoute>
+      ),
     },
     {
       path: '/store',
-      element: <StoreDetail />,
+      element: (
+        <ProtectedRoute>
+          <StoreDetail />
+        </ProtectedRoute>
+      ),
     },
     {
       path: '/store/edit',
-      element: <EditStoreDetail />,
+      element: (
+        <ProtectedRoute>
+          <EditStoreDetail />
+        </ProtectedRoute>
+      ),
     },
   ]);
   return <RouterProvider router={router} />;

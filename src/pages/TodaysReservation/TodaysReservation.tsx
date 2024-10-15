@@ -36,8 +36,6 @@ const TodaysReservation = ({}) => {
   });
   const [inputValue, setInputValue] = useInputValue();
 
-  console.log(inputValue);
-
   const [operating, setOperating] = useState<number[]>([]);
 
   const getTodaysReservation = async () => {

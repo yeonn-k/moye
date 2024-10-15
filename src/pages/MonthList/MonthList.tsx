@@ -20,6 +20,7 @@ const MonthList = () => {
   const [count, setCount] = useState(0);
   const [selected, setSelected] = useState('');
   const [items, setItems] = useState<Items>({});
+
   const status = ['전체', '예약 확정', '대기중', '예약 취소'];
 
   const { month, date, days, day } = useCheckTheDate();
@@ -62,6 +63,8 @@ const MonthList = () => {
     }
     setCount(total);
   }, [items]);
+
+  // console.log(items);
 
   const filteredItems = (items: Items): Items => {
     const filteredItems: Items = {};

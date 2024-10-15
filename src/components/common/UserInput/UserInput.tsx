@@ -1,4 +1,4 @@
-import { S } from './UserInput';
+import { S } from './UserInput.style.ts';
 
 interface UserInputProps {
   height?: string;

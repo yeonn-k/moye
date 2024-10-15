@@ -21,7 +21,7 @@ const TimelineBox = ({ items, operating }: TimelineBoxProps) => {
 
   const operatingNum = operating.length > 0 ? operating.length - 1 : 1;
 
-  if (!operating || operating.length === 0) return null;
+  if (!operating?.length) return null;
   return (
     <S.TimelineBox>
       <S.TimeBox>

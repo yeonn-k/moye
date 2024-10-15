@@ -68,7 +68,7 @@ const OwnerProfile = () => {
 
   useEffect(() => {
     const resetStoreSelected = () => {
-      dispatch(setIsStoreSelected(false));
+      dispatch(setIsStoreSelected(true));
     };
     resetStoreSelected();
   });

@@ -17,7 +17,7 @@ export interface AuthState {
 const initialState: AuthState = {
   token: null,
   user: null,
-  isStoreSelected: false,
+  isStoreSelected: true,
 };
 
 const authSlice = createSlice({

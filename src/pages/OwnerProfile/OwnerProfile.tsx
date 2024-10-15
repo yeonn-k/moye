@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { updateUserProfileAction } from '../../store/slices/auth/authSlice';
-import { S } from './OwnerProfile';
+import { S } from './OwnerProfile.style';
 import { RootState } from '../../store/store';
 import {
   getUserByEmailService,
   getStoresByIdService,
 } from '../../services/auth/authService';
-import { formatPhoneNumber } from '../../utils/format/formaPhoneNumber';
+import { formatPhoneNumber } from '../../utils/formatter';
 
 // TODO: interface 외부 파일로 관리 필요
 interface Store {

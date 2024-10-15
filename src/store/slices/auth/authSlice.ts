@@ -11,11 +11,13 @@ export interface LoginUser {
 export interface AuthState {
   token: string | null;
   user: LoginUser | null;
+  isStoreSelected: boolean;
 }
 
 const initialState: AuthState = {
   token: null,
   user: null,
+  isStoreSelected: false,
 };
 
 const authSlice = createSlice({
@@ -41,9 +43,16 @@ const authSlice = createSlice({
       state.token = null;
       state.user = null;
     },
+    setIsStoreSelected(state, action: PayloadAction<boolean>) {
+      state.isStoreSelected = action.payload;
+    },
   },
 });
 
-export const { loginAction, logoutAction, updateUserProfileAction } =
-  authSlice.actions;
+export const {
+  loginAction,
+  logoutAction,
+  updateUserProfileAction,
+  setIsStoreSelected,
+} = authSlice.actions;
 export default authSlice.reducer;

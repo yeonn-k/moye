@@ -1,14 +1,17 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { updateUserProfileAction } from '../../store/slices/auth/authSlice';
-import { S } from './OwnerProfile';
+import {
+  setIsStoreSelected,
+  updateUserProfileAction,
+} from '../../store/slices/auth/authSlice';
+import { S } from './OwnerProfile.style';
 import { RootState } from '../../store/store';
 import {
   getUserByEmailService,
   getStoresByIdService,
 } from '../../services/auth/authService';
-import { formatPhoneNumber } from '../../utils/format/formaPhoneNumber';
+import { formatPhoneNumber } from '../../utils/formatter';
 
 // TODO: interface 외부 파일로 관리 필요
 interface Store {
@@ -63,6 +66,17 @@ const OwnerProfile = () => {
     fetchStoresById();
   }, [loginUser, dispatch]);
 
+  useEffect(() => {
+    const resetStoreSelected = () => {
+      dispatch(setIsStoreSelected(false));
+    };
+    resetStoreSelected();
+  });
+
+  const handleLinkClick = () => {
+    dispatch(setIsStoreSelected(true));
+  };
+
   return (
     <S.OwnerProfileBox>
       <S.ProfileSection>
@@ -93,7 +107,10 @@ const OwnerProfile = () => {
             <>
               {stores.map((store) => (
                 <S.MyStoreItem key={store.id}>
-                  <Link to={`/today?storeId=${store.id}`}>
+                  <Link
+                    to={`/today?storeId=${store.id}`}
+                    onClick={handleLinkClick}
+                  >
                     {store.businessName}
                   </Link>
                 </S.MyStoreItem>

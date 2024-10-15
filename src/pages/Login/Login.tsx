@@ -2,16 +2,22 @@ import { useState, ChangeEvent, FormEvent } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
-import { S } from './Login';
+import { S } from './Login.style';
 import { loginService } from '../../services/auth/authService';
 import { loginAction } from '../../store/slices/auth/authSlice';
-// import UserInput from '../../components/common/UserInput/UserInput.tsx';
+import { validateEmail } from '../../utils/validator';
 
 const Login = () => {
   const [userForm, setUserForm] = useState({
     email: '',
     password: '',
   });
+
+  // 이메일 입력 검증 에러 메시지
+  const [validError, setValidError] = useState('');
+  // TODO: 로그인 요청 후 이메일, 비밀번호 일치 검증 에러 메시지
+  // const [responseError, setResponseError] = useState('');
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -21,6 +27,12 @@ const Login = () => {
       ...prevState,
       [name]: value,
     }));
+    if (name === 'email') {
+      const error = validateEmail(value);
+      setValidError(error);
+    } else {
+      setValidError('');
+    }
   };
 
   const handleSubmitButtonClick = async (e: FormEvent<HTMLFormElement>) => {
@@ -47,11 +59,8 @@ const Login = () => {
           email: loginForm.email,
           name: null,
           phone: null,
-          stores: null,
           avatarUrl: null,
         };
-
-        console.log(response.data);
 
         dispatch(
           loginAction({
@@ -73,8 +82,11 @@ const Login = () => {
       <S.LoginForm onSubmit={handleSubmitButtonClick}>
         <S.FormTitle>로그인</S.FormTitle>
         <S.UserInputBox>
-          {/* <UserInput width="260px" height="40px" placeholder="이메일" />
-          <UserInput width="260px" height="40px" placeholder="비밀번호" /> */}
+          {validError && (
+            <S.ErrorMessage className={validError ? 'visible' : ''}>
+              {validError}
+            </S.ErrorMessage>
+          )}
           <S.UserInput
             name="email"
             placeholder="이메일"

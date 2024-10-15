@@ -1,9 +1,20 @@
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import backgroundImage from '../../assets/images/backgroundImage.png';
 
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
 export const S = {
-  LoginBox: styled.div`
+  SignUpBox: styled.div`
     width: 100%;
     height: 100vh;
     background-image: url(${backgroundImage});
@@ -20,9 +31,9 @@ export const S = {
     color: #fff;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   `,
-  LoginForm: styled.form`
+  SignUpForm: styled.form`
     width: 500px;
-    height: 470px;
+    height: 580px;
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
@@ -42,12 +53,19 @@ export const S = {
     flex-direction: column;
     gap: 10px;
   `,
-  SignUpPrompt: styled.div`
+  UserInputLabel: styled.label`
+    display: flex;
+    flex-direction: column;
+    font-size: 13px;
+    font-weight: 600;
+    gap: 10px;
+  `,
+  LoginPrompt: styled.div`
     display: flex;
     gap: 10px;
   `,
-  SignUpPromptMessage: styled.span``,
-  SignUpPromptLink: styled(Link)`
+  LoginPromptMessage: styled.span``,
+  LoginPromptLink: styled(Link)`
     color: ${(props) => props.theme.color.navy};
     text-decoration: none;
     cursor: pointer;
@@ -72,5 +90,21 @@ export const S = {
     background-color: ${(props) => props.theme.color.deepGreen};
     color: #fff;
     border-radius: 5px;
+  `,
+  ErrorMessage: styled.p<{ visible?: boolean }>`
+    color: ${(props) => props.theme.color.coral};
+    font-size: 8px;
+    opacity: 0;
+    animation: ${fadeIn} 0.3s ease forwards;
+    opacity: 1;
+    display: none;
+    &.visible {
+      display: block;
+    }
+  `,
+  SubmitErrorMessage: styled.p<{ visible?: boolean }>`
+    color: #f00;
+    font-size: 12px;
+    font-weight: 600;
   `,
 };

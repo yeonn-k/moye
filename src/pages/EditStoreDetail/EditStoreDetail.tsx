@@ -1,15 +1,29 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ESD } from './EditStoreDetail';
 import { useLocation, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import dayjs from 'dayjs';
 import ListInputElement from './ListInputElement';
 import ListTimeElement from './ListTimeElement';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
+interface localStorageData {
+  token: string;
+  user: {
+    id: number;
+    email: string;
+    name: string;
+    phone: string;
+    stores: string;
+    avatarUrl: string;
+  };
+}
+
 const initialState = {
   name: '',
   businessName: '',
-  businessRegistrationNumber: '',
+  businessNumber: '',
   address: '',
   contact: '',
   totalSeats: '',
@@ -25,17 +39,30 @@ const initialState = {
   weekendBreakEnd: '',
 };
 
+const DATE_FORMAT = 'YYYY-MM-DD';
+
+const TIME_SUBFIX = ':00';
+
 const dayOfTheWeeks = ['일', '월', '화', '수', '목', '금', '토'];
+
+function addTimeSubfix(time: string) {
+  return time + TIME_SUBFIX;
+}
+
+function isExist(data: any) {
+  return data !== null && data !== undefined;
+}
 
 const EditStoreDetail = () => {
   const location = useLocation(); // access to location.state
-  const [inputs, setInputs] = useState(initialState);
-  const [regularClosedDays, setRegularClosedDays] = useState<number[]>([]); // API 전송 시 +1
-  const [imgFile, setImgFile] = useState('');
-  const [selectedClosedDate, setSelectedClosedDate] = useState(new Date());
-  const [irregularClosedDays, setIrregularClosedDays] = useState<Date[]>([]);
-  const imgRef = useRef();
   const navigate = useNavigate();
+  const imgRef = useRef();
+  const [inputs, setInputs] = useState(initialState);
+  const [imgFile, setImgFile] = useState('');
+  const [regularClosedDays, setRegularClosedDays] = useState<number[]>([]);
+  const [selectedClosedDate, setSelectedClosedDate] = useState(new Date());
+  const [irregularClosedDays, setIrregularClosedDays] = useState<string[]>([]);
+
   const handleStoreDetailsInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputs({
       ...inputs,
@@ -59,20 +86,82 @@ const EditStoreDetail = () => {
     }
   };
   const handleUploadPictureClick = () => {
-    const file = imgRef.current.files[0];
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = () => {
-      setImgFile(reader.result);
-    };
-    // console.log('사진 업로드');
+    try {
+      const file = imgRef.current!.files[0];
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        setImgFile(reader.result);
+      };
+    } catch (error) {
+      console.log('Error: ', error);
+    }
   };
-  const handlePostFormClick = () => {
-    console.log('inputs: ', inputs);
-    console.log('closedDays:', regularClosedDays);
-    console.log('imgFile: ', imgFile);
-    console.log('location: ', location);
-    console.log('closedDays: ', irregularClosedDays);
+  const handlePostFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      let auth = null;
+      if (isExist(localStorage) && isExist(localStorage.getItem('auth'))) {
+        auth = JSON.parse(localStorage.getItem('auth'));
+      }
+      const openingHourData = [
+        {
+          type: '평일',
+          openFrom: addTimeSubfix(inputs.weekdayOpen),
+          closeTo: addTimeSubfix(inputs.weekdayClose),
+        },
+        {
+          type: '주말',
+          openFrom: addTimeSubfix(inputs.weekendOpen),
+          closeTo: addTimeSubfix(inputs.weekendClose),
+        },
+      ];
+      const breakTimeData = [
+        {
+          type: '평일',
+          openFrom: addTimeSubfix(inputs.weekdayBreakStart),
+          closeTo: addTimeSubfix(inputs.weekdayBreakEnd),
+        },
+        {
+          type: '주말',
+          openFrom: addTimeSubfix(inputs.weekendBreakStart),
+          closeTo: addTimeSubfix(inputs.weekendBreakEnd),
+        },
+      ];
+      const postData = {
+        businessRegistrationNumber: inputs.businessNumber,
+        businessName: inputs.businessName,
+        description: inputs.description,
+        name: inputs.name,
+        address: inputs.address,
+        contact: inputs.contact,
+        totalSeats: inputs.totalSeats,
+        numberPerTable: inputs.numberPerTable,
+        openingHour: openingHourData,
+        breakTime: breakTimeData,
+        closedDay: irregularClosedDays,
+        dayOfWeekDay: regularClosedDays.map((index: number) => index + 1),
+      };
+      // backend에서 요일을 일=1, 월=2 ~ 토=7으로 받음, front에서는 0~6으로 배정됨
+
+      await axios
+        .post('http://localhost:5005/stores', JSON.stringify(postData), {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+            'Content-Type': 'application/json',
+          },
+        })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((error) => {
+          alert('등록에 실패하였습니다.');
+          console.log('Error: ', error);
+        });
+    } catch (error) {
+      console.log('Error: ', error);
+    }
+
     // 사진은 별도의 POST로 분리하여 요청하기
   };
   const handleCancleFormClick = () => {
@@ -81,25 +170,24 @@ const EditStoreDetail = () => {
     // TODO: 확인, 취소 창으로 변경
   };
   const handleIrregularClosedDaysClick = () => {
+    const formattedDate = dayjs(selectedClosedDate).format(DATE_FORMAT);
     const newList = irregularClosedDays.filter(
-      (item) => item.toDateString() !== selectedClosedDate.toDateString(),
+      (item) => item !== formattedDate,
     );
-    setIrregularClosedDays([...newList, selectedClosedDate]);
+    setIrregularClosedDays([...newList, formattedDate]);
   };
   const handleIrregularClosedDateChange = (date: Date) => {
     setSelectedClosedDate(date);
   };
-  const handleDeleteSelectedDateClick = (date: Date) => {
+  const handleDeleteSelectedDateClick = (date: string) => {
     return () => {
       setIrregularClosedDays(
-        irregularClosedDays.filter(
-          (item) => item.toDateString() !== date.toDateString(),
-        ),
+        irregularClosedDays.filter((item) => item !== date),
       );
     };
   };
 
-  useEffect(() => console.log(location.state), []);
+  // useEffect(() => console.log(selector), []);
 
   return (
     <ESD.EditStoreDetail>
@@ -134,13 +222,13 @@ const EditStoreDetail = () => {
             <ListInputElement
               label="전화번호"
               type="text"
-              id="phoneNumber"
+              id="contact"
               onChange={handleStoreDetailsInput}
             />
             <ListInputElement
               label="좌석 수"
               type="text"
-              id="numberOfSeats"
+              id="totalSeats"
               onChange={handleStoreDetailsInput}
             />
             <ListInputElement
@@ -152,7 +240,7 @@ const EditStoreDetail = () => {
             <ListInputElement
               label="소개글"
               type="text"
-              id="introduction"
+              id="description"
               onChange={handleStoreDetailsInput}
             />
             <ListTimeElement
@@ -253,8 +341,8 @@ const EditStoreDetail = () => {
           <ul>
             {irregularClosedDays.map((item) => {
               return (
-                <li key={item.toLocaleDateString('ko-KR')}>
-                  {item.toLocaleDateString('ko-KR')}
+                <li key={item}>
+                  {item}
                   <ESD.DateAddButton
                     onClick={handleDeleteSelectedDateClick(item)}
                   >
@@ -267,7 +355,7 @@ const EditStoreDetail = () => {
         </ESD.BodyRight>
       </ESD.Body>
       <ESD.ConfirmBar>
-        <button onClick={handlePostFormClick}>확인</button>
+        <button onClick={handlePostFormSubmit}>확인</button>
         <button onClick={handleCancleFormClick}>취소</button>
       </ESD.ConfirmBar>
     </ESD.EditStoreDetail>

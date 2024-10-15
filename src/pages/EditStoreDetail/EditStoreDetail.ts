@@ -48,13 +48,6 @@ export const ESD = {
       border: 2px solid ${(props) => props.theme.color.green};
       border-radius: 5px;
     }
-    button {
-      padding: 8px 12px;
-      border: 2px solid ${(props) => props.theme.color.green};
-      border-radius: 10px;
-      background: transparent;
-      cursor: pointer;
-    }
     li span {
       width: 25%;
     }
@@ -91,6 +84,13 @@ export const ESD = {
         background: ${(props) => props.theme.color.darkGreen};
       }
     }
+  `,
+  DateAddButton: styled.button`
+    padding: 8px 12px;
+    border: 2px solid ${(props) => props.theme.color.green};
+    border-radius: 10px;
+    background: transparent;
+    cursor: pointer;
   `,
   ConfirmBar: styled.div`
     text-align: center;

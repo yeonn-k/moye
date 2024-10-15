@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ESD } from './EditStoreDetail';
 import { useLocation, useNavigate } from 'react-router-dom';
+import ListInputElement from './ListInputElement';
+import ListTimeElement from './ListTimeElement';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -28,7 +30,7 @@ const dayOfTheWeeks = ['일', '월', '화', '수', '목', '금', '토'];
 const EditStoreDetail = () => {
   const location = useLocation(); // access to location.state
   const [inputs, setInputs] = useState(initialState);
-  const [regularClosedDays, setRegularClosedDays] = useState<number[]>([]);
+  const [regularClosedDays, setRegularClosedDays] = useState<number[]>([]); // API 전송 시 +1
   const [imgFile, setImgFile] = useState('');
   const [selectedClosedDate, setSelectedClosedDate] = useState(new Date());
   const [irregularClosedDays, setIrregularClosedDays] = useState<Date[]>([]);
@@ -70,18 +72,31 @@ const EditStoreDetail = () => {
     console.log('closedDays:', regularClosedDays);
     console.log('imgFile: ', imgFile);
     console.log('location: ', location);
+    console.log('closedDays: ', irregularClosedDays);
     // 사진은 별도의 POST로 분리하여 요청하기
   };
   const handleCancleFormClick = () => {
     alert('취소하시겠습니까?');
     navigate('/store');
+    // TODO: 확인, 취소 창으로 변경
   };
   const handleIrregularClosedDaysClick = () => {
-    setIrregularClosedDays([...irregularClosedDays, selectedClosedDate]);
-    console.log(selectedClosedDate);
+    const newList = irregularClosedDays.filter(
+      (item) => item.toDateString() !== selectedClosedDate.toDateString(),
+    );
+    setIrregularClosedDays([...newList, selectedClosedDate]);
   };
   const handleIrregularClosedDateChange = (date: Date) => {
     setSelectedClosedDate(date);
+  };
+  const handleDeleteSelectedDateClick = (date: Date) => {
+    return () => {
+      setIrregularClosedDays(
+        irregularClosedDays.filter(
+          (item) => item.toDateString() !== date.toDateString(),
+        ),
+      );
+    };
   };
 
   useEffect(() => console.log(location.state), []);
@@ -92,188 +107,102 @@ const EditStoreDetail = () => {
       <ESD.Body>
         <ESD.BodyLeft>
           <ul>
-            <li>
-              <label htmlFor="name">매장 이름</label>
-              <div>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  onChange={handleStoreDetailsInput}
-                />
-              </div>
-            </li>
-            <li>
-              <label htmlFor="businessNumber">사업자 번호</label>
-              <div>
-                <input
-                  type="text"
-                  id="businessNumber"
-                  name="businessNumber"
-                  placeholder="-는 빼고 입력해주세요"
-                  onChange={handleStoreDetailsInput}
-                />
-              </div>
-            </li>
-            <li>
-              <label htmlFor="businessName">상호명</label>
-              <div>
-                <input
-                  type="text"
-                  id="businessName"
-                  name="businessName"
-                  onChange={handleStoreDetailsInput}
-                />
-              </div>
-            </li>
-            <li>
-              <label htmlFor="address">주소</label>
-              <div>
-                <input
-                  type="text"
-                  id="address"
-                  name="address"
-                  onChange={handleStoreDetailsInput}
-                />
-              </div>
-            </li>
-            <li>
-              <label htmlFor="phoneNumber">전화번호</label>
-              <div>
-                <input
-                  type="text"
-                  id="phoneNumber"
-                  name="phoneNumber"
-                  placeholder="-는 빼고 입력해주세요"
-                  onChange={handleStoreDetailsInput}
-                />
-              </div>
-            </li>
-            <li>
-              <label htmlFor="numberOfSeats">좌석 수</label>
-              <div>
-                <input
-                  type="number"
-                  id="numberOfSeats"
-                  name="numberOfSeats"
-                  placeholder="숫자만 입력해주세요"
-                  onChange={handleStoreDetailsInput}
-                  min={0}
-                />
-              </div>
-            </li>
-            <li>
-              <label htmlFor="numberPerTable">테이블 최대 인원</label>
-              <div>
-                <input
-                  type="number"
-                  id="numberPerTable"
-                  name="numberPerTable"
-                  placeholder="숫자만 입력해주세요"
-                  onChange={handleStoreDetailsInput}
-                  min={0}
-                />
-              </div>
-            </li>
-            <li>
-              <label htmlFor="introduction">소개글</label>
-              <div>
-                <input
-                  type="text"
-                  id="introduction"
-                  name="introduction"
-                  onChange={handleStoreDetailsInput}
-                />
-              </div>
-            </li>
-            <li>
-              <span>영업시간</span>
-              <div>
-                평일&nbsp;
-                <ESD.TimeInput
-                  type="number"
-                  min={0}
-                  max={24}
-                  name="weekdayOpen"
-                  onChange={handleStoreDetailsInput}
-                />{' '}
-                시 ~&nbsp;
-                <ESD.TimeInput
-                  type="number"
-                  min={0}
-                  max={24}
-                  name="weekdayClose"
-                  onChange={handleStoreDetailsInput}
-                />{' '}
-                시
-              </div>
-            </li>
-            <li>
-              <span></span>
-              <div>
-                주말&nbsp;
-                <ESD.TimeInput
-                  type="number"
-                  min={0}
-                  max={24}
-                  name="weekendOpen"
-                  onChange={handleStoreDetailsInput}
-                />{' '}
-                시 ~&nbsp;
-                <ESD.TimeInput
-                  type="number"
-                  min={0}
-                  max={24}
-                  name="weekendClose"
-                  onChange={handleStoreDetailsInput}
-                />{' '}
-                시
-              </div>
-            </li>
-            <li>
-              <span>휴식시간</span>
-              <div>
-                평일&nbsp;
-                <ESD.TimeInput
-                  type="number"
-                  min={0}
-                  max={24}
-                  name="weekdayBreakStart"
-                  onChange={handleStoreDetailsInput}
-                />{' '}
-                시 ~&nbsp;
-                <ESD.TimeInput
-                  type="number"
-                  min={0}
-                  max={24}
-                  name="weekdayBreakEnd"
-                  onChange={handleStoreDetailsInput}
-                />{' '}
-                시
-              </div>
-            </li>
-            <li>
-              <span></span>
-              <div>
-                주말 &nbsp;
-                <ESD.TimeInput
-                  type="number"
-                  min={0}
-                  max={24}
-                  name="weekendBreakStart"
-                  onChange={handleStoreDetailsInput}
-                />{' '}
-                시 ~&nbsp;
-                <ESD.TimeInput
-                  type="number"
-                  min={0}
-                  max={24}
-                  name="weekendBreakEnd"
-                  onChange={handleStoreDetailsInput}
-                />{' '}
-                시
-              </div>
-            </li>
+            <ListInputElement
+              label="매장 이름"
+              type="text"
+              id="name"
+              onChange={handleStoreDetailsInput}
+            />
+            <ListInputElement
+              label="사업자 번호"
+              type="text"
+              id="businessNumber"
+              onChange={handleStoreDetailsInput}
+            />
+            <ListInputElement
+              label="상호명"
+              type="text"
+              id="businessName"
+              onChange={handleStoreDetailsInput}
+            />
+            <ListInputElement
+              label="주소"
+              type="text"
+              id="address"
+              onChange={handleStoreDetailsInput}
+            />
+            <ListInputElement
+              label="전화번호"
+              type="text"
+              id="phoneNumber"
+              onChange={handleStoreDetailsInput}
+            />
+            <ListInputElement
+              label="좌석 수"
+              type="text"
+              id="numberOfSeats"
+              onChange={handleStoreDetailsInput}
+            />
+            <ListInputElement
+              label="테이블 최대 인원"
+              type="text"
+              id="numberPerTable"
+              onChange={handleStoreDetailsInput}
+            />
+            <ListInputElement
+              label="소개글"
+              type="text"
+              id="introduction"
+              onChange={handleStoreDetailsInput}
+            />
+            <ListTimeElement
+              totalLabel="영업시간"
+              inputLabel="평일"
+              type="number"
+              min={0}
+              max={24}
+              startName="weekdayOpen"
+              startValue={inputs.weekdayOpen}
+              endName="weekdayClose"
+              endValue={inputs.weekdayClose}
+              onChange={handleHourInput}
+            />
+            <ListTimeElement
+              totalLabel=""
+              inputLabel="주말"
+              type="number"
+              min={0}
+              max={24}
+              startName="weekendOpen"
+              startValue={inputs.weekendOpen}
+              endName="weekendClose"
+              endValue={inputs.weekendClose}
+              onChange={handleHourInput}
+            />
+            <ListTimeElement
+              totalLabel="휴식시간"
+              inputLabel="평일"
+              type="number"
+              min={0}
+              max={24}
+              startName="weekdayBreakStart"
+              startValue={inputs.weekdayBreakStart}
+              endName="weekdayBreakEnd"
+              endValue={inputs.weekdayBreakEnd}
+              onChange={handleHourInput}
+            />
+            <ListTimeElement
+              totalLabel=""
+              inputLabel="주말"
+              type="number"
+              min={0}
+              max={24}
+              startName="weekendBreakStart"
+              startValue={inputs.weekendBreakStart}
+              endName="weekendBreakEnd"
+              endValue={inputs.weekendBreakEnd}
+              onChange={handleHourInput}
+            />
           </ul>
         </ESD.BodyLeft>
         <ESD.BodyRight>
@@ -315,15 +244,24 @@ const EditStoreDetail = () => {
                   selected={selectedClosedDate}
                   onChange={handleIrregularClosedDateChange}
                 />
-                <button onClick={handleIrregularClosedDaysClick}>
-                  달력에서 추가하기
-                </button>
               </div>
+              <ESD.DateAddButton onClick={handleIrregularClosedDaysClick}>
+                달력에서 추가하기
+              </ESD.DateAddButton>
             </li>
           </ul>
           <ul>
             {irregularClosedDays.map((item) => {
-              return <li>{item.toDateString()}</li>;
+              return (
+                <li key={item.toLocaleDateString('ko-KR')}>
+                  {item.toLocaleDateString('ko-KR')}
+                  <ESD.DateAddButton
+                    onClick={handleDeleteSelectedDateClick(item)}
+                  >
+                    삭제
+                  </ESD.DateAddButton>
+                </li>
+              );
             })}
           </ul>
         </ESD.BodyRight>

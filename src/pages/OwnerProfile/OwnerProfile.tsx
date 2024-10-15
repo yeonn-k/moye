@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { updateUserProfileAction } from '../../store/slices/auth/authSlice';
+import {
+  setIsStoreSelected,
+  updateUserProfileAction,
+} from '../../store/slices/auth/authSlice';
 import { S } from './OwnerProfile.style';
 import { RootState } from '../../store/store';
 import {
@@ -63,6 +66,17 @@ const OwnerProfile = () => {
     fetchStoresById();
   }, [loginUser, dispatch]);
 
+  useEffect(() => {
+    const resetStoreSelected = () => {
+      dispatch(setIsStoreSelected(false));
+    };
+    resetStoreSelected();
+  });
+
+  const handleLinkClick = () => {
+    dispatch(setIsStoreSelected(true));
+  };
+
   return (
     <S.OwnerProfileBox>
       <S.ProfileSection>
@@ -93,7 +107,10 @@ const OwnerProfile = () => {
             <>
               {stores.map((store) => (
                 <S.MyStoreItem key={store.id}>
-                  <Link to={`/today?storeId=${store.id}`}>
+                  <Link
+                    to={`/today?storeId=${store.id}`}
+                    onClick={handleLinkClick}
+                  >
                     {store.businessName}
                   </Link>
                 </S.MyStoreItem>

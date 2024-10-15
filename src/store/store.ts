@@ -15,6 +15,7 @@ const loadAuthState = () => {
           phone: null,
           avatarUrl: null,
         },
+        isStoreSelected: false,
       };
 };
 
@@ -35,6 +36,7 @@ store.subscribe(() => {
     JSON.stringify({
       token: state.auth.token,
       user: state.auth.user,
+      isStoreSelected: state.auth.isStoreSelected,
     }),
   );
 });

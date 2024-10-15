@@ -17,7 +17,7 @@ export const N = {
       padding: 8px 12px;
     }
     li:hover {
-      background-color: ${(props) => props.theme.color.green}
+      background-color: ${(props) => props.theme.color.green};
       border-radius: 4px;
     }
   `,

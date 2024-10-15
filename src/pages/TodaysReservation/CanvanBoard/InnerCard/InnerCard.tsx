@@ -1,6 +1,7 @@
 import React from 'react';
-import { S } from './InnerCard';
 import ConfirmButton from '../../../../components/common/ConfirmButton/ConfirmButton.tsx';
+
+import { S } from './InnerCard.style.ts';
 
 interface OuterCardProps {
   status: string;

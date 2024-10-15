@@ -1,7 +1,8 @@
-import { S } from './TimelineBox';
+import { S } from './TimelineBox.style.ts';
 
 interface TimelineBoxProps {
   items: Items[];
+  operating: number[];
 }
 
 interface Items {
@@ -13,37 +14,36 @@ interface Items {
   status: string;
 }
 
-const TimelineBox = ({ items }: TimelineBoxProps) => {
+const TimelineBox = ({ items, operating }: TimelineBoxProps) => {
   const lastNums = (phone: string) => {
     return phone.slice(-4, phone.length);
   };
+
+  console.log(operating);
+
+  const operatingNum = operating.length > 0 ? operating.length - 1 : 1;
+
+  if (!operating || operating.length === 0) return null;
   return (
     <S.TimelineBox>
       <S.TimeBox>
-        <S.Time>10</S.Time>
-        <S.Time>11</S.Time>
-        <S.Time>12</S.Time>
-        <S.Time>13</S.Time>
-        <S.Time>14</S.Time>
-        <S.Time>15</S.Time>
-        <S.Time>16</S.Time>
-        <S.Time>17</S.Time>
-        <S.Time>18</S.Time>
+        {operating.map((hr, idx) => {
+          return <S.Time key={idx}>{hr}</S.Time>;
+        })}
       </S.TimeBox>
-      <S.Grid>
-        <S.Cell></S.Cell>
-        <S.Cell></S.Cell>
-        <S.Cell></S.Cell>
-        <S.Cell></S.Cell>
-        <S.Cell></S.Cell>
-        <S.Cell></S.Cell>
-        <S.Cell></S.Cell>
-        <S.Cell></S.Cell>
+
+      <S.Grid operatingNum={operatingNum}>
+        {operating.slice(0, operatingNum).map((hr, idx) => {
+          return <S.Cell></S.Cell>;
+        })}
 
         <S.ItemGrid>
           {items.map((item) => {
             return (
-              <S.Item>
+              <S.Item
+              // start={parseInt(item.startTime)}
+              // end={parseInt(item.endTime)}
+              >
                 {item.name} ({item.count}명) {lastNums(item.phone)}
               </S.Item>
             );

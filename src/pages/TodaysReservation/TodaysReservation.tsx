@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { S } from './TodaysReservation';
-import UserInput from '../../components/common/UserInput/UserInput.tsx';
+import { useLocation, useSearchParams } from 'react-router-dom';
+import { BASE_URL } from '../../config/config.ts';
+
 import TimelineBox from './TimelineBox/TimelineBox.tsx';
 import CanvanBoard from './CanvanBoard/CanvanBoard.tsx';
 
-import { URL, PORT } from '../../config/config.ts';
-
-import api from '../../services/api.ts';
+import UserInput from '../../components/common/UserInput/UserInput.tsx';
 import useCheckTheDate from '../../hooks/useCheckTheDate.tsx';
+import api from '../../services/api.ts';
+
+import { S } from './TodaysReservation.style.ts';
 
 interface Items {
   name: string;
@@ -19,20 +21,23 @@ interface Items {
 }
 
 const TodaysReservation = ({}) => {
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const storeId = searchParams.get('storeId');
+
   const [items, setItems] = useState<Items[]>([]);
   const { month, date, days, day } = useCheckTheDate();
   const [businessHrs, setBusinessHrs] = useState({
-    open: 0,
-    close: 0,
+    open: '',
+    close: '',
   });
+  const [operating, setOperating] = useState<number[]>([]);
 
   const getTodaysReservation = async () => {
-    const storeId = 1;
     try {
-      const res = await api.get(
-        `${URL}:${PORT}/reservations/${storeId}/stores`,
-      );
-      setItems(res.data.body);
+      const res = await api.get(`${BASE_URL}/stores/${storeId}/reservations`);
+      setItems(res.data.body.reservations);
+      setBusinessHrs({ open: res.data.body.open, close: res.data.body.close });
     } catch (err) {
       console.error(err);
     }
@@ -41,7 +46,23 @@ const TodaysReservation = ({}) => {
   useEffect(() => {
     getTodaysReservation();
   }, []);
-  console.log(items);
+  console.log(items, businessHrs.open, businessHrs.close);
+
+  const openTime = () => {
+    const open = parseInt(businessHrs.open.slice(0, 2));
+    const close = parseInt(businessHrs.close.slice(0, 2)) + 1;
+
+    const newOperating = [];
+    for (let i = open; i <= close; i++) {
+      newOperating.push(i);
+    }
+
+    setOperating(newOperating);
+  };
+
+  useEffect(() => {
+    openTime();
+  }, [businessHrs]);
 
   return (
     <S.TodaysReservation>
@@ -63,7 +84,7 @@ const TodaysReservation = ({}) => {
           </S.InputBox>
         </S.FlexBox>
         <S.TimelineBox>
-          <TimelineBox items={items} />
+          <TimelineBox items={items} operating={operating} />
         </S.TimelineBox>
       </S.UpperBox>
       <CanvanBoard items={items} />

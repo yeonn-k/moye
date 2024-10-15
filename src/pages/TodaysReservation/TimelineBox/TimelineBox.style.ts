@@ -1,5 +1,11 @@
 import styled from 'styled-components';
 
+interface TimelineProps {
+  operatingNum: number;
+  // start: number;
+  // end: number;
+}
+
 export const S = {
   TimelineBox: styled.div`
     display: flex;
@@ -17,11 +23,11 @@ export const S = {
     text-align: center;
   `,
   Time: styled.div``,
-  Grid: styled.div`
+  Grid: styled.div<TimelineProps>`
     position: relative;
 
     display: grid;
-    grid-template-columns: repeat(8, 1fr);
+    grid-template-columns: repeat(${(props) => props.operatingNum}, 1fr);
     grid-gap: 0;
 
     width: 99%;

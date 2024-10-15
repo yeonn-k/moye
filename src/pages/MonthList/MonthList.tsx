@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { S } from './MonthList';
-import Dropdown from '../../components/common/Dropdown/Dropdown.tsx';
-import CalendarWrap from './CalendarWrap/CalendarWrap.tsx';
 import { useDispatch } from 'react-redux';
-import { openModal } from '../../store/slices/modal/modalSlice.ts';
-import useCheckTheDate from '../../hooks/useCheckTheDate.tsx';
 import axios from 'axios';
 
-import { URL } from '../../config/config';
+import Dropdown from '../../components/common/Dropdown/Dropdown.tsx';
+import CalendarWrap from './CalendarWrap/CalendarWrap.tsx';
+import useCheckTheDate from '../../hooks/useCheckTheDate.tsx';
+import { openModal } from '../../store/slices/modal/modalSlice.ts';
+import { BASE_URL } from '../../config/config';
+
+import { S } from './MonthList.style.ts';
 
 interface Items {
   [key: string]: { ACCEPT: number; PENDING: number; CANCEL: number };
@@ -16,22 +17,21 @@ interface Items {
 const MonthList = () => {
   const [count, setCount] = useState(0);
   const [selected, setSelected] = useState('');
+  const [items, setItems] = useState<Items>({});
+  const status = ['전체', '예약 확정', '대기중', '예약 취소'];
 
   const { month, date, days, day } = useCheckTheDate();
   const dispatch = useDispatch();
+
   const handleOpenSearchModal = () => {
     dispatch(openModal('search'));
   };
-
-  const status = ['전체', '예약 확정', '대기중', '예약 취소'];
-
-  const [items, setItems] = useState<Items>({});
 
   const getItems = async (month: number) => {
     try {
       const storeId = 1;
       const res = await axios.get(
-        `${URL}/reservations/${storeId}/stores?month=10`,
+        `${BASE_URL}/reservations/${storeId}/stores?month=10`,
       );
       setItems(res.data.body);
     } catch (err) {
@@ -64,6 +64,7 @@ const MonthList = () => {
     // 아닐 경우 객체 내에서 키를 통해 값을 필터링하고 해당하는 값만 담은 filteredItems를 내려주어 렌더링 하려고 합니다 !
 
     // 그런데 seleted(dropDown으로 선택된 값)에 따라 키를 어떻게 선택할 수 있을 지 잘 모르겠습니다...
+    // 현재는 전체일 경우 값이 없는 경우만 제외하고 렌더링하는
     // if (selected === '예약 확정') {
     // }
 

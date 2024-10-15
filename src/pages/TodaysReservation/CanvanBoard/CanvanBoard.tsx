@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { S } from './CanvaBoard';
 import OuterCard from './OuterCard/OuterCard.tsx';
+
+import { S } from './CanvaBoard.style.ts';
 
 interface CanvanBoardProps {
   items: Items[];

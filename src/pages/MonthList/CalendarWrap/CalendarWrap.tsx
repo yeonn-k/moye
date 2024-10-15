@@ -1,5 +1,5 @@
 import Calendar from 'react-calendar';
-import { S } from './CalendarWrap';
+import { S } from './CalendarWrap.style.ts';
 
 interface MonthListProps {
   selected: string;
@@ -20,6 +20,7 @@ const CalendarWrap = ({ selected, items }: MonthListProps) => {
           </div>
         </S.Item>
       );
+
     if (items[dateKey]) {
       const { ACCEPT, PENDING, CANCEL } = items[dateKey];
 

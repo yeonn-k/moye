@@ -7,6 +7,7 @@ import CanvanBoard from './CanvanBoard/CanvanBoard.tsx';
 
 import UserInput from '../../components/common/UserInput/UserInput.tsx';
 import useCheckTheDate from '../../hooks/useCheckTheDate.tsx';
+import useInputValue from '../../hooks/useInputValue.tsx';
 
 import api from '../../services/api.ts';
 
@@ -33,6 +34,9 @@ const TodaysReservation = ({}) => {
     open: '',
     close: '',
   });
+  const [inputValue, setInputValue] = useInputValue();
+
+  console.log(inputValue);
 
   const [operating, setOperating] = useState<number[]>([]);
 
@@ -49,6 +53,10 @@ const TodaysReservation = ({}) => {
   useEffect(() => {
     getTodaysReservation();
   }, []);
+
+  const filteredItems: Items[] = items.filter((item) => {
+    return item.name.includes(inputValue) || item.phone.includes(inputValue);
+  });
 
   const openTime = () => {
     const open = parseInt(businessHrs.open.slice(0, 2));
@@ -89,14 +97,16 @@ const TodaysReservation = ({}) => {
               width="220px"
               color="white"
               height="25px"
+              value={inputValue}
+              onChange={setInputValue}
             />
           </S.InputBox>
         </S.FlexBox>
         <S.TimelineBox>
-          <TimelineBox items={items} operating={operating} />
+          <TimelineBox items={filteredItems} operating={operating} />
         </S.TimelineBox>
       </S.UpperBox>
-      <CanvanBoard items={items} />
+      <CanvanBoard items={filteredItems} />
     </S.TodaysReservation>
   );
 };

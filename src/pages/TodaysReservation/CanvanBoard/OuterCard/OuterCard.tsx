@@ -3,6 +3,7 @@ import React from 'react';
 import InnerCard from '../InnerCard/InnerCard.tsx';
 
 import { S } from './OuterCard.style.ts';
+import { isGetAccessorDeclaration } from 'typescript';
 
 interface CanvanBoardProps {
   status: string;
@@ -19,10 +20,18 @@ interface Items {
 }
 
 const OuterCard = ({ status, filtered }: CanvanBoardProps) => {
+  const statusTitle = () => {
+    if (status === 'accept') {
+      return '예약 확정';
+    }
+    if (status === 'pending') {
+      return '대기 중';
+    } else return '지나간 예약';
+  };
   return (
     <S.CardBox>
       <S.TitleBox>
-        <S.CardName>예약 확정</S.CardName>
+        <S.CardName>{statusTitle()}</S.CardName>
         <S.Amount>
           {filtered.length}
           <S.LilFont>건</S.LilFont>

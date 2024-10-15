@@ -42,6 +42,7 @@ const TimelineBox = ({ items, operating }: TimelineBoxProps) => {
             const startIndex = operating.indexOf(start);
             const endIndex = operating.indexOf(end);
 
+            if (item.status === 'CANCEL') return null;
             return (
               <S.ItemWrap key={idx} operatingNum={operatingNum}>
                 <S.Item

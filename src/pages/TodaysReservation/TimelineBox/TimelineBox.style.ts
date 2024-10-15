@@ -29,6 +29,7 @@ export const S = {
   Time: styled.div``,
   Grid: styled.div<girdProps>`
     position: relative;
+    overflow: scroll;
 
     display: grid;
     grid-template-columns: repeat(${(props) => props.operatingNum}, 1fr);
@@ -65,10 +66,10 @@ export const S = {
     flex-wrap: wrap;
     align-items: center;
     padding-left: 14px;
-    margin-top: 14px;
+    margin-top: 12px;
     grid-column: ${(props) => props.start + 1} / span
       ${(props) => props.end - props.start};
-    height: 34px;
+    height: 40px;
     background-color: ${(props) =>
       props.status === 'ACCEPT'
         ? props.theme.color.paleCoral

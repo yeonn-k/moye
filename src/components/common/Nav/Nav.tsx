@@ -26,10 +26,10 @@ const Nav = () => {
       {isStoreSelected && (
         <N.NavMenu>
           <li>
-            <Link to="/dashboard">Dashboard</Link>
+            <Link to="/today">today</Link>
           </li>
           <li>
-            <Link to="/list">List</Link>
+            <Link to="/month">month</Link>
           </li>
           <li>
             <Link to="/store">Store</Link>

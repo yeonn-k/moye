@@ -46,24 +46,16 @@ function AppRouter() {
       ),
       children: [
         {
+          path: 'owner',
+          element: <OwnerProfile />,
+        },
+        {
           path: 'today',
           element: <TodaysReservation />,
         },
         {
           path: 'month',
           element: <MonthList />,
-        },
-        {
-          path: 'owner',
-          element: <OwnerProfile />,
-        },
-        {
-          path: 'dashboard',
-          element: <div>This is dashboard page</div>,
-        },
-        {
-          path: 'list',
-          element: <div>This is list page</div>,
         },
         {
           path: 'store',

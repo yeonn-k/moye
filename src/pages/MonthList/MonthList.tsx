@@ -18,7 +18,7 @@ interface Items {
 
 const MonthList = () => {
   const [count, setCount] = useState(0);
-  const [selected, setSelected] = useState('');
+  const [selected, setSelected] = useState<string>('');
   const [items, setItems] = useState<Items>({});
 
   const status = ['전체', '예약 확정', '대기중', '예약 취소'];

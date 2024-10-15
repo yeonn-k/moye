@@ -19,8 +19,6 @@ const TimelineBox = ({ items, operating }: TimelineBoxProps) => {
     return phone.slice(-4, phone.length);
   };
 
-  console.log(operating);
-
   const operatingNum = operating.length > 0 ? operating.length - 1 : 1;
 
   if (!operating || operating.length === 0) return null;
@@ -34,18 +32,27 @@ const TimelineBox = ({ items, operating }: TimelineBoxProps) => {
 
       <S.Grid operatingNum={operatingNum}>
         {operating.slice(0, operatingNum).map((hr, idx) => {
-          return <S.Cell></S.Cell>;
+          return <S.Cell key={idx}></S.Cell>;
         })}
-
         <S.ItemGrid>
-          {items.map((item) => {
+          {items.map((item, idx) => {
+            const start = parseInt(item.startTime.slice(0, 2));
+            const end = parseInt(item.endTime.slice(0, 2));
+
+            const startIndex = operating.indexOf(start);
+            const endIndex = operating.indexOf(end);
+
             return (
-              <S.Item
-              // start={parseInt(item.startTime)}
-              // end={parseInt(item.endTime)}
-              >
-                {item.name} ({item.count}명) {lastNums(item.phone)}
-              </S.Item>
+              <S.ItemWrap key={idx} operatingNum={operatingNum}>
+                <S.Item
+                  key={idx}
+                  start={startIndex}
+                  end={endIndex}
+                  status={item.status}
+                >
+                  {item.name} ({item.count}명) {lastNums(item.phone)}
+                </S.Item>
+              </S.ItemWrap>
             );
           })}
         </S.ItemGrid>

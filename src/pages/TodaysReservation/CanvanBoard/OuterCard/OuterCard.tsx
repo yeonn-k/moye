@@ -31,8 +31,8 @@ const OuterCard = ({ status, filtered }: CanvanBoardProps) => {
       <S.Line status={status} />
       <S.ColorBox status={status}>
         <S.ScrollBox>
-          {filtered.map((item) => {
-            return <InnerCard status={status} item={item} />;
+          {filtered.map((item, idx) => {
+            return <InnerCard key={idx} status={status} item={item} />;
           })}
         </S.ScrollBox>
       </S.ColorBox>

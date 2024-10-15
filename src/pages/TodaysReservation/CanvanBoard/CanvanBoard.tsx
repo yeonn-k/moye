@@ -44,12 +44,8 @@ const CanvanBoard = ({ items }: CanvanBoardProps) => {
       });
 
       setFiltered(newFiltered);
-
-      console.log(newFiltered);
     });
   }, [items]);
-
-  console.log(filtered);
 
   return (
     <S.CanvanBoardBox>

@@ -1,9 +1,13 @@
 import styled from 'styled-components';
 
-interface TimelineProps {
+interface girdProps {
   operatingNum: number;
-  // start: number;
-  // end: number;
+}
+
+interface itemProps {
+  start: number;
+  end: number;
+  status: string;
 }
 
 export const S = {
@@ -23,7 +27,7 @@ export const S = {
     text-align: center;
   `,
   Time: styled.div``,
-  Grid: styled.div<TimelineProps>`
+  Grid: styled.div<girdProps>`
     position: relative;
 
     display: grid;
@@ -40,24 +44,36 @@ export const S = {
     height: 100%;
   `,
   ItemGrid: styled.div`
-    overflow: scroll;
     position: absolute;
 
     display: grid;
-    grid-template-columns: repeat(8, 1fr);
+    grid-template-columns: auto;
+  `,
+
+  ItemWrap: styled.div<girdProps>`
+    display: grid;
+    grid-template-columns: repeat(${(props) => props.operatingNum}, 1fr);
+
     grid-gap: 0;
 
     width: 100%;
     max-height: 248px;
   `,
 
-  Item: styled.div`
+  Item: styled.div<itemProps>`
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     padding-left: 14px;
     margin-top: 14px;
-    grid-column: 1 / span 2;
+    grid-column: ${(props) => props.start + 1} / span
+      ${(props) => props.end - props.start};
     height: 34px;
-    background-color: ${(props) => props.theme.color.paleCoral};
+    background-color: ${(props) =>
+      props.status === 'ACCEPT'
+        ? props.theme.color.paleCoral
+        : props.status === 'PENDING'
+          ? props.theme.color.paleGreen
+          : props.theme.color.paleNavy};
   `,
 };

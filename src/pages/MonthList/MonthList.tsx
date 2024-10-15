@@ -9,6 +9,8 @@ import { openModal } from '../../store/slices/modal/modalSlice.ts';
 import { BASE_URL } from '../../config/config';
 
 import { S } from './MonthList.style.ts';
+import api from '../../services/api.ts';
+import { useLocation } from 'react-router-dom';
 
 interface Items {
   [key: string]: { ACCEPT: number; PENDING: number; CANCEL: number };
@@ -23,15 +25,19 @@ const MonthList = () => {
   const { month, date, days, day } = useCheckTheDate();
   const dispatch = useDispatch();
 
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  // const storeId = searchParams.get('storeId');
+  const storeId = 3;
+
   const handleOpenSearchModal = () => {
     dispatch(openModal('search'));
   };
 
   const getItems = async (month: number) => {
     try {
-      const storeId = 1;
-      const res = await axios.get(
-        `${BASE_URL}/reservations/${storeId}/stores?month=10`,
+      const res = await api.get(
+        `${BASE_URL}/stores/${storeId}/reservations?month=${month}`,
       );
       setItems(res.data.body);
     } catch (err) {

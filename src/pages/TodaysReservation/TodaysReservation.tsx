@@ -7,6 +7,7 @@ import CanvanBoard from './CanvanBoard/CanvanBoard.tsx';
 
 import UserInput from '../../components/common/UserInput/UserInput.tsx';
 import useCheckTheDate from '../../hooks/useCheckTheDate.tsx';
+
 import api from '../../services/api.ts';
 
 import { S } from './TodaysReservation.style.ts';
@@ -23,7 +24,8 @@ interface Items {
 const TodaysReservation = ({}) => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const storeId = searchParams.get('storeId');
+  // const storeId = searchParams.get('storeId');
+  const storeId = 3;
 
   const [items, setItems] = useState<Items[]>([]);
   const { month, date, days, day } = useCheckTheDate();
@@ -31,6 +33,7 @@ const TodaysReservation = ({}) => {
     open: '',
     close: '',
   });
+
   const [operating, setOperating] = useState<number[]>([]);
 
   const getTodaysReservation = async () => {
@@ -46,11 +49,17 @@ const TodaysReservation = ({}) => {
   useEffect(() => {
     getTodaysReservation();
   }, []);
-  console.log(items, businessHrs.open, businessHrs.close);
 
   const openTime = () => {
     const open = parseInt(businessHrs.open.slice(0, 2));
-    const close = parseInt(businessHrs.close.slice(0, 2)) + 1;
+
+    const checkClose = () => {
+      if (parseInt(businessHrs.close[2]) !== 0) {
+        return parseInt(businessHrs.close.slice(0, 2)) + 1;
+      } else return parseInt(businessHrs.close.slice(0, 2));
+    };
+
+    const close = checkClose();
 
     const newOperating = [];
     for (let i = open; i <= close; i++) {

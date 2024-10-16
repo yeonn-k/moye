@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ESD } from './EditStoreDetail';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -56,9 +56,9 @@ function isExist(data: any) {
 const EditStoreDetail = () => {
   const location = useLocation(); // access to location.state
   const navigate = useNavigate();
-  const imgRef = useRef();
   const [inputs, setInputs] = useState(initialState);
-  const [imgFile, setImgFile] = useState('');
+  const [uploadedImage, setUploadedImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState('');
   const [regularClosedDays, setRegularClosedDays] = useState<number[]>([]);
   const [selectedClosedDate, setSelectedClosedDate] = useState(new Date());
   const [irregularClosedDays, setIrregularClosedDays] = useState<string[]>([]);
@@ -85,14 +85,17 @@ const EditStoreDetail = () => {
       setRegularClosedDays(regularClosedDays.filter((item) => item !== id));
     }
   };
-  const handleUploadPictureClick = () => {
+  const handleUploadPictureClick = (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
-      const file = imgRef.current!.files[0];
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onloadend = () => {
-        setImgFile(reader.result);
-      };
+      const imageFile = e.target.files?.[0];
+
+      if (imageFile) {
+        const reader = new FileReader();
+
+        setUploadedImage(imageFile);
+        reader.readAsDataURL(imageFile);
+        reader.onloadend = () => setImagePreview(reader.result);
+      }
     } catch (error) {
       console.log('Error: ', error);
     }
@@ -100,6 +103,7 @@ const EditStoreDetail = () => {
   const handlePostFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
+      const formData = new FormData();
       let auth = null;
       if (isExist(localStorage) && isExist(localStorage.getItem('auth'))) {
         auth = JSON.parse(localStorage.getItem('auth'));
@@ -152,22 +156,26 @@ const EditStoreDetail = () => {
           },
         })
         .then((res) => {
+          alert('매장이 등록되었습니다.');
           console.log(res);
         })
         .catch((error) => {
-          alert('등록에 실패하였습니다.');
+          alert('매장 등록에 실패하였습니다.');
           console.log('Error: ', error);
         });
+      formData.append('files', uploadedImage);
+      axios.post('http://localhost:5005/uploads/3', formData, {
+        headers: {
+          Authorization: `Bearer ${auth.token}`,
+          'Content-Type': 'multipart/form-data',
+        },
+      });
     } catch (error) {
       console.log('Error: ', error);
     }
-
-    // 사진은 별도의 POST로 분리하여 요청하기
   };
   const handleCancleFormClick = () => {
-    alert('취소하시겠습니까?');
-    navigate('/store');
-    // TODO: 확인, 취소 창으로 변경
+    // 취소 되묻기 기능, PSG 문제 방지
   };
   const handleIrregularClosedDaysClick = () => {
     const formattedDate = dayjs(selectedClosedDate).format(DATE_FORMAT);
@@ -186,8 +194,6 @@ const EditStoreDetail = () => {
       );
     };
   };
-
-  // useEffect(() => console.log(selector), []);
 
   return (
     <ESD.EditStoreDetail>
@@ -297,13 +303,16 @@ const EditStoreDetail = () => {
           <ul>
             <li>
               <div>
-                <img src={imgFile ? imgFile : '../StoreDetail/halloween.jpg'} />
+                <img
+                  src={
+                    imagePreview ? imagePreview : '../StoreDetail/halloween.jpg'
+                  }
+                />
                 <input
                   type="file"
                   accept="image/*"
                   id="profileImg"
                   onChange={handleUploadPictureClick}
-                  ref={imgRef}
                 />
               </div>
             </li>
@@ -339,18 +348,16 @@ const EditStoreDetail = () => {
             </li>
           </ul>
           <ul>
-            {irregularClosedDays.map((item) => {
-              return (
-                <li key={item}>
-                  {item}
-                  <ESD.DateAddButton
-                    onClick={handleDeleteSelectedDateClick(item)}
-                  >
-                    삭제
-                  </ESD.DateAddButton>
-                </li>
-              );
-            })}
+            {irregularClosedDays.map((item) => (
+              <li key={item}>
+                {item}
+                <ESD.DateAddButton
+                  onClick={handleDeleteSelectedDateClick(item)}
+                >
+                  삭제
+                </ESD.DateAddButton>
+              </li>
+            ))}
           </ul>
         </ESD.BodyRight>
       </ESD.Body>

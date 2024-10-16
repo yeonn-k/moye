@@ -12,6 +12,7 @@ import {
   getStoresByIdService,
 } from '../../services/auth/authService';
 import { formatPhoneNumber } from '../../utils/formatter';
+import OwnerAvatar from '../../components/common/OwnerAvatar/OwnerAvatar.tsx';
 
 // TODO: interface 외부 파일로 관리 필요
 interface Store {
@@ -81,7 +82,7 @@ const OwnerProfile = () => {
     <S.OwnerProfileBox>
       <S.ProfileSection>
         <S.AvatarArea>
-          <S.DefaultAvatar />
+          <OwnerAvatar $avatarUrl={loginUser?.avatarUrl} />
           <S.AvatarSelectButton>프로필 변경</S.AvatarSelectButton>
         </S.AvatarArea>
         <S.OwnerInfoArea>

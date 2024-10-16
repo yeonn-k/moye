@@ -50,6 +50,10 @@ export const S = {
     background-color: ${(props) => props.theme.color.green};
     border-radius: 5px;
     margin-left: 14px;
+
+    &:hover {
+      cursor: pointer;
+    }
   `,
   IconImg: styled.div`
     background-image: url('/icons/magnifierIcon.svg');

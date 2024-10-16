@@ -27,6 +27,9 @@ export const S = {
     text-align: center;
   `,
   Time: styled.div``,
+  NoTime: styled.div`
+    visibility: hidden;
+  `,
   Grid: styled.div<girdProps>`
     position: relative;
 

@@ -22,24 +22,28 @@ interface Items {
 
 const CanvanBoard = ({ items, setIsRerender }: CanvanBoardProps) => {
   const [oClock, setOClock] = useState(false);
-  const { hour } = useCheckTheDate();
+  const [thirty, setThirty] = useState(false);
+  const { hour, minute } = useCheckTheDate();
   const [filtered, setFiltered] = useState({
     accept: [] as Items[],
     pending: [] as Items[],
     completed: [] as Items[],
   });
 
-  const checkOClock = () => {
+  const checkTime = () => {
     const now = dayjs();
     if (now.minute() === 0 && now.second() === 0) {
       setOClock(true);
+    } else if (now.minute() === 30 && now.second() === 0) {
+      setThirty(true);
     } else {
       setOClock(false);
+      setThirty(false);
     }
   };
 
   useEffect(() => {
-    const interval = setInterval(checkOClock, 60000);
+    const interval = setInterval(checkTime, 1000);
     return () => clearInterval(interval);
   }, []);
 
@@ -52,10 +56,19 @@ const CanvanBoard = ({ items, setIsRerender }: CanvanBoardProps) => {
       };
 
       items.forEach((item: Items) => {
-        if (
-          item.status === 'ACCEPT' &&
-          parseInt(item.startTime.slice(0, 2)) <= hour
-        ) {
+        const start = () => {
+          if (parseInt(item.startTime[3]) !== 0) {
+            return parseInt(item.startTime.slice(0, 2)) + 0.5;
+          } else return parseInt(item.startTime.slice(0, 2));
+        };
+
+        const now = () => {
+          if (minute >= 30) {
+            return hour + 0.5;
+          } else return hour;
+        };
+
+        if (item.status === 'ACCEPT' && start() <= now()) {
           newFiltered.completed.push(item);
         } else if (item.status === 'ACCEPT') {
           newFiltered.accept.push(item);
@@ -66,7 +79,7 @@ const CanvanBoard = ({ items, setIsRerender }: CanvanBoardProps) => {
 
       setFiltered(newFiltered);
     });
-  }, [items, oClock, hour]);
+  }, [items, oClock, thirty, hour]);
 
   return (
     <S.CanvanBoardBox>
@@ -75,18 +88,21 @@ const CanvanBoard = ({ items, setIsRerender }: CanvanBoardProps) => {
         filtered={filtered.accept}
         setIsRerender={setIsRerender}
         oClock={oClock}
+        thirty={thirty}
       />
       <OuterCard
         status={'pending'}
         filtered={filtered.pending}
         setIsRerender={setIsRerender}
         oClock={oClock}
+        thirty={thirty}
       />
       <OuterCard
         status={'completed'}
         filtered={filtered.completed}
         setIsRerender={setIsRerender}
         oClock={oClock}
+        thirty={thirty}
       />
     </S.CanvanBoardBox>
   );

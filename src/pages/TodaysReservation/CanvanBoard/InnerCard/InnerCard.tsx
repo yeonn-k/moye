@@ -11,6 +11,7 @@ interface OuterCardProps {
   item: Items;
   setIsRerender: React.Dispatch<React.SetStateAction<boolean>>;
   oClock: boolean;
+  thirty: boolean;
 }
 
 interface Items {
@@ -23,8 +24,14 @@ interface Items {
   status: string;
 }
 
-const InnerCard = ({ status, item, setIsRerender, oClock }: OuterCardProps) => {
-  const { hour } = useCheckTheDate();
+const InnerCard = ({
+  status,
+  item,
+  setIsRerender,
+  oClock,
+  thirty,
+}: OuterCardProps) => {
+  const { hour, minute } = useCheckTheDate();
 
   const putChangeReservationsState = async () => {
     const id = item.id;
@@ -54,10 +61,18 @@ const InnerCard = ({ status, item, setIsRerender, oClock }: OuterCardProps) => {
 
   const putChangePassedState = async () => {
     const id = item.id;
-    if (
-      item.status === 'PENDING' &&
-      parseInt(item.startTime.slice(0, 2)) <= hour
-    ) {
+    const start = () => {
+      if (parseInt(item.startTime[3]) !== 0) {
+        return parseInt(item.startTime.slice(0, 2)) + 0.5;
+      } else return parseInt(item.startTime.slice(0, 2));
+    };
+
+    const now = () => {
+      if (minute >= 30) {
+        return hour + 0.5;
+      } else return hour;
+    };
+    if (item.status === 'PENDING' && start() <= now()) {
       try {
         const res = await api.put(`${BASE_URL}/reservations/${id}`, {
           state: 'CANCEL',
@@ -72,7 +87,7 @@ const InnerCard = ({ status, item, setIsRerender, oClock }: OuterCardProps) => {
 
   useEffect(() => {
     putChangePassedState();
-  }, [oClock]);
+  }, [oClock, thirty]);
 
   return (
     <S.Card>

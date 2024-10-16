@@ -36,7 +36,7 @@ const TodaysReservation = ({}) => {
     close: '',
   });
   const [inputValue, setInputValue] = useInputValue();
-  const [operating, setOperating] = useState<number[]>([]);
+  const [operating, setOperating] = useState<(number | string)[]>([]);
   const [isRerender, setIsRerender] = useState(false);
 
   const getTodaysReservation = async () => {
@@ -67,16 +67,17 @@ const TodaysReservation = ({}) => {
     const open = parseInt(businessHrs.open.slice(0, 2));
 
     const checkClose = () => {
-      if (parseInt(businessHrs.close[2]) !== 0) {
-        return parseInt(businessHrs.close.slice(0, 2)) + 1;
-      } else return parseInt(businessHrs.close.slice(0, 2));
+      return parseInt(businessHrs.close.slice(0, 2));
     };
 
     const close = checkClose();
 
-    const newOperating = [];
+    const newOperating: (number | string)[] = [];
     for (let i = open; i <= close; i++) {
-      newOperating.push(i);
+      if (i < close) {
+        newOperating.push(i);
+        newOperating.push(i + 0.5);
+      } else newOperating.push(i);
     }
 
     setOperating(newOperating);

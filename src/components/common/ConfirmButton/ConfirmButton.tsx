@@ -1,5 +1,5 @@
 import React from 'react';
-import { S } from './ConfirmButton';
+import { S } from './ConfirmButton.style.ts';
 
 interface ConfirmButtonProps {
   action: 'confirm' | 'cancel';

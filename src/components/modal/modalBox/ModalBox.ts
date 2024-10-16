@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 export const S = {
   ModalContainer: styled.div`
+    z-index: 2;
     position: fixed;
     top: 0;
     right: 0;

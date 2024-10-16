@@ -13,6 +13,7 @@ export const S = {
     height: 404px;
   `,
   TitleBox: styled.div`
+    position: relative;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -35,6 +36,21 @@ export const S = {
 
   LilFont: styled.span`
     font-size: 16px;
+  `,
+  Refresh: styled.div`
+    position: absolute;
+    right: -146px;
+    top: 10px;
+
+    background-image: url('/icons/refreshIcon.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 24px;
+    height: 24px;
+
+    &:hover {
+      cursor: pointer;
+    }
   `,
 
   Line: styled.div<CanvanBoardProps>`

@@ -18,5 +18,9 @@ export const S = {
         ? props.theme.color.green
         : props.theme.color.deepGreen};
     color: white;
+
+    &:hover {
+      cursor: pointer;
+    }
   `,
 };

@@ -26,6 +26,10 @@ export const S = {
     align-items: center;
     padding-left: 12px;
     background-color: #fff;
+
+    &:hover {
+      cursor: pointer;
+    }
   `,
   DropdownButton: styled.button`
     background: none;

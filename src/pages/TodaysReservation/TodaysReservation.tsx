@@ -14,6 +14,7 @@ import api from '../../services/api.ts';
 import { S } from './TodaysReservation.style.ts';
 
 interface Items {
+  id: number;
   name: string;
   count: number;
   startTime: string;
@@ -35,14 +36,15 @@ const TodaysReservation = ({}) => {
     close: '',
   });
   const [inputValue, setInputValue] = useInputValue();
-
   const [operating, setOperating] = useState<number[]>([]);
+  const [isRerender, setIsRerender] = useState(false);
 
   const getTodaysReservation = async () => {
     try {
       const res = await api.get(`${BASE_URL}/stores/${storeId}/reservations`);
       setItems(res.data.body.reservations);
       setBusinessHrs({ open: res.data.body.open, close: res.data.body.close });
+      console.log(res.data.body.reservations);
     } catch (err) {
       console.error(err);
     }
@@ -51,6 +53,11 @@ const TodaysReservation = ({}) => {
   useEffect(() => {
     getTodaysReservation();
   }, []);
+
+  useEffect(() => {
+    getTodaysReservation();
+    setIsRerender(false);
+  }, [isRerender]);
 
   const filteredItems: Items[] = items.filter((item) => {
     return item.name.includes(inputValue) || item.phone.includes(inputValue);
@@ -81,7 +88,9 @@ const TodaysReservation = ({}) => {
 
   return (
     <S.TodaysReservation>
-      <S.StoreName>store Name</S.StoreName>
+      <S.TitleBox>
+        <S.StoreName>store Name</S.StoreName>
+      </S.TitleBox>
       <S.UpperBox>
         <S.FlexBox>
           <div>
@@ -104,7 +113,7 @@ const TodaysReservation = ({}) => {
           <TimelineBox items={filteredItems} operating={operating} />
         </S.TimelineBox>
       </S.UpperBox>
-      <CanvanBoard items={filteredItems} />
+      <CanvanBoard items={filteredItems} setIsRerender={setIsRerender} />
     </S.TodaysReservation>
   );
 };

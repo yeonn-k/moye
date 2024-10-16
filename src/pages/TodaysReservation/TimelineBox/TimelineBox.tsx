@@ -2,7 +2,7 @@ import { S } from './TimelineBox.style.ts';
 
 interface TimelineBoxProps {
   items: Items[];
-  operating: number[];
+  operating: (number | string)[];
 }
 
 interface Items {
@@ -26,7 +26,11 @@ const TimelineBox = ({ items, operating }: TimelineBoxProps) => {
     <S.TimelineBox>
       <S.TimeBox>
         {operating.map((hr, idx) => {
-          return <S.Time key={idx}>{hr}</S.Time>;
+          return idx % 2 === 0 ? (
+            <S.Time key={idx}>{hr}</S.Time>
+          ) : (
+            <S.NoTime key={idx}>{hr}</S.NoTime>
+          );
         })}
       </S.TimeBox>
 
@@ -36,11 +40,19 @@ const TimelineBox = ({ items, operating }: TimelineBoxProps) => {
         })}
         <S.ItemGrid>
           {items.map((item, idx) => {
-            const start = parseInt(item.startTime.slice(0, 2));
-            const end = parseInt(item.endTime.slice(0, 2));
+            const start = () => {
+              if (parseInt(item.startTime[3]) !== 0) {
+                return parseInt(item.startTime.slice(0, 2)) + 0.5;
+              } else return parseInt(item.startTime.slice(0, 2));
+            };
+            const end = () => {
+              if (parseInt(item.endTime[3]) !== 0) {
+                return parseInt(item.endTime.slice(0, 2)) + 0.5;
+              } else return parseInt(item.endTime.slice(0, 2));
+            };
 
-            const startIndex = operating.indexOf(start);
-            const endIndex = operating.indexOf(end);
+            const startIndex = operating.indexOf(start());
+            const endIndex = operating.indexOf(end());
 
             if (item.status === 'CANCEL') return null;
             return (

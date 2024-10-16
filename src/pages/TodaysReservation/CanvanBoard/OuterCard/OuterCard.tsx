@@ -9,6 +9,7 @@ interface CanvanBoardProps {
   filtered: Items[];
   setIsRerender: React.Dispatch<React.SetStateAction<boolean>>;
   oClock: boolean;
+  thirty: boolean;
 }
 
 interface Items {
@@ -26,6 +27,7 @@ const OuterCard = ({
   filtered,
   setIsRerender,
   oClock,
+  thirty,
 }: CanvanBoardProps) => {
   const handleRerender = () => {
     setIsRerender(true);
@@ -60,6 +62,7 @@ const OuterCard = ({
                 item={item}
                 setIsRerender={setIsRerender}
                 oClock={oClock}
+                thirty={thirty}
               />
             );
           })}

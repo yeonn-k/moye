@@ -46,12 +46,8 @@ const SignUp = () => {
     const signUpForm = { email, password, name, phone };
     const hasErrors = Object.values(errors).some((error) => error !== '');
 
-    if (hasErrors) {
-      setSubmitError(true);
-      return;
-    }
-
     if (!email || !password || !name || !phone || hasErrors) {
+      setSubmitError(true);
       return;
     }
 
@@ -81,6 +77,7 @@ const SignUp = () => {
             name="email"
             value={userForm.email}
             onChange={handleUserFormChange}
+            autoComplete="off"
           />
           <S.UserInputLabel>
             <span>비밀번호*</span>
@@ -93,6 +90,7 @@ const SignUp = () => {
             type="password"
             value={userForm.password}
             onChange={handleUserFormChange}
+            autoComplete="off"
           />
           <S.UserInputLabel>
             <span>비밀번호 재확인*</span>
@@ -105,6 +103,7 @@ const SignUp = () => {
             type="password"
             value={userForm.passwordConfirm}
             onChange={handleUserFormChange}
+            autoComplete="off"
           />
           <S.UserInputLabel>
             <span>이름*</span>
@@ -129,11 +128,11 @@ const SignUp = () => {
             onChange={handleUserFormChange}
           />
         </S.UserInputBox>
-        {submitError && (
-          <S.SubmitErrorMessage>
-            모든 정보를 올바르게 입력한 후 다시 시도해 주세요.
-          </S.SubmitErrorMessage>
-        )}
+
+        <S.SubmitErrorMessage className={submitError ? 'visible' : ''}>
+          모든 정보를 올바르게 입력한 후 다시 시도해 주세요.
+        </S.SubmitErrorMessage>
+
         <S.SubmitButton>가입하기</S.SubmitButton>
         <S.LoginPrompt>
           <S.LoginPromptMessage>이미 계정이 있으신가요?</S.LoginPromptMessage>

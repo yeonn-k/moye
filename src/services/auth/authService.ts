@@ -1,3 +1,4 @@
+import axios from 'axios';
 import api from '../api';
 
 interface Store {
@@ -13,6 +14,7 @@ interface Store {
   tableCount: number;
   updateDate: string;
   updateUser: string;
+  description: string;
 }
 
 interface SignupRequest {
@@ -87,9 +89,13 @@ export const signUpService = async ({
     if (response.status === 200) {
       return response.data;
     } else {
-      return null;
+      console.log(response);
     }
   } catch (e) {
+    // TODO: 회원가입 응답 에러 처리 로직 필요
+    // if (axios.isAxiosError(e) && e.response) {
+    //   throw new Error(e.response.data);
+    // }
     console.error('회원가입 에러: ', e);
   }
 };
@@ -103,9 +109,14 @@ export const loginService = async ({ email, password }: LoginRequest) => {
     if (response.status === 200) {
       return response;
     } else {
-      return null;
+      if (response.status === 404) {
+        console.log(response);
+      }
     }
   } catch (e) {
+    if (axios.isAxiosError(e) && e.response) {
+      throw new Error(e.response.data.message);
+    }
     console.error('로그인 에러: ', e);
   }
 };
@@ -119,6 +130,10 @@ export const getUserByEmailService = async ({ email }: GetUserRequest) => {
       return null;
     }
   } catch (e) {
+    // TODO: 회원 조회 에러 처리 로직 필요
+    // if (axios.isAxiosError(e) && e.response) {
+    //   throw new Error(e.response.data);
+    // }
     console.error('회원 조회 에러: ', e);
   }
 };
@@ -130,6 +145,10 @@ export const getStoresByIdService = async ({ userId }: GetStoresRequest) => {
       return response.data.body.stores;
     }
   } catch (e) {
+    // TODO: 가게 조회 에러 처리 로직 필요
+    // if (axios.isAxiosError(e) && e.response) {
+    //   throw new Error(e.response.data);
+    // }
     console.error('가게 조회 에러', e);
   }
 };

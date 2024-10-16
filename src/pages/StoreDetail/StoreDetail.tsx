@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { SD } from './StoreDetail';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import ROUTE_LINK from '../../routes/RouterLink.ts';
 import { StoreDetailData, initialState } from './StoreDetailInterface.ts';
 import OperatingTimeTable from './OperatingTimeTable.tsx';
 import halloween from './halloween.jpg';
@@ -37,7 +38,7 @@ const StoreDetail = () => {
     <>
       <SD.TopBar>
         <p>매장이름</p>
-        <Link to="edit" state={{ data: 20070221 }}>
+        <Link to={ROUTE_LINK.STOREEDIT.link} state={{ data: 20070221 }}>
           <button>편집</button>
         </Link>
       </SD.TopBar>

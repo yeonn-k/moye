@@ -7,6 +7,9 @@ interface MonthListProps {
 }
 
 const CalendarWrap = ({ selected, items }: MonthListProps) => {
+  const disabledTiles = () => {
+    return;
+  };
   const tileContent = ({ date }: { date: Date }) => {
     const dateKey = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 
@@ -54,6 +57,7 @@ const CalendarWrap = ({ selected, items }: MonthListProps) => {
         locale="en"
         calendarType="hebrew"
         tileContent={tileContent}
+        onClickDay={disabledTiles}
       />
     </S.CalendarBox>
   );

@@ -60,6 +60,12 @@ export const S = {
     .react-calendar__month-view__days__day--neighboringMonth {
       color: ${(props) => props.theme.color.paleGray};
     }
+    .react-calendar__tile--now {
+      border: 4px solid ${(props) => props.theme.color.lightGreen};
+    }
+    .react-calendar__tile:enabled:hover {
+      background-color: #dbf7d2;
+    }
   `,
   ItemBox: styled.div`
     display: flex;
@@ -124,9 +130,7 @@ export const S = {
       color: ${(props) => props.theme.kultureGreen};
     }
 
-    .react-calendar__tile--now {
-      background: #fff;
-    }
+  
 
     .react-calendar__tile--now:enabled:hover,
     .react-calendar__tile--now:enabled:focus {
@@ -148,10 +152,7 @@ export const S = {
       height: 30px;
     }
 
-    .react-calendar__tile:enabled:hover,
-    .react-calendar__tile:enabled:focus {
-      color: #1c1b1b;
-    }
+    
 
     .react-calendar__tile {
       color: #e6e6e6;

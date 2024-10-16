@@ -51,7 +51,6 @@ const SearchModal = ({ onClose }: SearchModalProps) => {
   useEffect(() => {
     searchByPhone(inputValue);
   }, [inputValue]);
-  console.log('searched', searched);
 
   return (
     <S.SearchModal>

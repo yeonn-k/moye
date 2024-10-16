@@ -31,13 +31,10 @@ const Dropdown = ({
   };
 
   return (
-    <S.DropdownContainer
-      open={isOpen}
-      width={width}
-      height={height}
-      onClick={toggleDropdown}
-    >
-      <S.DropdownButton>{selectedItem}</S.DropdownButton>
+    <S.DropdownContainer open={isOpen} width={width} height={height}>
+      <S.DropdownButton onClick={toggleDropdown}>
+        {selectedItem}
+      </S.DropdownButton>
       {isOpen ? (
         <S.DropdownArrowUp onClick={toggleDropdown} />
       ) : (

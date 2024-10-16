@@ -64,34 +64,6 @@ const MonthList = () => {
     setCount(total);
   }, [items]);
 
-  // console.log(items);
-
-  const filteredItems = (items: Items): Items => {
-    const filteredItems: Items = {};
-
-    // ❓ 데이터가 객체로 되어 있어서 필터가 '전체'일 경우 그냥 items를 내려주고,
-    // 아닐 경우 객체 내에서 키를 통해 값을 필터링하고 해당하는 값만 담은 filteredItems를 내려주어 렌더링 하려고 합니다 !
-
-    // 그런데 seleted(dropDown으로 선택된 값)에 따라 키를 어떻게 선택할 수 있을 지 잘 모르겠습니다...
-    // 현재는 전체일 경우 값이 없는 경우만 제외하고 렌더링하는
-    // if (selected === '예약 확정') {
-    // }
-
-    Object.keys(items).forEach((item) => {
-      if (items[item].ACCEPT > 0) {
-        filteredItems[item] = {
-          ACCEPT: items[item].ACCEPT,
-          PENDING: 0,
-          CANCEL: 0,
-        };
-      }
-    });
-
-    return filteredItems;
-  };
-
-  // filteredItems(items);
-
   return (
     <S.MonthList>
       <S.FlexBoxBetween>

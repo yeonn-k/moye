@@ -7,8 +7,6 @@ interface MonthListProps {
 }
 
 const CalendarWrap = ({ selected, items }: MonthListProps) => {
-  console.log(selected);
-
   const tileContent = ({ date }: { date: Date }) => {
     const dateKey = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 
@@ -26,23 +24,23 @@ const CalendarWrap = ({ selected, items }: MonthListProps) => {
     if (items[dateKey]) {
       const { ACCEPT, PENDING, CANCEL } = items[dateKey];
       return (
-        <S.ItemBox>
+        <>
           {selected === '전체' || selected === '' ? (
-            <>
+            <S.ItemBox>
               {renderItem(ACCEPT, S.AcceptIcon)}
               {renderItem(PENDING, S.PendingIcon)}
               {renderItem(CANCEL, S.CancelIcon)}
-            </>
-          ) : selected === '예약 확정' ? (
-            renderItem(ACCEPT, S.AcceptIcon)
-          ) : selected === '대기중' ? (
-            renderItem(PENDING, S.PendingIcon)
-          ) : selected === '예약 취소' ? (
-            renderItem(CANCEL, S.CancelIcon)
+            </S.ItemBox>
+          ) : selected === '예약 확정' && ACCEPT > 0 ? (
+            <S.ItemBox>{renderItem(ACCEPT, S.AcceptIcon)}</S.ItemBox>
+          ) : selected === '대기중' && PENDING > 0 ? (
+            <S.ItemBox>{renderItem(PENDING, S.PendingIcon)}</S.ItemBox>
+          ) : selected === '예약 취소' && CANCEL > 0 ? (
+            <S.ItemBox>{renderItem(CANCEL, S.CancelIcon)}</S.ItemBox>
           ) : (
             ''
           )}
-        </S.ItemBox>
+        </>
       );
     }
 

@@ -42,7 +42,7 @@ const CanvanBoard = ({ items }: CanvanBoardProps) => {
   }, []);
 
   useEffect(() => {
-    items.map((item: Items) => {
+    items.forEach((item: Items) => {
       const newFiltered = {
         accept: [] as Items[],
         pending: [] as Items[],
@@ -52,7 +52,7 @@ const CanvanBoard = ({ items }: CanvanBoardProps) => {
       items.forEach((item: Items) => {
         if (
           item.status === 'ACCEPT' &&
-          parseInt(item.startTime.slice(0, 2)) < hour
+          parseInt(item.startTime.slice(0, 2)) <= hour
         ) {
           newFiltered.completed.push(item);
         } else if (item.status === 'ACCEPT') {
@@ -64,32 +64,7 @@ const CanvanBoard = ({ items }: CanvanBoardProps) => {
 
       setFiltered(newFiltered);
     });
-  }, [items]);
-
-  useEffect(() => {
-    if (oClock) {
-      const newFiltered = {
-        accept: [] as Items[],
-        pending: [] as Items[],
-        completed: [] as Items[],
-      };
-
-      items.forEach((item: Items) => {
-        if (
-          item.status === 'ACCEPT' &&
-          parseInt(item.startTime.slice(0, 2)) < hour
-        ) {
-          newFiltered.completed.push(item);
-        } else if (item.status === 'ACCEPT') {
-          newFiltered.accept.push(item);
-        } else if (item.status === 'PENDING') {
-          newFiltered.pending.push(item);
-        }
-      });
-
-      setFiltered(newFiltered);
-    }
-  }, [oClock, hour, items]);
+  }, [items, oClock, hour]);
 
   return (
     <S.CanvanBoardBox>

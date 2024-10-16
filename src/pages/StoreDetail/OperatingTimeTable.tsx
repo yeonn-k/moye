@@ -1,49 +1,52 @@
+import { useState, useEffect } from 'react';
 import { T } from './OperatingTimeTable.ts';
-import timeData from './storeIrregularClosedDays.json';
-
-/*
-interface IrregularClosedDays {
-  date: string;
-}
+import {
+  OperatingTimeTableData,
+  IrregularCloseDay,
+  RegularHoliday,
+} from './StoreDetailInterface.ts';
+import dayjs from 'dayjs';
 
 interface OperatingTimeTableProps {
-  weekdayOpeningHour: string;
-  weekdayClosingHour: string;
-  weekendOpeningHour: string;
-  weekendClosedHour: string;
-  weekdayBreakStart: string;
-  weekdayBreakEnd: string;
-  weekendBreakStart: string;
-  weekendBreakEnd: string;
-  regularClosedDays: number[];
-  irregularClosedDays: IrregularClosedDays[];
+  openingHour: OperatingTimeTableData[];
+  regularHoliday: RegularHoliday[];
+  closedDay: IrregularCloseDay[];
 }
 
-{
-  weekdayOpeningHour,
-  weekdayClosingHour,
-  weekendOpeningHour,
-  weekendClosedHour,
-  weekdayBreakStart,
-  weekdayBreakEnd,
-  weekendBreakStart,
-  weekendBreakEnd,
-  regularClosedDays,
-  irregularClosedDays,
-}: OperatingTimeTableProps
-*/
+const initialState: OperatingTimeTableData = {
+  type: '',
+  openFrom: '',
+  closeTo: '',
+  startBreakTime: '',
+  endBreakTime: '',
+};
 
 const dayOfTheWeeks = [
+  '',
+  '일요일',
   '월요일',
   '화요일',
   '수요일',
   '목요일',
   '금요일',
   '토요일',
-  '일요일',
 ];
 
-const OperatingTimeTable = () => {
+const OperatingTimeTable = ({
+  openingHour,
+  regularHoliday,
+  closedDay,
+}: OperatingTimeTableProps) => {
+  const [weekday, setWeekday] = useState<OperatingTimeTableData>(initialState);
+  const [weekend, setWeekend] = useState<OperatingTimeTableData>(initialState);
+
+  useEffect(() => {
+    if (openingHour.length > 1) {
+      setWeekday(openingHour.filter((item) => item.type === '평일')[0]);
+      setWeekend(openingHour.filter((item) => item.type === '주말')[0]);
+    }
+  }, [openingHour]);
+
   return (
     <T.OperatingTimeTable>
       <thead>
@@ -57,33 +60,38 @@ const OperatingTimeTable = () => {
         <tr>
           <td>평일</td>
           <td>
-            {timeData.weekdayOpeningHour} ~ {timeData.weekdayClosingHour}
+            {weekday.openFrom.substring(0, 5)} ~{' '}
+            {weekday.closeTo.substring(0, 5)}
           </td>
           <td>
-            {timeData.weekdayBreakStart} ~ {timeData.weekdayBreakEnd}
+            {weekday.startBreakTime.substring(0, 5)} ~{' '}
+            {weekday.endBreakTime.substring(0, 5)}
           </td>
         </tr>
         <tr>
           <td>주말</td>
           <td>
-            {timeData.weekendOpeningHour} ~ {timeData.weekendClosedHour}
+            {weekend.openFrom.substring(0, 5)} ~{' '}
+            {weekend.closeTo.substring(0, 5)}
           </td>
           <td>
-            {timeData.weekendBreakStart} ~ {timeData.weekendBreakEnd}
+            {weekend.startBreakTime.substring(0, 5)} ~{' '}
+            {weekend.endBreakTime.substring(0, 5)}
           </td>
         </tr>
         <tr>
           <td>휴무일</td>
           <td>
-            {timeData.regularClosedDays.map((day) => (
-              <p>{dayOfTheWeeks[day]}</p>
+            {regularHoliday.map((day) => (
+              <p>{dayOfTheWeeks[day.closedDay]}</p>
             ))}
           </td>
           <td>
-            {timeData.irregularClosedDays.map((closed) => (
-              <p>{closed.date.substring(5)}</p>
-              // TODO: 날짜 라이브러리 도입 후 날짜 비교 로직 추가
-            ))}
+            {closedDay.map((date) => {
+              if (dayjs(date.ymd).diff(dayjs(new Date()), 'days') >= 0) {
+                return <p>{date.ymd}</p>;
+              }
+            })}
           </td>
         </tr>
       </tbody>

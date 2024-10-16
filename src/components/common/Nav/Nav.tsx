@@ -1,12 +1,17 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { N } from './Nav';
+import { N } from './Nav.style';
 import { useSelector, useDispatch } from 'react-redux';
+import ROUTE_LINK from '../../../routes/RouterLink';
 import { RootState } from '../../../store/store';
 import { logoutAction } from '../../../store/slices/auth/authSlice';
+import OwnerAvatar from '../OwnerAvatar/OwnerAvatar';
 
 const Nav = () => {
   const isStoreSelected = useSelector(
     (state: RootState) => state.auth.isStoreSelected,
+  );
+  const avatarUrl = useSelector(
+    (state: RootState) => state.auth.user?.avatarUrl ?? null,
   );
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -19,29 +24,25 @@ const Nav = () => {
   return (
     <N.NavBar>
       <div>
-        <Link to="/owner">
+        <Link to={ROUTE_LINK.OWNER.link}>
           <img className="nav_logo" src="프로젝트로고url" alt="navLogo" />
         </Link>
       </div>
       {isStoreSelected && (
         <N.NavMenu>
           <li>
-            <Link to="/today">today</Link>
+            <Link to={ROUTE_LINK.TODAY.link}>Today</Link>
           </li>
           <li>
-            <Link to="/month">month</Link>
+            <Link to={ROUTE_LINK.MONTH.link}>Month</Link>
           </li>
           <li>
-            <Link to="/store">Store</Link>
+            <Link to={ROUTE_LINK.STORE.link}>Store</Link>
           </li>
         </N.NavMenu>
       )}
       <N.UserMenu>
-        <img
-          className="nav_profile"
-          src="유저프로필이미지url"
-          alt="navProfile"
-        />
+        <OwnerAvatar $avatarUrl={avatarUrl} width="35px" height="35px" />
         <button onClick={handleLogoutClick}>로그아웃</button>
       </N.UserMenu>
     </N.NavBar>

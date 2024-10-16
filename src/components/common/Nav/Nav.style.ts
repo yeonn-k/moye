@@ -23,6 +23,8 @@ export const N = {
   `,
   UserMenu: styled.ul`
     display: flex;
+    align-items: center;
+    gap: 20px;
     list-style: none;
     padding-left: 0;
     button {

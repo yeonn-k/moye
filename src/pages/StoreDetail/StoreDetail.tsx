@@ -1,22 +1,45 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 import { SD } from './StoreDetail';
 import { Link } from 'react-router-dom';
-import storeData from './storeDetail.json';
+import axios from 'axios';
+import ROUTE_LINK from '../../routes/RouterLink.ts';
+import { StoreDetailData, initialState } from './StoreDetailInterface.ts';
 import OperatingTimeTable from './OperatingTimeTable.tsx';
 import halloween from './halloween.jpg';
 
+function isExist(data: any) {
+  return data !== null && data !== undefined;
+}
+
 const StoreDetail = () => {
-  const handleEditStoreClick = () => {
-    // TODO: 매장 편집 페이지로 이동
-    console.log('go to: editing store page');
-  };
+  const [storeData, setStoreData] = useState<StoreDetailData>(initialState);
+
+  useEffect(() => {
+    let auth = null;
+
+    if (isExist(localStorage) && isExist(localStorage.getItem('auth'))) {
+      auth = JSON.parse(localStorage.getItem('auth'));
+    }
+    axios
+      .get('http://localhost:5005/stores/3', {
+        headers: {
+          Authorization: `Bearer ${auth.token}`,
+        },
+      })
+      .then((res) => {
+        setStoreData(res.data.body);
+      })
+      .catch((error) => {
+        console.log('Error: ', error);
+      });
+  }, []);
 
   return (
     <>
       <SD.TopBar>
         <p>매장이름</p>
-        <Link to="edit" state={{ data: storeData.id }}>
-          <button onClick={handleEditStoreClick}>편집</button>
+        <Link to={ROUTE_LINK.STOREEDIT.link} state={{ data: 20070221 }}>
+          <button>편집</button>
         </Link>
       </SD.TopBar>
       <SD.Body>
@@ -27,13 +50,13 @@ const StoreDetail = () => {
               <span>상호명</span>: {storeData.businessName}
             </li>
             <li>
-              <span>사업자 번호</span>: {storeData.businessNumber}
+              <span>사업자 번호</span>: {storeData.businessRegistrationNumber}
             </li>
             <li>
-              <span>매장 전화번호</span>: {storeData.storePhoneNumber}
+              <span>매장 전화번호</span>: {storeData.contact}
             </li>
             <li>
-              <span>매장 이메일</span>: {storeData.storeEmail}
+              <span>매장 이메일</span>: {storeData.email}
             </li>
             <br />
             <li>
@@ -50,9 +73,13 @@ const StoreDetail = () => {
             <span>Description</span>
             <br />
             <br />
-            <p>매장 소개 내용 텍스트</p>
+            <p>{storeData.description}</p>
           </SD.Description>
-          <OperatingTimeTable />
+          <OperatingTimeTable
+            openingHour={storeData.openingHour}
+            regularHoliday={storeData.regularHoliday}
+            closedDay={storeData.closedDay}
+          />
         </SD.BodyRight>
       </SD.Body>
     </>

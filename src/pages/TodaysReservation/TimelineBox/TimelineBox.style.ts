@@ -29,7 +29,6 @@ export const S = {
   Time: styled.div``,
   Grid: styled.div<girdProps>`
     position: relative;
-    overflow: scroll;
 
     display: grid;
     grid-template-columns: repeat(${(props) => props.operatingNum}, 1fr);
@@ -46,6 +45,8 @@ export const S = {
   `,
   ItemGrid: styled.div`
     position: absolute;
+    overflow: scroll;
+    height: 100%;
 
     display: grid;
     grid-template-columns: auto;

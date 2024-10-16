@@ -1,10 +1,10 @@
-import { useState, ChangeEvent, FormEvent } from 'react';
+import { useState, useEffect, ChangeEvent, FormEvent, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import { S } from './Login.style';
 import { loginService } from '../../services/auth/authService';
-import { loginAction } from '../../store/slices/auth/authSlice';
+import { loginAction, logoutAction } from '../../store/slices/auth/authSlice';
 import { validateEmail } from '../../utils/validator';
 
 const Login = () => {
@@ -13,15 +13,20 @@ const Login = () => {
     password: '',
   });
 
-  // 이메일 입력 검증 에러 메시지
   const [validError, setValidError] = useState('');
-  // TODO: 로그인 요청 후 이메일, 비밀번호 일치 검증 에러 메시지
-  // const [responseError, setResponseError] = useState('');
+  const [responseError, setResponseError] = useState('');
+
+  const emailRef = useRef<HTMLInputElement>(null);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    dispatch(logoutAction());
+  }, [dispatch]);
+
   const handleUserFormChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setResponseError('');
     const { name, value } = e.target;
     setUserForm((prevState) => ({
       ...prevState,
@@ -69,10 +74,19 @@ const Login = () => {
           }),
         );
 
+        setUserForm({
+          email: '',
+          password: '',
+        });
+
         navigate('/owner');
       }
     } catch (e) {
-      console.error(e);
+      if (e instanceof Error) {
+        console.log(e.message);
+        setResponseError(e.message);
+        emailRef?.current?.focus();
+      }
     }
   };
 
@@ -90,9 +104,9 @@ const Login = () => {
           <S.UserInput
             name="email"
             placeholder="이메일"
-            type="email"
             value={userForm.email}
             onChange={handleUserFormChange}
+            ref={emailRef}
           />
           <S.UserInput
             name="password"
@@ -100,8 +114,14 @@ const Login = () => {
             type="password"
             value={userForm.password}
             onChange={handleUserFormChange}
+            autoComplete="current-password"
           />
         </S.UserInputBox>
+        {responseError && (
+          <S.ErrorMessage className={responseError ? 'visible' : ''}>
+            {responseError}
+          </S.ErrorMessage>
+        )}
         <S.SubmitButton>로그인</S.SubmitButton>
         <S.SignUpPrompt>
           <S.SignUpPromptMessage>계정이 없으신가요?</S.SignUpPromptMessage>

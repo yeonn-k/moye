@@ -78,6 +78,9 @@ export const S = {
     border-radius: 5px;
     outline: none;
     padding-left: 10px;
+    &:focus {
+      box-shadow: 0 0 5px ${(props) => props.theme.color.deepGreen};
+    }
   `,
   SubmitButton: styled.button`
     all: unset;
@@ -106,5 +109,12 @@ export const S = {
     color: #f00;
     font-size: 12px;
     font-weight: 600;
+    opacity: 0;
+    animation: ${fadeIn} 0.3s ease forwards;
+    opacity: 1;
+    display: none;
+    &.visible {
+      display: block;
+    }
   `,
 };

@@ -40,8 +40,8 @@ export const S = {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-evenly;
-    padding: 20px;
+    justify-content: center;
+    gap: 30px;
   `,
   FormTitle: styled.h3`
     font-size: 16px;
@@ -71,6 +71,9 @@ export const S = {
     border-radius: 5px;
     outline: none;
     padding-left: 10px;
+    &:focus {
+      box-shadow: 0 0 5px ${(props) => props.theme.color.deepGreen};
+    }
   `,
   SubmitButton: styled.button`
     all: unset;
@@ -86,7 +89,8 @@ export const S = {
   `,
   ErrorMessage: styled.p<{ visible?: boolean }>`
     color: ${(props) => props.theme.color.coral};
-    font-size: 8px;
+    font-size: 10px;
+    font-weight: 600;
     opacity: 0;
     animation: ${fadeIn} 0.3s ease forwards;
     opacity: 1;

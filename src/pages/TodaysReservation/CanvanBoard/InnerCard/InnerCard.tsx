@@ -27,14 +27,26 @@ const InnerCard = ({ status, item, setIsRerender, oClock }: OuterCardProps) => {
   const { hour } = useCheckTheDate();
 
   const putChangeReservationsState = async () => {
-    setIsRerender(true);
-
     const id = item.id;
     try {
       const res = await api.put(`${BASE_URL}/reservations/${id}`, {
         state: 'ACCEPT',
       });
       console.log(res);
+      setIsRerender(true);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const putCancelReservationsState = async () => {
+    const id = item.id;
+    try {
+      const res = await api.put(`${BASE_URL}/reservations/${id}`, {
+        state: 'CANCEL',
+      });
+      console.log(res);
+      setIsRerender(true);
     } catch (err) {
       console.error(err);
     }
@@ -86,7 +98,12 @@ const InnerCard = ({ status, item, setIsRerender, oClock }: OuterCardProps) => {
               height="32px"
               onClick={putChangeReservationsState}
             />
-            <ConfirmButton action="cancel" width="104px" height="32px" />
+            <ConfirmButton
+              action="cancel"
+              width="104px"
+              height="32px"
+              onClick={putCancelReservationsState}
+            />
           </S.BtnFlex>
         )}
       </S.PendingFlexBox>

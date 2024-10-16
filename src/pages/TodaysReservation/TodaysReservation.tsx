@@ -44,7 +44,7 @@ const TodaysReservation = ({}) => {
       const res = await api.get(`${BASE_URL}/stores/${storeId}/reservations`);
       setItems(res.data.body.reservations);
       setBusinessHrs({ open: res.data.body.open, close: res.data.body.close });
-      console.log(res);
+      console.log(res.data.body.reservations);
     } catch (err) {
       console.error(err);
     }
@@ -88,7 +88,9 @@ const TodaysReservation = ({}) => {
 
   return (
     <S.TodaysReservation>
-      <S.StoreName>store Name</S.StoreName>
+      <S.TitleBox>
+        <S.StoreName>store Name</S.StoreName>
+      </S.TitleBox>
       <S.UpperBox>
         <S.FlexBox>
           <div>

@@ -6,7 +6,16 @@ export const S = {
     margin-top: 80px;
     box-sizing: border-box;
 
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+
     width: 1440px;
+  `,
+  TitleBox: styled.div`
+    display: flex;
+    justify-content: flex-start;
+    width: 1386px;
   `,
   StoreName: styled.header`
     color: ${(props) => props.theme.color.green};

@@ -4,7 +4,6 @@ import OuterCard from './OuterCard/OuterCard.tsx';
 import { S } from './CanvaBoard.style.ts';
 import useCheckTheDate from '../../../hooks/useCheckTheDate.tsx';
 import dayjs from 'dayjs';
-import { Dispatch } from '@reduxjs/toolkit';
 
 interface CanvanBoardProps {
   items: Items[];

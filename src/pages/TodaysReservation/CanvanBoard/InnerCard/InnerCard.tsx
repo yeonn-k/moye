@@ -25,32 +25,9 @@ interface Items {
 
 const InnerCard = ({ status, item, setIsRerender, oClock }: OuterCardProps) => {
   const { hour } = useCheckTheDate();
-  const [putItem, setPutItem] = useState<Items>({
-    id: 0,
-    name: '',
-    count: 0,
-    startTime: '',
-    endTime: '',
-    phone: '',
-    status: '',
-  });
-
-  // const makePutItem = () => {
-  //   setPutItem((prev) => ({
-  //     ...prev,
-  //     id: item.id,
-  //     name: item.name,
-  //     count: item.count,
-  //     startTime: item.startTime,
-  //     endTime: item.endTime,
-  //     phone: item.phone,
-  //     status: item.status,
-  //   }));
-  // };
 
   const putChangeReservationsState = async () => {
-    // makePutItem();
-    setIsRerender((prev) => !prev);
+    setIsRerender(true);
 
     const id = item.id;
     try {
@@ -64,8 +41,7 @@ const InnerCard = ({ status, item, setIsRerender, oClock }: OuterCardProps) => {
   };
 
   const putChangePassedState = async () => {
-    // makePutItem();
-    setIsRerender((prev) => !prev);
+    setIsRerender(true);
 
     const id = item.id;
     if (

@@ -27,6 +27,10 @@ const OuterCard = ({
   setIsRerender,
   oClock,
 }: CanvanBoardProps) => {
+  const handleRerender = () => {
+    setIsRerender(true);
+  };
+
   const statusTitle = () => {
     if (status === 'accept') {
       return '예약 확정';
@@ -43,6 +47,7 @@ const OuterCard = ({
           {filtered.length}
           <S.LilFont>건</S.LilFont>
         </S.Amount>
+        {status === 'pending' && <S.Refresh onClick={handleRerender} />}
       </S.TitleBox>
       <S.Line status={status} />
       <S.ColorBox status={status}>

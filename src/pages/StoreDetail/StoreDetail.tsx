@@ -20,7 +20,7 @@ const StoreDetail = () => {
       auth = JSON.parse(localStorage.getItem('auth'));
     }
     axios
-      .get('http://localhost:5005/stores/2', {
+      .get('http://localhost:5005/stores/3', {
         headers: {
           Authorization: `Bearer ${auth.token}`,
         },

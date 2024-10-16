@@ -37,7 +37,12 @@ const initialState: StoreDetailData = {
   openingHour: [],
   closedDay: [],
   regularHoliday: [],
-  image: [],
+  image: [
+    {
+      isPrimary: '',
+      src: '',
+    },
+  ],
   businessRegistrationNumber: '',
   businessName: '',
   contact: '',

@@ -1,4 +1,5 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import ROUTE_LINK from './RouterLink.ts';
 import EntryPoint from '../pages/EntryPoint/EntryPoint.tsx';
 import Login from '../pages/Login/Login.tsx';
 import SignUp from '../pages/SignUp/SignUp.tsx';
@@ -14,7 +15,7 @@ import Layout from '../components/common/Layout/Layout.tsx';
 function AppRouter() {
   const router = createBrowserRouter([
     {
-      path: '/',
+      path: ROUTE_LINK.ENTRYPOINT.path,
       element: (
         <PublicRoute>
           <EntryPoint />
@@ -22,7 +23,7 @@ function AppRouter() {
       ),
     },
     {
-      path: '/login',
+      path: ROUTE_LINK.LOGIN.path,
       element: (
         <PublicRoute>
           <Login />
@@ -30,7 +31,7 @@ function AppRouter() {
       ),
     },
     {
-      path: '/signup',
+      path: ROUTE_LINK.SIGNUP.path,
       element: (
         <PublicRoute>
           <SignUp />
@@ -46,23 +47,23 @@ function AppRouter() {
       ),
       children: [
         {
-          path: 'owner',
+          path: ROUTE_LINK.OWNER.path,
           element: <OwnerProfile />,
         },
         {
-          path: 'today',
+          path: ROUTE_LINK.TODAY.path,
           element: <TodaysReservation />,
         },
         {
-          path: 'month',
+          path: ROUTE_LINK.MONTH.path,
           element: <MonthList />,
         },
         {
-          path: 'store',
+          path: ROUTE_LINK.STORE.path,
           element: <StoreDetail />,
         },
         {
-          path: 'store/edit',
+          path: ROUTE_LINK.STOREEDIT.path,
           element: <EditStoreDetail />,
         },
       ],

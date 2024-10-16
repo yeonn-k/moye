@@ -33,7 +33,7 @@ const InnerCard = ({ status, item, setIsRerender, oClock }: OuterCardProps) => {
         state: 'ACCEPT',
       });
       console.log(res);
-      setIsRerender(true);
+      setIsRerender((prev) => !prev);
     } catch (err) {
       console.error(err);
     }
@@ -46,15 +46,13 @@ const InnerCard = ({ status, item, setIsRerender, oClock }: OuterCardProps) => {
         state: 'CANCEL',
       });
       console.log(res);
-      setIsRerender(true);
+      setIsRerender((prev) => !prev);
     } catch (err) {
       console.error(err);
     }
   };
 
   const putChangePassedState = async () => {
-    setIsRerender(true);
-
     const id = item.id;
     if (
       item.status === 'PENDING' &&
@@ -65,6 +63,7 @@ const InnerCard = ({ status, item, setIsRerender, oClock }: OuterCardProps) => {
           state: 'CANCEL',
         });
         console.log(res);
+        setIsRerender((prev) => !prev);
       } catch (err) {
         console.error(err);
       }

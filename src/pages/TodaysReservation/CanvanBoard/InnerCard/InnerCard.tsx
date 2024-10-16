@@ -1,14 +1,20 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import ConfirmButton from '../../../../components/common/ConfirmButton/ConfirmButton.tsx';
 
 import { S } from './InnerCard.style.ts';
+import api from '../../../../services/api.ts';
+import { BASE_URL } from '../../../../config/config.ts';
+import useCheckTheDate from '../../../../hooks/useCheckTheDate.tsx';
 
 interface OuterCardProps {
   status: string;
   item: Items;
+  setIsRerender: React.Dispatch<React.SetStateAction<boolean>>;
+  oClock: boolean;
 }
 
 interface Items {
+  id: number;
   name: string;
   count: number;
   startTime: string;
@@ -17,7 +23,70 @@ interface Items {
   status: string;
 }
 
-const InnerCard = ({ status, item }: OuterCardProps) => {
+const InnerCard = ({ status, item, setIsRerender, oClock }: OuterCardProps) => {
+  const { hour } = useCheckTheDate();
+  const [putItem, setPutItem] = useState<Items>({
+    id: 0,
+    name: '',
+    count: 0,
+    startTime: '',
+    endTime: '',
+    phone: '',
+    status: '',
+  });
+
+  // const makePutItem = () => {
+  //   setPutItem((prev) => ({
+  //     ...prev,
+  //     id: item.id,
+  //     name: item.name,
+  //     count: item.count,
+  //     startTime: item.startTime,
+  //     endTime: item.endTime,
+  //     phone: item.phone,
+  //     status: item.status,
+  //   }));
+  // };
+
+  const putChangeReservationsState = async () => {
+    // makePutItem();
+    setIsRerender((prev) => !prev);
+
+    const id = item.id;
+    try {
+      const res = await api.put(`${BASE_URL}/reservations/${id}`, {
+        state: 'ACCEPT',
+      });
+      console.log(res);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const putChangePassedState = async () => {
+    // makePutItem();
+    setIsRerender((prev) => !prev);
+
+    const id = item.id;
+    if (
+      item.status === 'PENDING' &&
+      parseInt(item.startTime.slice(0, 2)) <= hour
+    ) {
+      try {
+        const res = await api.put(`${BASE_URL}/reservations/${id}`, {
+          state: 'CANCEL',
+        });
+        console.log(res);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  };
+
+  useEffect(() => {
+    putChangePassedState();
+  }, [oClock]);
+
   return (
     <S.Card>
       <S.FlexBox>
@@ -35,7 +104,12 @@ const InnerCard = ({ status, item }: OuterCardProps) => {
         </div>
         {status === 'pending' && (
           <S.BtnFlex>
-            <ConfirmButton action="confirm" width="104px" height="32px" />
+            <ConfirmButton
+              action="confirm"
+              width="104px"
+              height="32px"
+              onClick={putChangeReservationsState}
+            />
             <ConfirmButton action="cancel" width="104px" height="32px" />
           </S.BtnFlex>
         )}

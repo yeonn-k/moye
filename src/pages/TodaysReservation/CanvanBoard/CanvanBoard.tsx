@@ -4,12 +4,15 @@ import OuterCard from './OuterCard/OuterCard.tsx';
 import { S } from './CanvaBoard.style.ts';
 import useCheckTheDate from '../../../hooks/useCheckTheDate.tsx';
 import dayjs from 'dayjs';
+import { Dispatch } from '@reduxjs/toolkit';
 
 interface CanvanBoardProps {
   items: Items[];
+  setIsRerender: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 interface Items {
+  id: number;
   name: string;
   count: number;
   startTime: string;
@@ -18,9 +21,9 @@ interface Items {
   status: string;
 }
 
-const CanvanBoard = ({ items }: CanvanBoardProps) => {
+const CanvanBoard = ({ items, setIsRerender }: CanvanBoardProps) => {
   const [oClock, setOClock] = useState(false);
-  const { hour, minute, second } = useCheckTheDate();
+  const { hour } = useCheckTheDate();
   const [filtered, setFiltered] = useState({
     accept: [] as Items[],
     pending: [] as Items[],
@@ -68,9 +71,24 @@ const CanvanBoard = ({ items }: CanvanBoardProps) => {
 
   return (
     <S.CanvanBoardBox>
-      <OuterCard status={'accept'} filtered={filtered.accept} />
-      <OuterCard status={'pending'} filtered={filtered.pending} />
-      <OuterCard status={'completed'} filtered={filtered.completed} />
+      <OuterCard
+        status={'accept'}
+        filtered={filtered.accept}
+        setIsRerender={setIsRerender}
+        oClock={oClock}
+      />
+      <OuterCard
+        status={'pending'}
+        filtered={filtered.pending}
+        setIsRerender={setIsRerender}
+        oClock={oClock}
+      />
+      <OuterCard
+        status={'completed'}
+        filtered={filtered.completed}
+        setIsRerender={setIsRerender}
+        oClock={oClock}
+      />
     </S.CanvanBoardBox>
   );
 };

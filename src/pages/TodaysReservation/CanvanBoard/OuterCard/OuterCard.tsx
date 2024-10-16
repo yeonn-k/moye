@@ -3,14 +3,16 @@ import React from 'react';
 import InnerCard from '../InnerCard/InnerCard.tsx';
 
 import { S } from './OuterCard.style.ts';
-import { isGetAccessorDeclaration } from 'typescript';
 
 interface CanvanBoardProps {
   status: string;
   filtered: Items[];
+  setIsRerender: React.Dispatch<React.SetStateAction<boolean>>;
+  oClock: boolean;
 }
 
 interface Items {
+  id: number;
   name: string;
   count: number;
   startTime: string;
@@ -19,7 +21,12 @@ interface Items {
   status: string;
 }
 
-const OuterCard = ({ status, filtered }: CanvanBoardProps) => {
+const OuterCard = ({
+  status,
+  filtered,
+  setIsRerender,
+  oClock,
+}: CanvanBoardProps) => {
   const statusTitle = () => {
     if (status === 'accept') {
       return '예약 확정';
@@ -41,7 +48,15 @@ const OuterCard = ({ status, filtered }: CanvanBoardProps) => {
       <S.ColorBox status={status}>
         <S.ScrollBox>
           {filtered.map((item, idx) => {
-            return <InnerCard key={idx} status={status} item={item} />;
+            return (
+              <InnerCard
+                key={idx}
+                status={status}
+                item={item}
+                setIsRerender={setIsRerender}
+                oClock={oClock}
+              />
+            );
           })}
         </S.ScrollBox>
       </S.ColorBox>

@@ -23,7 +23,7 @@ interface Items {
 const CanvanBoard = ({ items, setIsRerender }: CanvanBoardProps) => {
   const [oClock, setOClock] = useState(false);
   const [thirty, setThirty] = useState(false);
-  const { hour, minute } = useCheckTheDate();
+  const { hour, minute, second } = useCheckTheDate();
   const [filtered, setFiltered] = useState({
     accept: [] as Items[],
     pending: [] as Items[],
@@ -31,10 +31,9 @@ const CanvanBoard = ({ items, setIsRerender }: CanvanBoardProps) => {
   });
 
   const checkTime = () => {
-    const now = dayjs();
-    if (now.minute() === 0 && now.second() === 0) {
+    if (minute === 0 && second === 0) {
       setOClock(true);
-    } else if (now.minute() === 30 && now.second() === 0) {
+    } else if (minute === 30 && second === 0) {
       setThirty(true);
     } else {
       setOClock(false);

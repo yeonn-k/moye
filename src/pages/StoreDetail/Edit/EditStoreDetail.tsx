@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { ESD } from './EditStoreDetail';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -9,18 +9,6 @@ import DatePicker from 'react-datepicker';
 import ROUTE_LINK from '../../../routes/RouterLink';
 import 'react-datepicker/dist/react-datepicker.css';
 import { StoreDetailData } from '../StoreDetailInterface';
-
-interface localStorageData {
-  token: string;
-  user: {
-    id: number;
-    email: string;
-    name: string;
-    phone: string;
-    stores: string;
-    avatarUrl: string;
-  };
-}
 
 let initialState = {
   name: '',
@@ -137,11 +125,6 @@ const EditStoreDetail = () => {
   const handlePostFormSubmit = async () => {
     try {
       const formData = new FormData();
-      let auth = null;
-      const item = localStorage.getItem('auth');
-      if (item !== null) {
-        auth = JSON.parse(item);
-      }
       const openingHourData = [
         {
           type: '평일',
@@ -185,7 +168,6 @@ const EditStoreDetail = () => {
       await axios
         .post('http://localhost:5005/stores', JSON.stringify(postData), {
           headers: {
-            Authorization: `Bearer ${auth.token}`,
             'Content-Type': 'application/json',
           },
         })
@@ -200,7 +182,6 @@ const EditStoreDetail = () => {
       formData.append('files', uploadedImage);
       axios.post('http://localhost:5005/uploads/3', formData, {
         headers: {
-          Authorization: `Bearer ${auth.token}`,
           'Content-Type': 'multipart/form-data',
         },
       });
@@ -352,9 +333,8 @@ const EditStoreDetail = () => {
             <li>
               <div>
                 <img
-                  src={
-                    imagePreview ? imagePreview : '../StoreDetail/halloween.jpg'
-                  }
+                  src={imagePreview ? imagePreview : ''}
+                  alt="imagePreview"
                 />
                 <input
                   type="file"

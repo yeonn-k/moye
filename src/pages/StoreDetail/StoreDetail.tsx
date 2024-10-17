@@ -22,18 +22,8 @@ const StoreDetail = () => {
     async function asyncCall() {
       let imageSrc = '';
 
-      let auth = null;
-      const item = localStorage.getItem('auth');
-      if (item !== null) {
-        auth = JSON.parse(item);
-      }
-
       await axios
-        .get(`${APIS.store}/${storeId}`, {
-          headers: {
-            Authorization: `Bearer ${auth.token}`,
-          },
-        })
+        .get(`${APIS.store}/${storeId}`)
         .then((res) => {
           setStoreData(res.data.body);
           imageSrc = res.data.body.image.filter(
@@ -48,9 +38,6 @@ const StoreDetail = () => {
 
       await axios
         .get(getURL, {
-          headers: {
-            Authorization: `Bearer ${auth.token}`,
-          },
           responseType: 'blob',
         })
         .then((res) => {

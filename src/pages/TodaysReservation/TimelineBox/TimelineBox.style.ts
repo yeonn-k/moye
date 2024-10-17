@@ -69,16 +69,17 @@ export const S = {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    padding-left: 14px;
+    padding: 6px 10px;
     margin-top: 12px;
     grid-column: ${(props) => props.start + 1} / span
       ${(props) => props.end - props.start};
-    height: 40px;
+    min-height: 40px;
     background-color: ${(props) =>
       props.status === 'ACCEPT'
         ? props.theme.color.paleCoral
         : props.status === 'PENDING'
           ? props.theme.color.paleGreen
           : props.theme.color.paleNavy};
+    font-size: 14px;
   `,
 };

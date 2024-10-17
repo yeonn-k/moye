@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import defaultAvatar from '../../assets/images/defaultAvatar.png';
 
@@ -101,18 +100,21 @@ export const S = {
     text-decoration: none;
     color: #000;
     cursor: pointer;
-  `,
-  AddMyStoreLink: styled(Link)`
-    width: 280px;
-    height: 280px;
-    background-color: ${(props) => props.theme.color.paleGray};
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-    text-decoration: none;
-    color: #000;
-    cursor: pointer;
+    position: relative;
+    &:hover {
+      &:before {
+        box-shadow: 0 0 5px 2px rgba(128, 128, 128, 0.5);
+        outline: none;
+        border-radius: 10px;
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(128, 128, 128, 0.2);
+        pointer-events: none;
+      }
+    }
   `,
 };

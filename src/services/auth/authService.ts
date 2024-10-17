@@ -88,8 +88,6 @@ export const signUpService = async ({
     });
     if (response.status === 200) {
       return response.data;
-    } else {
-      console.log(response);
     }
   } catch (e) {
     // TODO: 회원가입 응답 에러 처리 로직 필요

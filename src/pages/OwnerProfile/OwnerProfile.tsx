@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {
@@ -13,6 +13,7 @@ import {
 } from '../../services/auth/authService';
 import { formatPhoneNumber } from '../../utils/formatter';
 import OwnerAvatar from '../../components/common/OwnerAvatar/OwnerAvatar.tsx';
+import ROUTE_LINK from '../../routes/RouterLink.ts';
 
 // TODO: interface 외부 파일로 관리 필요
 interface Store {
@@ -34,6 +35,7 @@ const OwnerProfile = () => {
   const [stores, setStores] = useState<Store[]>([]);
   const loginUser = useSelector((state: RootState) => state.auth.user);
   const dispatch = useDispatch();
+  const avatarInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!loginUser || !loginUser.email) return;
@@ -72,10 +74,16 @@ const OwnerProfile = () => {
       dispatch(setIsStoreSelected(true));
     };
     resetStoreSelected();
-  });
+  }, [dispatch]);
 
   const handleLinkClick = () => {
     dispatch(setIsStoreSelected(true));
+  };
+
+  const handleSelectAvatar = () => {
+    // if (avatarInputRef.current) {
+    //   avatarInputRef.current.click();
+    // }
   };
 
   return (
@@ -83,7 +91,11 @@ const OwnerProfile = () => {
       <S.ProfileSection>
         <S.AvatarArea>
           <OwnerAvatar $avatarUrl={loginUser?.avatarUrl} />
-          <S.AvatarSelectButton>프로필 변경</S.AvatarSelectButton>
+          {/* TODO: 프로필 변경 로직 추가 필요 */}
+          <input accept="img/*" type="file" hidden ref={avatarInputRef} />
+          <S.AvatarSelectButton onClick={handleSelectAvatar}>
+            프로필 변경
+          </S.AvatarSelectButton>
         </S.AvatarArea>
         <S.OwnerInfoArea>
           <S.OwnerInfoLabeBox>
@@ -109,7 +121,7 @@ const OwnerProfile = () => {
               {stores.map((store) => (
                 <S.MyStoreItem key={store.id}>
                   <Link
-                    to={`/today?storeId=${store.id}`}
+                    to={`${ROUTE_LINK.TODAY.link}?storeId=${store.id}`}
                     onClick={handleLinkClick}
                   >
                     {store.businessName}
@@ -118,7 +130,10 @@ const OwnerProfile = () => {
               ))}
             </>
           )}
-          <S.AddMyStoreLink to="/owner">+ 매장 등록</S.AddMyStoreLink>
+          <S.MyStoreItem>
+            {/* TODO: 매장 추가 페이지로 링크 연결하기 */}
+            <Link to="/owner">+ 매장 추가</Link>
+          </S.MyStoreItem>
         </S.MyStoreList>
       </S.MyStoreSection>
     </S.OwnerProfileBox>

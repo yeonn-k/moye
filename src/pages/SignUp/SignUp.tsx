@@ -1,8 +1,9 @@
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { S } from './SignUp.style';
 import { signUpService } from '../../services/auth/authService';
 import { validateForm } from '../../utils/validator';
+import ROUTE_LINK from '../../routes/RouterLink';
 
 const SignUp = () => {
   const [userForm, setUserForm] = useState({
@@ -13,7 +14,7 @@ const SignUp = () => {
     phone: '',
   });
 
-  const [errors, setErrors] = useState({
+  const [validErrors, setValidErrors] = useState({
     email: '',
     password: '',
     passwordConfirm: '',
@@ -22,6 +23,8 @@ const SignUp = () => {
   });
 
   const [submitError, setSubmitError] = useState(false);
+
+  const emailInputRef = useRef<HTMLInputElement>(null);
 
   const navigate = useNavigate();
 
@@ -34,7 +37,7 @@ const SignUp = () => {
       ...prevState,
       [name]: value,
     }));
-    setErrors((prevErrors) => ({
+    setValidErrors((prevErrors) => ({
       ...prevErrors,
       [name]: error,
     }));
@@ -42,19 +45,30 @@ const SignUp = () => {
 
   const handleSubmitButtonClick = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const { email, password, name, phone } = userForm;
+    const { email, password, passwordConfirm, name, phone } = userForm;
     const signUpForm = { email, password, name, phone };
-    const hasErrors = Object.values(errors).some((error) => error !== '');
+    const hasErrors = Object.values(validErrors).some((error) => error !== '');
 
-    if (!email || !password || !name || !phone || hasErrors) {
+    if (hasErrors) {
       setSubmitError(true);
+      if (emailInputRef.current) {
+        emailInputRef.current.focus();
+      }
+      return;
+    }
+
+    if (!email || !password || !passwordConfirm || !name || !phone) {
+      setSubmitError(true);
+      if (emailInputRef.current) {
+        emailInputRef.current.focus();
+      }
       return;
     }
 
     try {
       const response = await signUpService(signUpForm);
       if (response) {
-        navigate('/login');
+        navigate(ROUTE_LINK.LOGIN.path);
       }
     } catch (e) {
       console.error(e);
@@ -69,8 +83,8 @@ const SignUp = () => {
         <S.UserInputBox>
           <S.UserInputLabel>
             <span>이메일*</span>
-            <S.ErrorMessage className={errors.email ? 'visible' : ''}>
-              {errors.email}
+            <S.ErrorMessage className={validErrors.email ? 'visible' : ''}>
+              {validErrors.email}
             </S.ErrorMessage>
           </S.UserInputLabel>
           <S.UserInput
@@ -78,11 +92,12 @@ const SignUp = () => {
             value={userForm.email}
             onChange={handleUserFormChange}
             autoComplete="off"
+            ref={emailInputRef}
           />
           <S.UserInputLabel>
             <span>비밀번호*</span>
-            <S.ErrorMessage className={errors.password ? 'visible' : ''}>
-              {errors.password}
+            <S.ErrorMessage className={validErrors.password ? 'visible' : ''}>
+              {validErrors.password}
             </S.ErrorMessage>
           </S.UserInputLabel>
           <S.UserInput
@@ -94,8 +109,10 @@ const SignUp = () => {
           />
           <S.UserInputLabel>
             <span>비밀번호 재확인*</span>
-            <S.ErrorMessage className={errors.passwordConfirm ? 'visible' : ''}>
-              {errors.passwordConfirm}
+            <S.ErrorMessage
+              className={validErrors.passwordConfirm ? 'visible' : ''}
+            >
+              {validErrors.passwordConfirm}
             </S.ErrorMessage>
           </S.UserInputLabel>
           <S.UserInput
@@ -107,8 +124,8 @@ const SignUp = () => {
           />
           <S.UserInputLabel>
             <span>이름*</span>
-            <S.ErrorMessage className={errors.name ? 'visible' : ''}>
-              {errors.name}
+            <S.ErrorMessage className={validErrors.name ? 'visible' : ''}>
+              {validErrors.name}
             </S.ErrorMessage>
           </S.UserInputLabel>
           <S.UserInput
@@ -118,8 +135,8 @@ const SignUp = () => {
           />
           <S.UserInputLabel>
             <span>휴대전화*</span>
-            <S.ErrorMessage className={errors.phone ? 'visible' : ''}>
-              {errors.phone}
+            <S.ErrorMessage className={validErrors.phone ? 'visible' : ''}>
+              {validErrors.phone}
             </S.ErrorMessage>
           </S.UserInputLabel>
           <S.UserInput
@@ -136,7 +153,9 @@ const SignUp = () => {
         <S.SubmitButton>가입하기</S.SubmitButton>
         <S.LoginPrompt>
           <S.LoginPromptMessage>이미 계정이 있으신가요?</S.LoginPromptMessage>
-          <S.LoginPromptLink to="/login">로그인</S.LoginPromptLink>
+          <S.LoginPromptLink to={ROUTE_LINK.LOGIN.link}>
+            로그인
+          </S.LoginPromptLink>
         </S.LoginPrompt>
       </S.SignUpForm>
     </S.SignUpBox>

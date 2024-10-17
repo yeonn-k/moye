@@ -40,7 +40,7 @@ const Login = () => {
     const { name, value } = e.target;
     setUserForm((prevState) => ({
       ...prevState,
-      [name]: value,
+      [name]: value.trim(),
     }));
     if (name === 'email') {
       const error = validateEmail(value);

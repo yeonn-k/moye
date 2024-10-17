@@ -38,7 +38,6 @@ export const S = {
     background-image: url(${logo});
     background-size: cover;
     background-position: center;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   `,
   LoginForm: styled.form`
     width: 500px;

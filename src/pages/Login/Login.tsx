@@ -27,6 +27,14 @@ const Login = () => {
     dispatch(logoutAction());
   }, [dispatch]);
 
+  useEffect(() => {
+    if (emailRef.current && passwordRef.current) {
+      emailRef.current.value = '';
+      passwordRef.current.value = '';
+      emailRef.current.focus();
+    }
+  }, [responseError]);
+
   const handleUserFormChange = (e: ChangeEvent<HTMLInputElement>) => {
     setResponseError('');
     const { name, value } = e.target;
@@ -88,11 +96,6 @@ const Login = () => {
     } catch (e) {
       if (e instanceof Error) {
         setResponseError(e.message);
-        if (emailRef.current && passwordRef.current) {
-          emailRef.current.value = '';
-          passwordRef.current.value = '';
-          emailRef.current.focus();
-        }
       }
     }
   };
@@ -113,7 +116,7 @@ const Login = () => {
             placeholder="이메일"
             value={userForm.email}
             onChange={handleUserFormChange}
-            autoComplete="username"
+            autoComplete="email"
             ref={emailRef}
           />
           <S.UserInput
@@ -122,7 +125,7 @@ const Login = () => {
             type="password"
             value={userForm.password}
             onChange={handleUserFormChange}
-            autoComplete="current-password"
+            autoComplete="off"
             ref={passwordRef}
           />
         </S.UserInputBox>

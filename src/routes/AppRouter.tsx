@@ -7,7 +7,8 @@ import TodaysReservation from '../pages/TodaysReservation/TodaysReservation.tsx'
 import MonthList from '../pages/MonthList/MonthList.tsx';
 import OwnerProfile from '../pages/OwnerProfile/OwnerProfile.tsx';
 import StoreDetail from '../pages/StoreDetail/StoreDetail.tsx';
-import EditStoreDetail from '../pages/EditStoreDetail/EditStoreDetail.tsx';
+import EditStoreDetail from '../pages/StoreDetail/Edit/EditStoreDetail.tsx';
+import RegisterStore from '../pages/StoreDetail/Register/RegisterStoreDetail.tsx';
 import ProtectedRoute from './protectedRoute/ProtectedRoute.tsx';
 import PublicRoute from './publicRoute/PublicRoute.tsx';
 import Layout from '../components/common/Layout/Layout.tsx';
@@ -61,6 +62,10 @@ function AppRouter() {
         {
           path: ROUTE_LINK.STORE.path,
           element: <StoreDetail />,
+        },
+        {
+          path: ROUTE_LINK.STOREREGISTER.path,
+          element: <RegisterStore />,
         },
         {
           path: ROUTE_LINK.STOREEDIT.path,

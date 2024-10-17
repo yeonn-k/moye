@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
-import { SD } from './StoreDetail';
+import { SD } from './StoreDetail.ts';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import ROUTE_LINK from '../../routes/RouterLink.ts';
 import { StoreDetailData, initialState } from './StoreDetailInterface.ts';
 import OperatingTimeTable from './OperatingTimeTable.tsx';
-import halloween from './halloween.jpg';
+import halloween from '../../assets/images/halloween.jpg';
 
 function isExist(data: any) {
   return data !== null && data !== undefined;
@@ -13,6 +13,10 @@ function isExist(data: any) {
 
 const StoreDetail = () => {
   const [storeData, setStoreData] = useState<StoreDetailData>(initialState);
+
+  const checkImage = () => {
+    console.log(storeData);
+  };
 
   useEffect(() => {
     let auth = null;
@@ -81,6 +85,7 @@ const StoreDetail = () => {
             closedDay={storeData.closedDay}
           />
         </SD.BodyRight>
+        <button onClick={checkImage}>체크용</button>
       </SD.Body>
     </>
   );

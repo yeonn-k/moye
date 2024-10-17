@@ -7,6 +7,7 @@ const ROUTE_LINK = {
   MONTH: { path: 'month', link: '/month' },
   STORE: { path: 'store', link: '/store' },
   STOREEDIT: { path: 'store/edit', link: '/store/edit' },
+  STOREREGISTER: { path: 'store/register', link: '/store/register' },
 };
 
 export default ROUTE_LINK;

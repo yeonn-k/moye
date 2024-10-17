@@ -6,7 +6,7 @@ const ROUTE_LINK = {
   TODAY: { path: 'today/:storeId', link: '/today' },
   MONTH: { path: 'month/:storeId', link: '/month' },
   STORE: { path: 'stores/:storeId', link: '/stores' },
-  STOREEDIT: { path: 'stores/:storeId/edit', link: '/stores/edit' },
+  STOREEDIT: { path: 'stores/:storeId/edit', link: '/stores/' },
   STOREREGISTER: { path: 'stores/register', link: '/stores/register' },
 };
 

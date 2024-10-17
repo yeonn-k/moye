@@ -13,4 +13,5 @@ export const APIS = {
   storeEdit: `${BASE_URL}${ROUTE_LINK.STOREEDIT.link}`,
   storeRegister: `${BASE_URL}${ROUTE_LINK.STOREREGISTER.link}`,
   storePictureUpload: `${BASE_URL}/uploads`,
+  getImageBase: `${BASE_URL}/`,
 };

@@ -4,52 +4,85 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import ROUTE_LINK from '../../routes/RouterLink.ts';
-import { StoreDetailData, initialState } from './StoreDetailInterface.ts';
+import {
+  StoreDetailData,
+  initialState,
+  StoreImage,
+} from './StoreDetailInterface.ts';
 import OperatingTimeTable from './OperatingTimeTable.tsx';
-import halloween from '../../assets/images/halloween.jpg';
 import { APIS } from '../../config/config.ts';
 import { RootState } from '../../store/store.ts';
 
 const StoreDetail = () => {
   const [storeData, setStoreData] = useState<StoreDetailData>(initialState);
   const storeId = useSelector((state: RootState) => state.auth.store?.id);
-
-  const checkImage = () => {
-    console.log(storeData);
-  };
+  const [previewImage, setPreviewImage] = useState('');
 
   useEffect(() => {
-    let auth = null;
-    const item = localStorage.getItem('auth');
-    if (item !== null) {
-      auth = JSON.parse(item);
-    }
+    async function asyncCall() {
+      let imageSrc = '';
 
-    axios
-      .get(`${APIS.store}/${storeId}`, {
-        headers: {
-          Authorization: `Bearer ${auth.token}`,
-        },
-      })
-      .then((res) => {
-        setStoreData(res.data.body);
-      })
-      .catch((error) => {
-        console.log('Error: ', error);
-      });
+      let auth = null;
+      const item = localStorage.getItem('auth');
+      if (item !== null) {
+        auth = JSON.parse(item);
+      }
+
+      await axios
+        .get(`${APIS.store}/${storeId}`, {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        })
+        .then((res) => {
+          setStoreData(res.data.body);
+          imageSrc = res.data.body.image.filter(
+            (item: StoreImage) => item.url !== '' && item.url !== null,
+          )[0].url;
+          console.log(res.data.body);
+        })
+        .catch((error) => {
+          console.log('Error: ', error);
+        });
+      const getURL = `${APIS.getImageBase}${imageSrc}`;
+
+      await axios
+        .get(getURL, {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+          responseType: 'blob',
+        })
+        .then((res) => {
+          const newFile = new File([res.data], 'storeImg');
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            const previewImage = String(event.target?.result);
+            setPreviewImage(previewImage);
+          };
+          reader.readAsDataURL(newFile);
+        })
+        .catch((error) => {
+          console.log('Error: ', error);
+        });
+    }
+    asyncCall();
   }, [storeId]);
 
   return (
     <>
       <SD.TopBar>
         <p>매장이름</p>
-        <Link to={ROUTE_LINK.STOREEDIT.link}>
+        <Link
+          to={`${ROUTE_LINK.STOREEDIT.link}${storeId}/edit`}
+          state={{ data: storeData }}
+        >
           <button>편집</button>
         </Link>
       </SD.TopBar>
       <SD.Body>
         <SD.BodyLeft>
-          <img src={halloween} alt="매장사진"></img>
+          <img src={previewImage} alt="매장사진"></img>
           <ul>
             <li>
               <span>상호명</span>: {storeData.businessName}
@@ -86,7 +119,6 @@ const StoreDetail = () => {
             closedDay={storeData.closedDay}
           />
         </SD.BodyRight>
-        <button onClick={checkImage}>체크용</button>
       </SD.Body>
     </>
   );

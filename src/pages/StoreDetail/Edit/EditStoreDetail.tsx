@@ -6,7 +6,9 @@ import dayjs from 'dayjs';
 import ListInputElement from './ListInputElement';
 import ListTimeElement from './ListTimeElement';
 import DatePicker from 'react-datepicker';
+import ROUTE_LINK from '../../../routes/RouterLink';
 import 'react-datepicker/dist/react-datepicker.css';
+import { StoreDetailData } from '../StoreDetailInterface';
 
 interface localStorageData {
   token: string;
@@ -20,7 +22,7 @@ interface localStorageData {
   };
 }
 
-const initialState = {
+let initialState = {
   name: '',
   businessName: '',
   businessNumber: '',
@@ -39,6 +41,42 @@ const initialState = {
   weekendBreakEnd: '',
 };
 
+function mapStoreData(storeData: StoreDetailData) {
+  // initialState.name = storeData.name;
+  initialState.businessName = storeData.businessName;
+  initialState.businessNumber = storeData.businessRegistrationNumber;
+  // initialState.address = storeData.address;
+  initialState.contact = storeData.contact;
+  initialState.totalSeats = storeData.totalSeats;
+  initialState.numberPerTable = storeData.numberPerTable.toString();
+  initialState.description = storeData.description;
+  initialState.weekdayOpen = storeData.openingHour.filter(
+    (item) => item.type === '평일',
+  )[0].openFrom;
+  initialState.weekdayClose = storeData.openingHour.filter(
+    (item) => item.type === '평일',
+  )[0].closeTo;
+  initialState.weekendOpen = storeData.openingHour.filter(
+    (item) => item.type === '주말',
+  )[0].openFrom;
+  initialState.weekendClose = storeData.openingHour.filter(
+    (item) => item.type === '주말',
+  )[0].closeTo;
+  initialState.weekdayBreakStart = storeData.openingHour.filter(
+    (item) => item.type === '평일',
+  )[0].startBreakTime;
+  initialState.weekdayBreakEnd = storeData.openingHour.filter(
+    (item) => item.type === '평일',
+  )[0].endBreakTime;
+  initialState.weekendBreakStart = storeData.openingHour.filter(
+    (item) => item.type === '주말',
+  )[0].startBreakTime;
+  initialState.weekendBreakEnd = storeData.openingHour.filter(
+    (item) => item.type === '주말',
+  )[0].endBreakTime;
+  return initialState;
+}
+
 const DATE_FORMAT = 'YYYY-MM-DD';
 
 const TIME_SUBFIX = ':00';
@@ -50,9 +88,9 @@ function addTimeSubfix(time: string) {
 }
 
 const EditStoreDetail = () => {
-  const location = useLocation(); // access to location.state
+  const storeData = useLocation().state.data;
   const navigate = useNavigate();
-  const [inputs, setInputs] = useState(initialState);
+  const [inputs, setInputs] = useState(mapStoreData(storeData));
   const [uploadedImage, setUploadedImage] = useState<File | string>('');
   const [imagePreview, setImagePreview] = useState<any>(null);
   const [regularClosedDays, setRegularClosedDays] = useState<number[]>([]);
@@ -171,7 +209,9 @@ const EditStoreDetail = () => {
     }
   };
   const handleCancleFormClick = () => {
-    // 취소 되묻기 기능, PRG 문제 방지
+    if (window.confirm('취소하시겠습니까?')) {
+      navigate(`${ROUTE_LINK.OWNER.link}`);
+    }
   };
   const handleIrregularClosedDaysClick = () => {
     const formattedDate = dayjs(selectedClosedDate).format(DATE_FORMAT);
@@ -191,6 +231,10 @@ const EditStoreDetail = () => {
     };
   };
 
+  // useEffect(() => {
+  //   setInputs(mapStoreData(storeData));
+  // }, []);
+
   return (
     <ESD.EditStoreDetail>
       <ESD.TopBar>매장 편집</ESD.TopBar>
@@ -201,48 +245,56 @@ const EditStoreDetail = () => {
               label="매장 이름"
               type="text"
               id="name"
+              value={inputs.name}
               onChange={handleStoreDetailsInput}
             />
             <ListInputElement
               label="사업자 번호"
               type="text"
               id="businessNumber"
+              value={inputs.businessNumber}
               onChange={handleStoreDetailsInput}
             />
             <ListInputElement
               label="상호명"
               type="text"
               id="businessName"
+              value={inputs.businessName}
               onChange={handleStoreDetailsInput}
             />
             <ListInputElement
               label="주소"
               type="text"
               id="address"
+              value={inputs.address}
               onChange={handleStoreDetailsInput}
             />
             <ListInputElement
               label="전화번호"
               type="text"
               id="contact"
+              value={inputs.contact}
               onChange={handleStoreDetailsInput}
             />
             <ListInputElement
               label="좌석 수"
               type="text"
               id="totalSeats"
+              value={inputs.totalSeats}
               onChange={handleStoreDetailsInput}
             />
             <ListInputElement
               label="테이블 최대 인원"
               type="text"
               id="numberPerTable"
+              value={inputs.numberPerTable}
               onChange={handleStoreDetailsInput}
             />
             <ListInputElement
               label="소개글"
               type="text"
               id="description"
+              value={inputs.description}
               onChange={handleStoreDetailsInput}
             />
             <ListTimeElement

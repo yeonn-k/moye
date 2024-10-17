@@ -16,7 +16,7 @@ interface RegularHoliday {
 
 interface StoreImage {
   isPrimary: string;
-  src: string;
+  url: string;
 }
 
 interface StoreDetailData {
@@ -40,7 +40,7 @@ const initialState: StoreDetailData = {
   image: [
     {
       isPrimary: '',
-      src: '',
+      url: '',
     },
   ],
   businessRegistrationNumber: '',
@@ -57,5 +57,6 @@ export type {
   OperatingTimeTableData,
   IrregularCloseDay,
   RegularHoliday,
+  StoreImage,
 };
 export { initialState };

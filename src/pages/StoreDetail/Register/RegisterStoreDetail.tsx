@@ -34,8 +34,6 @@ const initialState = {
   weekendClose: '',
 };
 
-const DATE_FORMAT = 'YYYY-MM-DD';
-
 const TIME_SUBFIX = ':00';
 
 const dayOfTheWeeks = ['일', '월', '화', '수', '목', '금', '토'];
@@ -50,7 +48,6 @@ const RegisterStoreDetail = () => {
   const [uploadedImage, setUploadedImage] = useState<File | string>('');
   const [imagePreview, setImagePreview] = useState<any>(null);
   const [regularClosedDays, setRegularClosedDays] = useState<number[]>([]);
-  const [storeId, setStoreId] = useState('');
 
   const handleStoreDetailsInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputs({
@@ -91,6 +88,7 @@ const RegisterStoreDetail = () => {
   };
   const handlePostFormSubmit = async () => {
     try {
+      let storeId = '';
       const formData = new FormData();
       let auth = null;
       const item = localStorage.getItem('auth');
@@ -123,7 +121,7 @@ const RegisterStoreDetail = () => {
       };
       // backend에서 요일을 일=1, 월=2 ~ 토=7으로 받음, front에서는 0~6으로 배정됨
 
-      await axios
+      const result = await axios
         .post(APIS.store, JSON.stringify(postData), {
           headers: {
             Authorization: `Bearer ${auth.token}`,
@@ -132,7 +130,8 @@ const RegisterStoreDetail = () => {
         })
         .then((res) => {
           console.log('매장 등록 완료');
-          setStoreId(res.data.id);
+          storeId = res.data.body.id;
+          console.log('in: ', res.data.body.id);
         })
         .catch((error) => {
           alert('매장 등록에 실패하였습니다.');
@@ -140,6 +139,7 @@ const RegisterStoreDetail = () => {
         });
       formData.append('files', uploadedImage);
       console.log(storeId);
+
       await axios
         .post(`${APIS.storePictureUpload}/${storeId}`, formData, {
           headers: {
@@ -160,7 +160,9 @@ const RegisterStoreDetail = () => {
     }
   };
   const handleCancleFormClick = () => {
-    // 취소 되묻기 기능, PSG 문제 방지
+    if (window.confirm('취소하시겠습니까?')) {
+      navigate(`${ROUTE_LINK.OWNER.link}`);
+    }
   };
 
   return (

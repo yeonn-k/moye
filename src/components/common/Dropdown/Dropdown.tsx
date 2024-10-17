@@ -24,10 +24,10 @@ const Dropdown = ({
   };
 
   const handleSelect = async (option: string) => {
-    onSelect();
     setSelectedItem(option);
     setIsOpen(false);
     setSelected(option);
+    await onSelect(option);
   };
 
   return (

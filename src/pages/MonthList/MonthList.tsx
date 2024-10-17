@@ -28,9 +28,8 @@ const MonthList = () => {
 
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  // const storeId = searchParams.get('storeId');
+  // const storeId = searchParams.get('storeId')
   const storeId = 3;
-
   const handleOpenSearchModal = () => {
     dispatch(openModal('search'));
   };

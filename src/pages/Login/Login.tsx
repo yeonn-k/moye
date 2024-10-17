@@ -1,7 +1,6 @@
 import { useState, useEffect, ChangeEvent, FormEvent, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { jwtDecode } from 'jwt-decode';
 import { S } from './Login.style';
 import { loginService } from '../../services/auth/authService';
 import { loginAction, logoutAction } from '../../store/slices/auth/authSlice';
@@ -62,17 +61,8 @@ const Login = () => {
     try {
       const response = await loginService(loginForm);
       if (response) {
-        const jwtToken = response.data.body.access;
-        const decoded: {
-          exp: number;
-          iat: number;
-          id: number;
-          jti: string;
-          role: string;
-        } = jwtDecode(jwtToken);
-
         const loginUser = {
-          id: decoded.id,
+          id: null,
           email: loginForm.email,
           name: null,
           phone: null,
@@ -81,7 +71,6 @@ const Login = () => {
 
         dispatch(
           loginAction({
-            token: response.data.body.access,
             user: loginUser,
           }),
         );

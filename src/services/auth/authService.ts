@@ -39,6 +39,7 @@ interface GetUserResponse {
   status: number;
   data: {
     body: {
+      id: string;
       name: string;
       phone: string;
     };
@@ -46,7 +47,7 @@ interface GetUserResponse {
 }
 
 interface GetStoresRequest {
-  userId: number;
+  userId: string;
 }
 
 interface GetStoresResponse {

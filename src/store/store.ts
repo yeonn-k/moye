@@ -7,7 +7,6 @@ const loadAuthState = () => {
   return savedAuthState
     ? JSON.parse(savedAuthState)
     : {
-        token: null,
         user: {
           id: null,
           email: null,
@@ -17,6 +16,7 @@ const loadAuthState = () => {
         },
         isStoreSelected: false,
         store: null,
+        isLoggedIn: false,
       };
 };
 
@@ -38,6 +38,7 @@ store.subscribe(() => {
       user: state.auth.user,
       isStoreSelected: state.auth.isStoreSelected,
       store: state.auth.store,
+      isLoggedIn: state.auth.isLoggedIn,
     }),
   );
 });

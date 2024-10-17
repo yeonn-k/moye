@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react';
+
 import OuterCard from './OuterCard/OuterCard.tsx';
 
-import { S } from './CanvaBoard.style.ts';
 import useCheckTheDate from '../../../hooks/useCheckTheDate.tsx';
-import dayjs from 'dayjs';
+
+import { S } from './CanvaBoard.style.ts';
 
 interface CanvanBoardProps {
   items: Items[];
   setIsRerender: React.Dispatch<React.SetStateAction<boolean>>;
+  oClock: boolean;
+  thirty: boolean;
 }
 
 interface Items {
@@ -20,31 +23,18 @@ interface Items {
   status: string;
 }
 
-const CanvanBoard = ({ items, setIsRerender }: CanvanBoardProps) => {
-  const [oClock, setOClock] = useState(false);
-  const [thirty, setThirty] = useState(false);
-  const { hour, minute, second } = useCheckTheDate();
+const CanvanBoard = ({
+  items,
+  setIsRerender,
+  oClock,
+  thirty,
+}: CanvanBoardProps) => {
+  const { hour, minute } = useCheckTheDate();
   const [filtered, setFiltered] = useState({
     accept: [] as Items[],
     pending: [] as Items[],
     completed: [] as Items[],
   });
-
-  const checkTime = () => {
-    if (minute === 0 && second === 0) {
-      setOClock(true);
-    } else if (minute === 30 && second === 0) {
-      setThirty(true);
-    } else {
-      setOClock(false);
-      setThirty(false);
-    }
-  };
-
-  useEffect(() => {
-    const interval = setInterval(checkTime, 1000);
-    return () => clearInterval(interval);
-  }, []);
 
   useEffect(() => {
     items.forEach((item: Items) => {

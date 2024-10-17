@@ -1,16 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import axios from 'axios';
+import { useState, useEffect } from 'react';
 
 import Dropdown from '../../components/common/Dropdown/Dropdown.tsx';
 import CalendarWrap from './CalendarWrap/CalendarWrap.tsx';
-import useCheckTheDate from '../../hooks/useCheckTheDate.tsx';
+
+import axios from 'axios';
+import { APIS } from '../../config/config.ts';
+
+import { useLocation } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { openModal } from '../../store/slices/modal/modalSlice.ts';
-import { BASE_URL } from '../../config/config';
+
+import useCheckTheDate from '../../hooks/useCheckTheDate.tsx';
+import useCheckAuth from '../../hooks/useCheckAuth.tsx';
 
 import { S } from './MonthList.style.ts';
-import api from '../../services/api.ts';
-import { useLocation } from 'react-router-dom';
 
 interface Items {
   [key: string]: { ACCEPT: number; PENDING: number; CANCEL: number };
@@ -24,6 +27,8 @@ const MonthList = () => {
   const status = ['전체', '예약 확정', '대기중', '예약 취소'];
 
   const { month, date, days, day } = useCheckTheDate();
+  const { auth } = useCheckAuth();
+
   const dispatch = useDispatch();
 
   const location = useLocation();
@@ -36,8 +41,13 @@ const MonthList = () => {
 
   const getItems = async (month: number) => {
     try {
-      const res = await api.get(
-        `${BASE_URL}/stores/${storeId}/reservations?month=${month}`,
+      const res = await axios.get(
+        `${APIS.store}/${storeId}/reservations?month=${month}`,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        },
       );
       setItems(res.data.body);
     } catch (err) {

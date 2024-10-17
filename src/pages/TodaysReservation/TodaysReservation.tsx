@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { useLocation, useSearchParams } from 'react-router-dom';
-import { BASE_URL } from '../../config/config.ts';
+import { useEffect, useState } from 'react';
 
 import TimelineBox from './TimelineBox/TimelineBox.tsx';
 import CanvanBoard from './CanvanBoard/CanvanBoard.tsx';
-
 import UserInput from '../../components/common/UserInput/UserInput.tsx';
+
+import axios from 'axios';
+import { APIS } from '../../config/config.ts';
+
+import { useLocation } from 'react-router-dom';
+
+import useCheckAuth from '../../hooks/useCheckAuth.tsx';
 import useCheckTheDate from '../../hooks/useCheckTheDate.tsx';
 import useInputValue from '../../hooks/useInputValue.tsx';
-
-import api from '../../services/api.ts';
 
 import { S } from './TodaysReservation.style.ts';
 
@@ -30,7 +32,8 @@ const TodaysReservation = ({}) => {
   const storeId = 3;
 
   const [items, setItems] = useState<Items[]>([]);
-  const { month, date, days, day } = useCheckTheDate();
+  const { month, date, days, day, minute, second } = useCheckTheDate();
+  const { auth } = useCheckAuth();
   const [businessHrs, setBusinessHrs] = useState({
     open: '',
     close: '',
@@ -39,16 +42,44 @@ const TodaysReservation = ({}) => {
   const [operating, setOperating] = useState<(number | string)[]>([]);
   const [isRerender, setIsRerender] = useState(false);
 
+  const [oClock, setOClock] = useState(false);
+  const [thirty, setThirty] = useState(false);
+
   const getTodaysReservation = async () => {
     try {
-      const res = await api.get(`${BASE_URL}/stores/${storeId}/reservations`);
+      const res = await axios.get(`${APIS.store}/${storeId}/reservations`, {
+        headers: {
+          Authorization: `Bearer ${auth.token}`,
+        },
+      });
       setItems(res.data.body.reservations);
-      setBusinessHrs({ open: res.data.body.open, close: res.data.body.close });
+      setBusinessHrs({
+        open: res.data.body.open,
+        close: res.data.body.close,
+      });
       console.log(res.data.body.reservations);
     } catch (err) {
       console.error(err);
     }
   };
+
+  const checkTime = () => {
+    if (minute === 0 && second === 0) {
+      setOClock(true);
+      setIsRerender(true);
+    } else if (minute === 30 && second === 0) {
+      setThirty(true);
+      setIsRerender(true);
+    } else {
+      setOClock(false);
+      setThirty(false);
+    }
+  };
+
+  useEffect(() => {
+    const interval = setInterval(checkTime, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     getTodaysReservation();
@@ -121,7 +152,12 @@ const TodaysReservation = ({}) => {
           <TimelineBox items={filteredItems} operating={operating} />
         </S.TimelineBox>
       </S.UpperBox>
-      <CanvanBoard items={filteredItems} setIsRerender={setIsRerender} />
+      <CanvanBoard
+        items={filteredItems}
+        setIsRerender={setIsRerender}
+        oClock={oClock}
+        thirty={thirty}
+      />
     </S.TodaysReservation>
   );
 };

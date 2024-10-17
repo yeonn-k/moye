@@ -1,5 +1,3 @@
-import React from 'react';
-
 import InnerCard from '../InnerCard/InnerCard.tsx';
 
 import { S } from './OuterCard.style.ts';

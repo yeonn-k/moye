@@ -1,10 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+
 import ConfirmButton from '../../../../components/common/ConfirmButton/ConfirmButton.tsx';
 
-import { S } from './InnerCard.style.ts';
-import api from '../../../../services/api.ts';
+import axios from 'axios';
 import { BASE_URL } from '../../../../config/config.ts';
+
 import useCheckTheDate from '../../../../hooks/useCheckTheDate.tsx';
+import useCheckAuth from '../../../../hooks/useCheckAuth.tsx';
+
+import { S } from './InnerCard.style.ts';
 
 interface OuterCardProps {
   status: string;
@@ -32,13 +36,20 @@ const InnerCard = ({
   thirty,
 }: OuterCardProps) => {
   const { hour, minute } = useCheckTheDate();
+  const { auth } = useCheckAuth();
 
-  const putChangeReservationsState = async () => {
+  const putAcceptReservationsState = async () => {
     const id = item.id;
     try {
-      const res = await api.put(`${BASE_URL}/reservations/${id}`, {
-        state: 'ACCEPT',
-      });
+      const res = await axios.put(
+        `${BASE_URL}/reservations/${id}`,
+        { state: 'ACCEPT' },
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        },
+      );
       console.log(res);
       setIsRerender((prev) => !prev);
     } catch (err) {
@@ -49,9 +60,15 @@ const InnerCard = ({
   const putCancelReservationsState = async () => {
     const id = item.id;
     try {
-      const res = await api.put(`${BASE_URL}/reservations/${id}`, {
-        state: 'CANCEL',
-      });
+      const res = await axios.put(
+        `${BASE_URL}/reservations/${id}`,
+        { state: 'CANCEL' },
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        },
+      );
       console.log(res);
       setIsRerender((prev) => !prev);
     } catch (err) {
@@ -74,9 +91,15 @@ const InnerCard = ({
     };
     if (item.status === 'PENDING' && start() <= now()) {
       try {
-        const res = await api.put(`${BASE_URL}/reservations/${id}`, {
-          state: 'CANCEL',
-        });
+        const res = await axios.put(
+          `${BASE_URL}/reservations/${id}`,
+          { state: 'CANCEL' },
+          {
+            headers: {
+              Authorization: `Bearer ${auth.token}`,
+            },
+          },
+        );
         console.log(res);
         setIsRerender((prev) => !prev);
       } catch (err) {
@@ -110,7 +133,7 @@ const InnerCard = ({
               action="confirm"
               width="104px"
               height="32px"
-              onClick={putChangeReservationsState}
+              onClick={putAcceptReservationsState}
             />
             <ConfirmButton
               action="cancel"

@@ -28,6 +28,7 @@ export const S = {
     background-image: url(${logo});
     background-size: cover;
     background-position: center;
+    margin-left: 24px;
   `,
   AuthBox: styled.div`
     display: flex;

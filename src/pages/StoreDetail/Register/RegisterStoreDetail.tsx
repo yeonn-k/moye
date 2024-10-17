@@ -34,8 +34,6 @@ const initialState = {
   weekendClose: '',
 };
 
-const DATE_FORMAT = 'YYYY-MM-DD';
-
 const TIME_SUBFIX = ':00';
 
 const dayOfTheWeeks = ['일', '월', '화', '수', '목', '금', '토'];
@@ -162,7 +160,9 @@ const RegisterStoreDetail = () => {
     }
   };
   const handleCancleFormClick = () => {
-    // 취소 되묻기 기능, PSG 문제 방지
+    if (window.confirm('취소하시겠습니까?')) {
+      navigate(`${ROUTE_LINK.OWNER.link}`);
+    }
   };
 
   return (

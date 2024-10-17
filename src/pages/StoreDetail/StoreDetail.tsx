@@ -11,21 +11,16 @@ import {
 } from './StoreDetailInterface.ts';
 import OperatingTimeTable from './OperatingTimeTable.tsx';
 import { APIS } from '../../config/config.ts';
-import store, { RootState } from '../../store/store.ts';
+import { RootState } from '../../store/store.ts';
 
 const StoreDetail = () => {
   const [storeData, setStoreData] = useState<StoreDetailData>(initialState);
   const storeId = useSelector((state: RootState) => state.auth.store?.id);
   const [previewImage, setPreviewImage] = useState('');
 
-  const checkImage = () => {
-    console.log(storeData);
-  };
-
   useEffect(() => {
     async function asyncCall() {
       let imageSrc = '';
-      let imageFileUrl = '';
 
       let auth = null;
       const item = localStorage.getItem('auth');
@@ -44,6 +39,7 @@ const StoreDetail = () => {
           imageSrc = res.data.body.image.filter(
             (item: StoreImage) => item.url !== '' && item.url !== null,
           )[0].url;
+          console.log(res.data.body);
         })
         .catch((error) => {
           console.log('Error: ', error);
@@ -77,7 +73,10 @@ const StoreDetail = () => {
     <>
       <SD.TopBar>
         <p>매장이름</p>
-        <Link to={ROUTE_LINK.STOREEDIT.link}>
+        <Link
+          to={`${ROUTE_LINK.STOREEDIT.link}${storeId}/edit`}
+          state={{ data: storeData }}
+        >
           <button>편집</button>
         </Link>
       </SD.TopBar>
@@ -120,7 +119,6 @@ const StoreDetail = () => {
             closedDay={storeData.closedDay}
           />
         </SD.BodyRight>
-        <button onClick={checkImage}>체크용</button>
       </SD.Body>
     </>
   );

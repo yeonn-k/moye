@@ -14,6 +14,14 @@ interface ListTimeElementProps {
 }
 
 const ListTimeElement = (props: ListTimeElementProps) => {
+  function changeTime(time: string): number {
+    const result = Number(time.slice(0, 2));
+    if (!isNaN(result)) {
+      return result;
+    }
+    return 0;
+  }
+
   return (
     <li>
       <span>{props.totalLabel}</span>
@@ -24,7 +32,7 @@ const ListTimeElement = (props: ListTimeElementProps) => {
           min={props.min}
           max={props.max}
           name={props.startName}
-          value={props.startValue}
+          value={changeTime(props.startValue)}
           onChange={props.onChange}
         />{' '}
         시 ~&nbsp;
@@ -33,7 +41,7 @@ const ListTimeElement = (props: ListTimeElementProps) => {
           min={props.min}
           max={props.max}
           name={props.endName}
-          value={props.endValue}
+          value={changeTime(props.endValue)}
           onChange={props.onChange}
         />{' '}
         시

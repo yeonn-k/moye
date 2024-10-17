@@ -1,6 +1,6 @@
 import { Store } from '../../store/slices/auth/authSlice';
 import axios from 'axios';
-import api from '../api';
+import { APIS } from '../../config/config';
 
 interface SignupRequest {
   email: string;
@@ -65,7 +65,7 @@ export const signUpService = async ({
   password,
 }: SignupRequest) => {
   try {
-    const response: SignupResponse = await api.post('/users', {
+    const response: SignupResponse = await axios.post(APIS.signup, {
       email,
       name,
       phone,
@@ -85,7 +85,7 @@ export const signUpService = async ({
 
 export const loginService = async ({ email, password }: LoginRequest) => {
   try {
-    const response: LoginResponse = await api.post('/login', {
+    const response: LoginResponse = await axios.post(APIS.login, {
       email,
       password,
     });
@@ -102,7 +102,9 @@ export const loginService = async ({ email, password }: LoginRequest) => {
 
 export const getUserByEmailService = async ({ email }: GetUserRequest) => {
   try {
-    const response: GetUserResponse = await api.get(`/users?email=${email}`);
+    const response: GetUserResponse = await axios.get(
+      `${APIS.users}?email=${email}`,
+    );
     if (response.status === 200) {
       return response.data;
     } else {
@@ -119,7 +121,9 @@ export const getUserByEmailService = async ({ email }: GetUserRequest) => {
 
 export const getStoresByIdService = async ({ userId }: GetStoresRequest) => {
   try {
-    const response: GetStoresResponse = await api.get(`/users/${userId}`);
+    const response: GetStoresResponse = await axios.get(
+      `${APIS.users}/${userId}`,
+    );
     if (response.status === 200) {
       return response.data.body.stores;
     }
@@ -132,6 +136,6 @@ export const getStoresByIdService = async ({ userId }: GetStoresRequest) => {
   }
 };
 
-export const logout = async () => {
-  await api.post('/logout');
-};
+// export const logout = async () => {
+//   await api.post('/logout');
+// };

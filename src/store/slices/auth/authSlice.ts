@@ -24,17 +24,16 @@ export interface Store {
 }
 
 export interface AuthState {
-  // TODO: 토큰 삭제 예정
-  token: string | null;
   user: LoginUser | null;
   isStoreSelected: boolean;
+  isLoggedIn: boolean;
   store: Pick<Store, 'id' | 'businessName'> | null;
 }
 
 const initialState: AuthState = {
-  token: null,
   user: null,
   isStoreSelected: true,
+  isLoggedIn: false,
   store: null,
 };
 
@@ -46,7 +45,6 @@ const authSlice = createSlice({
       state,
       action: PayloadAction<{ token: string; user: LoginUser }>,
     ) {
-      state.token = action.payload.token;
       state.user = action.payload.user;
     },
     updateUserProfileAction(state, action: PayloadAction<Partial<LoginUser>>) {
@@ -58,8 +56,10 @@ const authSlice = createSlice({
       }
     },
     logoutAction(state) {
-      state.token = null;
       state.user = null;
+    },
+    setIsLoggedIn(state, action: PayloadAction<boolean>) {
+      state.isLoggedIn = action.payload;
     },
     setIsStoreSelected(state, action: PayloadAction<boolean>) {
       state.isStoreSelected = action.payload;

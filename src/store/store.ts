@@ -35,7 +35,6 @@ store.subscribe(() => {
   localStorage.setItem(
     'auth',
     JSON.stringify({
-      token: state.auth.token,
       user: state.auth.user,
       isStoreSelected: state.auth.isStoreSelected,
       store: state.auth.store,

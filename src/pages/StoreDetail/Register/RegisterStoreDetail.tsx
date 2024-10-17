@@ -44,15 +44,11 @@ function addTimeSubfix(time: string) {
   return time + TIME_SUBFIX;
 }
 
-function isExist(data: any) {
-  return data !== null && data !== undefined;
-}
-
 const RegisterStoreDetail = () => {
   const navigate = useNavigate();
   const [inputs, setInputs] = useState(initialState);
-  const [uploadedImage, setUploadedImage] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState('');
+  const [uploadedImage, setUploadedImage] = useState<File | string>('');
+  const [imagePreview, setImagePreview] = useState<any>(null);
   const [regularClosedDays, setRegularClosedDays] = useState<number[]>([]);
   const [storeId, setStoreId] = useState('');
 
@@ -93,14 +89,13 @@ const RegisterStoreDetail = () => {
       console.log('Error: ', error);
     }
   };
-  const handlePostFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handlePostFormSubmit = async () => {
     try {
       const formData = new FormData();
       let auth = null;
-
-      if (isExist(localStorage) && isExist(localStorage.getItem('auth'))) {
-        auth = JSON.parse(localStorage.getItem('auth'));
+      const item = localStorage.getItem('auth');
+      if (item !== null) {
+        auth = JSON.parse(item);
       }
 
       const openingHourData = [
@@ -125,7 +120,6 @@ const RegisterStoreDetail = () => {
         numberPerTable: inputs.numberPerTable,
         openingHour: openingHourData,
         dayOfWeekDay: regularClosedDays.map((index: number) => index + 1),
-        description: inputs.description,
       };
       // backend에서 요일을 일=1, 월=2 ~ 토=7으로 받음, front에서는 0~6으로 배정됨
 

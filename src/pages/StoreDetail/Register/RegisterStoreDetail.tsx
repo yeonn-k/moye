@@ -175,42 +175,49 @@ const RegisterStoreDetail = () => {
               label="매장 이름"
               type="text"
               id="name"
+              value=""
               onChange={handleStoreDetailsInput}
             />
             <ListInputElement
               label="사업자 번호"
               type="text"
               id="businessNumber"
+              value=""
               onChange={handleStoreDetailsInput}
             />
             <ListInputElement
               label="상호명"
               type="text"
               id="businessName"
+              value=""
               onChange={handleStoreDetailsInput}
             />
             <ListInputElement
               label="주소"
               type="text"
               id="address"
+              value=""
               onChange={handleStoreDetailsInput}
             />
             <ListInputElement
               label="전화번호"
               type="text"
               id="contact"
+              value=""
               onChange={handleStoreDetailsInput}
             />
             <ListInputElement
               label="좌석 수"
               type="text"
               id="totalSeats"
+              value=""
               onChange={handleStoreDetailsInput}
             />
             <ListInputElement
               label="테이블 최대 인원"
               type="text"
               id="numberPerTable"
+              value=""
               onChange={handleStoreDetailsInput}
             />
             <ListTimeElement

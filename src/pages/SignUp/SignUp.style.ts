@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 import backgroundImage from '../../assets/images/backgroundImage.png';
+import logo from '../../assets/images/logo.png';
 
 const fadeIn = keyframes`
   from {
@@ -20,15 +21,23 @@ export const S = {
     background-image: url(${backgroundImage});
     background-size: cover;
     background-position: center;
+  `,
+  BoxOverlay: styled.div`
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 50px;
   `,
-  PageTitle: styled.h2`
-    font-size: 28px;
-    color: #fff;
+  Logo: styled.div`
+    width: 274px;
+    height: 115px;
+    background-image: url(${logo});
+    background-size: cover;
+    background-position: center;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   `,
   SignUpForm: styled.form`

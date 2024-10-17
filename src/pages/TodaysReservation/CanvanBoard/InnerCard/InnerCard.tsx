@@ -33,7 +33,7 @@ const InnerCard = ({
 }: OuterCardProps) => {
   const { hour, minute } = useCheckTheDate();
 
-  const putChangeReservationsState = async () => {
+  const putAcceptReservationsState = async () => {
     const id = item.id;
     try {
       const res = await api.put(`${BASE_URL}/reservations/${id}`, {
@@ -110,7 +110,7 @@ const InnerCard = ({
               action="confirm"
               width="104px"
               height="32px"
-              onClick={putChangeReservationsState}
+              onClick={putAcceptReservationsState}
             />
             <ConfirmButton
               action="cancel"

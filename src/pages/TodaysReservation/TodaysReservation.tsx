@@ -30,7 +30,7 @@ const TodaysReservation = ({}) => {
   const storeId = 3;
 
   const [items, setItems] = useState<Items[]>([]);
-  const { month, date, days, day } = useCheckTheDate();
+  const { month, date, days, day, minute, second } = useCheckTheDate();
   const [businessHrs, setBusinessHrs] = useState({
     open: '',
     close: '',
@@ -38,6 +38,9 @@ const TodaysReservation = ({}) => {
   const [inputValue, setInputValue] = useInputValue();
   const [operating, setOperating] = useState<(number | string)[]>([]);
   const [isRerender, setIsRerender] = useState(false);
+
+  const [oClock, setOClock] = useState(false);
+  const [thirty, setThirty] = useState(false);
 
   const getTodaysReservation = async () => {
     try {
@@ -49,6 +52,24 @@ const TodaysReservation = ({}) => {
       console.error(err);
     }
   };
+
+  const checkTime = () => {
+    if (minute === 0 && second === 0) {
+      setOClock(true);
+      setIsRerender(true);
+    } else if (minute === 30 && second === 0) {
+      setThirty(true);
+      setIsRerender(true);
+    } else {
+      setOClock(false);
+      setThirty(false);
+    }
+  };
+
+  useEffect(() => {
+    const interval = setInterval(checkTime, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     getTodaysReservation();
@@ -121,7 +142,12 @@ const TodaysReservation = ({}) => {
           <TimelineBox items={filteredItems} operating={operating} />
         </S.TimelineBox>
       </S.UpperBox>
-      <CanvanBoard items={filteredItems} setIsRerender={setIsRerender} />
+      <CanvanBoard
+        items={filteredItems}
+        setIsRerender={setIsRerender}
+        oClock={oClock}
+        thirty={thirty}
+      />
     </S.TodaysReservation>
   );
 };

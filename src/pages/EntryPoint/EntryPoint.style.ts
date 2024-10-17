@@ -29,6 +29,7 @@ export const S = {
     background-size: cover;
     background-position: center;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    margin-left: 24px;
   `,
   AuthBox: styled.div`
     display: flex;

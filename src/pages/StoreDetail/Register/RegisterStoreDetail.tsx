@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { RSD } from './RegisterStoreDetail.ts';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -8,17 +8,17 @@ import 'react-datepicker/dist/react-datepicker.css';
 import ROUTE_LINK from '../../../routes/RouterLink.ts';
 import { APIS } from '../../../config/config.ts';
 
-interface localStorageData {
-  token: string;
-  user: {
-    id: number;
-    email: string;
-    name: string;
-    phone: string;
-    stores: string;
-    avatarUrl: string;
-  };
-}
+// interface localStorageData {
+//   token: string;
+//   user: {
+//     id: number;
+//     email: string;
+//     name: string;
+//     phone: string;
+//     stores: string;
+//     avatarUrl: string;
+//   };
+// }
 
 const initialState = {
   name: '',
@@ -90,11 +90,6 @@ const RegisterStoreDetail = () => {
     try {
       let storeId = '';
       const formData = new FormData();
-      let auth = null;
-      const item = localStorage.getItem('auth');
-      if (item !== null) {
-        auth = JSON.parse(item);
-      }
 
       const openingHourData = [
         {
@@ -121,10 +116,9 @@ const RegisterStoreDetail = () => {
       };
       // backend에서 요일을 일=1, 월=2 ~ 토=7으로 받음, front에서는 0~6으로 배정됨
 
-      const result = await axios
+      await axios
         .post(APIS.store, JSON.stringify(postData), {
           headers: {
-            Authorization: `Bearer ${auth.token}`,
             'Content-Type': 'application/json',
           },
         })
@@ -138,12 +132,9 @@ const RegisterStoreDetail = () => {
           console.log('Error: ', error);
         });
       formData.append('files', uploadedImage);
-      console.log(storeId);
-
       await axios
         .post(`${APIS.storePictureUpload}/${storeId}`, formData, {
           headers: {
-            Authorization: `Bearer ${auth.token}`,
             'Content-Type': 'multipart/form-data',
           },
         })
@@ -250,7 +241,10 @@ const RegisterStoreDetail = () => {
           <ul>
             <li>
               <div>
-                <img src={imagePreview ? imagePreview : ''} />
+                <img
+                  src={imagePreview ? imagePreview : ''}
+                  alt="imagePreview"
+                />
                 <input
                   type="file"
                   accept="image/*"

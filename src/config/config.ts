@@ -8,6 +8,7 @@ export const APIS = {
   today: `${BASE_URL}/today`,
   month: `${BASE_URL}/month`,
   owner: `${BASE_URL}/owner`,
-  store: `${BASE_URL}/store`,
-  storeEdit: `${BASE_URL}/store/edit`,
+  store: `${BASE_URL}/stores`,
+  storeEdit: `${BASE_URL}/stores/edit`,
+  storePictureUpload: `${BASE_URL}/uploads`,
 };

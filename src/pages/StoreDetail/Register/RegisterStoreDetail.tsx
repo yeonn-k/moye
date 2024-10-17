@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { ESD } from './EditStoreDetail';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { RSD } from './RegisterStoreDetail.ts';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import dayjs from 'dayjs';
-import ListInputElement from './ListInputElement';
-import ListTimeElement from './ListTimeElement';
-import DatePicker from 'react-datepicker';
+import ListInputElement from '../Edit/ListInputElement.tsx';
+import ListTimeElement from '../Edit/ListTimeElement.tsx';
 import 'react-datepicker/dist/react-datepicker.css';
+import ROUTE_LINK from '../../../routes/RouterLink.ts';
+import { APIS } from '../../../config/config.ts';
 
 interface localStorageData {
   token: string;
@@ -28,15 +28,10 @@ const initialState = {
   contact: '',
   totalSeats: '',
   numberPerTable: '',
-  description: '',
   weekdayOpen: '',
   weekdayClose: '',
   weekendOpen: '',
   weekendClose: '',
-  weekdayBreakStart: '',
-  weekdayBreakEnd: '',
-  weekendBreakStart: '',
-  weekendBreakEnd: '',
 };
 
 const DATE_FORMAT = 'YYYY-MM-DD';
@@ -53,15 +48,13 @@ function isExist(data: any) {
   return data !== null && data !== undefined;
 }
 
-const EditStoreDetail = () => {
-  const location = useLocation(); // access to location.state
+const RegisterStoreDetail = () => {
   const navigate = useNavigate();
   const [inputs, setInputs] = useState(initialState);
   const [uploadedImage, setUploadedImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState('');
   const [regularClosedDays, setRegularClosedDays] = useState<number[]>([]);
-  const [selectedClosedDate, setSelectedClosedDate] = useState(new Date());
-  const [irregularClosedDays, setIrregularClosedDays] = useState<string[]>([]);
+  const [storeId, setStoreId] = useState('');
 
   const handleStoreDetailsInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputs({
@@ -105,9 +98,11 @@ const EditStoreDetail = () => {
     try {
       const formData = new FormData();
       let auth = null;
+
       if (isExist(localStorage) && isExist(localStorage.getItem('auth'))) {
         auth = JSON.parse(localStorage.getItem('auth'));
       }
+
       const openingHourData = [
         {
           type: '평일',
@@ -120,56 +115,52 @@ const EditStoreDetail = () => {
           closeTo: addTimeSubfix(inputs.weekendClose),
         },
       ];
-      const breakTimeData = [
-        {
-          type: '평일',
-          openFrom: addTimeSubfix(inputs.weekdayBreakStart),
-          closeTo: addTimeSubfix(inputs.weekdayBreakEnd),
-        },
-        {
-          type: '주말',
-          openFrom: addTimeSubfix(inputs.weekendBreakStart),
-          closeTo: addTimeSubfix(inputs.weekendBreakEnd),
-        },
-      ];
       const postData = {
         businessRegistrationNumber: inputs.businessNumber,
         businessName: inputs.businessName,
-        description: inputs.description,
         name: inputs.name,
         address: inputs.address,
         contact: inputs.contact,
         totalSeats: inputs.totalSeats,
         numberPerTable: inputs.numberPerTable,
         openingHour: openingHourData,
-        breakTime: breakTimeData,
-        closedDay: irregularClosedDays,
         dayOfWeekDay: regularClosedDays.map((index: number) => index + 1),
+        description: inputs.description,
       };
       // backend에서 요일을 일=1, 월=2 ~ 토=7으로 받음, front에서는 0~6으로 배정됨
 
       await axios
-        .post('http://localhost:5005/stores', JSON.stringify(postData), {
+        .post(APIS.store, JSON.stringify(postData), {
           headers: {
             Authorization: `Bearer ${auth.token}`,
             'Content-Type': 'application/json',
           },
         })
         .then((res) => {
-          alert('매장이 등록되었습니다.');
-          console.log(res);
+          console.log('매장 등록 완료');
+          setStoreId(res.data.id);
         })
         .catch((error) => {
           alert('매장 등록에 실패하였습니다.');
           console.log('Error: ', error);
         });
       formData.append('files', uploadedImage);
-      axios.post('http://localhost:5005/uploads/3', formData, {
-        headers: {
-          Authorization: `Bearer ${auth.token}`,
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      console.log(storeId);
+      await axios
+        .post(`${APIS.storePictureUpload}/${storeId}`, formData, {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+            'Content-Type': 'multipart/form-data',
+          },
+        })
+        .then((res) => {
+          console.log('사진 업로드 성공');
+          navigate(ROUTE_LINK.OWNER.link);
+        })
+        .catch((error) => {
+          alert('사진 업로드에 실패했습니다.');
+          console.log('Error: ', error);
+        });
     } catch (error) {
       console.log('Error: ', error);
     }
@@ -177,29 +168,12 @@ const EditStoreDetail = () => {
   const handleCancleFormClick = () => {
     // 취소 되묻기 기능, PSG 문제 방지
   };
-  const handleIrregularClosedDaysClick = () => {
-    const formattedDate = dayjs(selectedClosedDate).format(DATE_FORMAT);
-    const newList = irregularClosedDays.filter(
-      (item) => item !== formattedDate,
-    );
-    setIrregularClosedDays([...newList, formattedDate]);
-  };
-  const handleIrregularClosedDateChange = (date: Date) => {
-    setSelectedClosedDate(date);
-  };
-  const handleDeleteSelectedDateClick = (date: string) => {
-    return () => {
-      setIrregularClosedDays(
-        irregularClosedDays.filter((item) => item !== date),
-      );
-    };
-  };
 
   return (
-    <ESD.EditStoreDetail>
-      <ESD.TopBar>매장 편집</ESD.TopBar>
-      <ESD.Body>
-        <ESD.BodyLeft>
+    <RSD.EditStoreDetail>
+      <RSD.TopBar>매장 등록</RSD.TopBar>
+      <RSD.Body>
+        <RSD.BodyLeft>
           <ul>
             <ListInputElement
               label="매장 이름"
@@ -243,12 +217,6 @@ const EditStoreDetail = () => {
               id="numberPerTable"
               onChange={handleStoreDetailsInput}
             />
-            <ListInputElement
-              label="소개글"
-              type="text"
-              id="description"
-              onChange={handleStoreDetailsInput}
-            />
             <ListTimeElement
               totalLabel="영업시간"
               inputLabel="평일"
@@ -273,41 +241,13 @@ const EditStoreDetail = () => {
               endValue={inputs.weekendClose}
               onChange={handleHourInput}
             />
-            <ListTimeElement
-              totalLabel="휴식시간"
-              inputLabel="평일"
-              type="number"
-              min={0}
-              max={24}
-              startName="weekdayBreakStart"
-              startValue={inputs.weekdayBreakStart}
-              endName="weekdayBreakEnd"
-              endValue={inputs.weekdayBreakEnd}
-              onChange={handleHourInput}
-            />
-            <ListTimeElement
-              totalLabel=""
-              inputLabel="주말"
-              type="number"
-              min={0}
-              max={24}
-              startName="weekendBreakStart"
-              startValue={inputs.weekendBreakStart}
-              endName="weekendBreakEnd"
-              endValue={inputs.weekendBreakEnd}
-              onChange={handleHourInput}
-            />
           </ul>
-        </ESD.BodyLeft>
-        <ESD.BodyRight>
+        </RSD.BodyLeft>
+        <RSD.BodyRight>
           <ul>
             <li>
               <div>
-                <img
-                  src={
-                    imagePreview ? imagePreview : '../StoreDetail/halloween.jpg'
-                  }
-                />
+                <img src={imagePreview ? imagePreview : ''} />
                 <input
                   type="file"
                   accept="image/*"
@@ -334,39 +274,15 @@ const EditStoreDetail = () => {
                 ))}
               </div>
             </li>
-            <li>
-              <span>비정기 휴무일</span>
-              <div>
-                <DatePicker
-                  selected={selectedClosedDate}
-                  onChange={handleIrregularClosedDateChange}
-                />
-              </div>
-              <ESD.DateAddButton onClick={handleIrregularClosedDaysClick}>
-                달력에서 추가하기
-              </ESD.DateAddButton>
-            </li>
           </ul>
-          <ul>
-            {irregularClosedDays.map((item) => (
-              <li key={item}>
-                {item}
-                <ESD.DateAddButton
-                  onClick={handleDeleteSelectedDateClick(item)}
-                >
-                  삭제
-                </ESD.DateAddButton>
-              </li>
-            ))}
-          </ul>
-        </ESD.BodyRight>
-      </ESD.Body>
-      <ESD.ConfirmBar>
+        </RSD.BodyRight>
+      </RSD.Body>
+      <RSD.ConfirmBar>
         <button onClick={handlePostFormSubmit}>확인</button>
         <button onClick={handleCancleFormClick}>취소</button>
-      </ESD.ConfirmBar>
-    </ESD.EditStoreDetail>
+      </RSD.ConfirmBar>
+    </RSD.EditStoreDetail>
   );
 };
 
-export default EditStoreDetail;
+export default RegisterStoreDetail;

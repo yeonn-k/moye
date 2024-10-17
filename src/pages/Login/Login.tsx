@@ -6,6 +6,7 @@ import { S } from './Login.style';
 import { loginService } from '../../services/auth/authService';
 import { loginAction, logoutAction } from '../../store/slices/auth/authSlice';
 import { validateEmail } from '../../utils/validator';
+import ROUTE_LINK from '../../routes/RouterLink';
 
 const Login = () => {
   const [userForm, setUserForm] = useState({
@@ -17,6 +18,7 @@ const Login = () => {
   const [responseError, setResponseError] = useState('');
 
   const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -45,8 +47,10 @@ const Login = () => {
     const { email, password } = userForm;
     const loginForm = { email, password };
     if (userForm.email === '' || userForm.password === '') {
+      setResponseError('이메일, 비밀번호를 모두 입력해주세요.');
       return;
     }
+
     try {
       const response = await loginService(loginForm);
       if (response) {
@@ -79,13 +83,16 @@ const Login = () => {
           password: '',
         });
 
-        navigate('/owner');
+        navigate(ROUTE_LINK.OWNER.link);
       }
     } catch (e) {
       if (e instanceof Error) {
-        console.log(e.message);
         setResponseError(e.message);
-        emailRef?.current?.focus();
+        if (emailRef.current && passwordRef.current) {
+          emailRef.current.value = '';
+          passwordRef.current.value = '';
+          emailRef.current.focus();
+        }
       }
     }
   };
@@ -106,6 +113,7 @@ const Login = () => {
             placeholder="이메일"
             value={userForm.email}
             onChange={handleUserFormChange}
+            autoComplete="username"
             ref={emailRef}
           />
           <S.UserInput
@@ -115,6 +123,7 @@ const Login = () => {
             value={userForm.password}
             onChange={handleUserFormChange}
             autoComplete="current-password"
+            ref={passwordRef}
           />
         </S.UserInputBox>
         {responseError && (

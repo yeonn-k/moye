@@ -1,5 +1,5 @@
 import { ReactNode, MouseEvent } from 'react';
-import { S } from './ModalBox.ts';
+import { S } from './ModalBox.style';
 import { useDispatch } from 'react-redux';
 import { closeModal } from '../../../store/slices/modal/modalSlice';
 

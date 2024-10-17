@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useSearchParams } from 'react-router-dom';
-import { BASE_URL } from '../../config/config.ts';
+import { APIS, BASE_URL } from '../../config/config.ts';
 
 import TimelineBox from './TimelineBox/TimelineBox.tsx';
 import CanvanBoard from './CanvanBoard/CanvanBoard.tsx';
@@ -9,9 +9,8 @@ import UserInput from '../../components/common/UserInput/UserInput.tsx';
 import useCheckTheDate from '../../hooks/useCheckTheDate.tsx';
 import useInputValue from '../../hooks/useInputValue.tsx';
 
-import api from '../../services/api.ts';
-
 import { S } from './TodaysReservation.style.ts';
+import axios from 'axios';
 
 interface Items {
   id: number;
@@ -42,11 +41,25 @@ const TodaysReservation = ({}) => {
   const [oClock, setOClock] = useState(false);
   const [thirty, setThirty] = useState(false);
 
+  let auth = null;
+  const authCheck = localStorage.getItem('auth');
+
+  if (authCheck !== null) {
+    auth = JSON.parse(authCheck);
+  }
+
   const getTodaysReservation = async () => {
     try {
-      const res = await api.get(`${BASE_URL}/stores/${storeId}/reservations`);
+      const res = await axios.get(`${APIS.store}/${storeId}/reservations`, {
+        headers: {
+          Authorization: `Bearer ${auth.token}`,
+        },
+      });
       setItems(res.data.body.reservations);
-      setBusinessHrs({ open: res.data.body.open, close: res.data.body.close });
+      setBusinessHrs({
+        open: res.data.body.open,
+        close: res.data.body.close,
+      });
       console.log(res.data.body.reservations);
     } catch (err) {
       console.error(err);

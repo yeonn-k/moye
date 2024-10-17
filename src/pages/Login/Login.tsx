@@ -102,44 +102,46 @@ const Login = () => {
 
   return (
     <S.LoginBox>
-      <S.PageTitle>Project Title</S.PageTitle>
-      <S.LoginForm onSubmit={handleSubmitButtonClick}>
-        <S.FormTitle>로그인</S.FormTitle>
-        <S.UserInputBox>
-          {validError && (
-            <S.ErrorMessage className={validError ? 'visible' : ''}>
-              {validError}
+      <S.BoxOverlay>
+        <S.Logo />
+        <S.LoginForm onSubmit={handleSubmitButtonClick}>
+          <S.FormTitle>로그인</S.FormTitle>
+          <S.UserInputBox>
+            {validError && (
+              <S.ErrorMessage className={validError ? 'visible' : ''}>
+                {validError}
+              </S.ErrorMessage>
+            )}
+            <S.UserInput
+              name="email"
+              placeholder="이메일"
+              value={userForm.email}
+              onChange={handleUserFormChange}
+              autoComplete="email"
+              ref={emailRef}
+            />
+            <S.UserInput
+              name="password"
+              placeholder="비밀번호"
+              type="password"
+              value={userForm.password}
+              onChange={handleUserFormChange}
+              autoComplete="off"
+              ref={passwordRef}
+            />
+          </S.UserInputBox>
+          {responseError && (
+            <S.ErrorMessage className={responseError ? 'visible' : ''}>
+              {responseError}
             </S.ErrorMessage>
           )}
-          <S.UserInput
-            name="email"
-            placeholder="이메일"
-            value={userForm.email}
-            onChange={handleUserFormChange}
-            autoComplete="email"
-            ref={emailRef}
-          />
-          <S.UserInput
-            name="password"
-            placeholder="비밀번호"
-            type="password"
-            value={userForm.password}
-            onChange={handleUserFormChange}
-            autoComplete="off"
-            ref={passwordRef}
-          />
-        </S.UserInputBox>
-        {responseError && (
-          <S.ErrorMessage className={responseError ? 'visible' : ''}>
-            {responseError}
-          </S.ErrorMessage>
-        )}
-        <S.SubmitButton>로그인</S.SubmitButton>
-        <S.SignUpPrompt>
-          <S.SignUpPromptMessage>계정이 없으신가요?</S.SignUpPromptMessage>
-          <S.SignUpPromptLink to="/signup">가입하기</S.SignUpPromptLink>
-        </S.SignUpPrompt>
-      </S.LoginForm>
+          <S.SubmitButton>로그인</S.SubmitButton>
+          <S.SignUpPrompt>
+            <S.SignUpPromptMessage>계정이 없으신가요?</S.SignUpPromptMessage>
+            <S.SignUpPromptLink to="/signup">가입하기</S.SignUpPromptLink>
+          </S.SignUpPrompt>
+        </S.LoginForm>
+      </S.BoxOverlay>
     </S.LoginBox>
   );
 };

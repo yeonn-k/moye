@@ -7,9 +7,12 @@ import { logoutAction } from '../../../store/slices/auth/authSlice';
 import OwnerAvatar from '../OwnerAvatar/OwnerAvatar';
 
 const Nav = () => {
-  const isStoreSelected = useSelector(
-    (state: RootState) => state.auth.isStoreSelected,
-  );
+  const storeId = useSelector((state: RootState) => {
+    if (state.auth.store === null) {
+      return 0;
+    }
+    return state.auth.store.id;
+  });
   const avatarUrl = useSelector(
     (state: RootState) => state.auth.user?.avatarUrl ?? null,
   );
@@ -28,16 +31,16 @@ const Nav = () => {
           <img className="nav_logo" src="프로젝트로고url" alt="navLogo" />
         </Link>
       </div>
-      {isStoreSelected && (
+      {storeId > 0 && (
         <N.NavMenu>
           <li>
-            <Link to={ROUTE_LINK.TODAY.link}>Today</Link>
+            <Link to={`${ROUTE_LINK.TODAY.link}/${storeId}`}>Today</Link>
           </li>
           <li>
-            <Link to={ROUTE_LINK.MONTH.link}>Month</Link>
+            <Link to={`${ROUTE_LINK.MONTH.link}/${storeId}`}>Month</Link>
           </li>
           <li>
-            <Link to={ROUTE_LINK.STORE.link}>Store</Link>
+            <Link to={`${ROUTE_LINK.STORE.link}/${storeId}`}>Store</Link>
           </li>
         </N.NavMenu>
       )}

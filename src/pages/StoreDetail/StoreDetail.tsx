@@ -2,10 +2,13 @@ import { useState, useEffect } from 'react';
 import { SD } from './StoreDetail.ts';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 import ROUTE_LINK from '../../routes/RouterLink.ts';
 import { StoreDetailData, initialState } from './StoreDetailInterface.ts';
 import OperatingTimeTable from './OperatingTimeTable.tsx';
 import halloween from '../../assets/images/halloween.jpg';
+import { APIS } from '../../config/config.ts';
+import { RootState } from '../../store/store.ts';
 
 function isExist(data: any) {
   return data !== null && data !== undefined;
@@ -13,6 +16,7 @@ function isExist(data: any) {
 
 const StoreDetail = () => {
   const [storeData, setStoreData] = useState<StoreDetailData>(initialState);
+  const storeId = useSelector((state: RootState) => state.auth.store?.id);
 
   const checkImage = () => {
     console.log(storeData);
@@ -25,7 +29,7 @@ const StoreDetail = () => {
       auth = JSON.parse(localStorage.getItem('auth'));
     }
     axios
-      .get('http://localhost:5005/stores/3', {
+      .get(`${APIS.store}/${storeId}`, {
         headers: {
           Authorization: `Bearer ${auth.token}`,
         },
@@ -36,13 +40,13 @@ const StoreDetail = () => {
       .catch((error) => {
         console.log('Error: ', error);
       });
-  }, []);
+  }, [storeId]);
 
   return (
     <>
       <SD.TopBar>
         <p>매장이름</p>
-        <Link to={ROUTE_LINK.STOREEDIT.link} state={{ data: 20070221 }}>
+        <Link to={ROUTE_LINK.STOREEDIT.link}>
           <button>편집</button>
         </Link>
       </SD.TopBar>

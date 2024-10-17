@@ -49,16 +49,12 @@ function addTimeSubfix(time: string) {
   return time + TIME_SUBFIX;
 }
 
-function isExist(data: any) {
-  return data !== null && data !== undefined;
-}
-
 const EditStoreDetail = () => {
   const location = useLocation(); // access to location.state
   const navigate = useNavigate();
   const [inputs, setInputs] = useState(initialState);
-  const [uploadedImage, setUploadedImage] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState('');
+  const [uploadedImage, setUploadedImage] = useState<File | string>('');
+  const [imagePreview, setImagePreview] = useState<any>(null);
   const [regularClosedDays, setRegularClosedDays] = useState<number[]>([]);
   const [selectedClosedDate, setSelectedClosedDate] = useState(new Date());
   const [irregularClosedDays, setIrregularClosedDays] = useState<string[]>([]);
@@ -100,13 +96,13 @@ const EditStoreDetail = () => {
       console.log('Error: ', error);
     }
   };
-  const handlePostFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handlePostFormSubmit = async () => {
     try {
       const formData = new FormData();
       let auth = null;
-      if (isExist(localStorage) && isExist(localStorage.getItem('auth'))) {
-        auth = JSON.parse(localStorage.getItem('auth'));
+      const item = localStorage.getItem('auth');
+      if (item !== null) {
+        auth = JSON.parse(item);
       }
       const openingHourData = [
         {
@@ -184,7 +180,7 @@ const EditStoreDetail = () => {
     );
     setIrregularClosedDays([...newList, formattedDate]);
   };
-  const handleIrregularClosedDateChange = (date: Date) => {
+  const handleIrregularClosedDateChange = (date: any) => {
     setSelectedClosedDate(date);
   };
   const handleDeleteSelectedDateClick = (date: string) => {

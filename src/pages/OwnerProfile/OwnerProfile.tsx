@@ -1,7 +1,8 @@
 import { Store } from '../../store/slices/auth/authSlice';
 import { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useTheme } from 'styled-components';
 import {
   setIsStoreSelected,
   updateUserProfileAction,
@@ -17,13 +18,14 @@ import {
 import { formatPhoneNumber } from '../../utils/formatter';
 import OwnerAvatar from '../../components/common/OwnerAvatar/OwnerAvatar.tsx';
 import ROUTE_LINK from '../../routes/RouterLink.ts';
-import { APIS } from '../../config/config.ts';
 
 const OwnerProfile = () => {
   const [stores, setStores] = useState<Store[]>([]);
   const loginUser = useSelector((state: RootState) => state.auth.user);
   const dispatch = useDispatch();
   const avatarInputRef = useRef<HTMLInputElement>(null);
+  const navigate = useNavigate();
+  const theme = useTheme();
 
   useEffect(() => {
     if (!loginUser || !loginUser.email) return;
@@ -109,22 +111,24 @@ const OwnerProfile = () => {
           {stores.length > 0 && (
             <>
               {stores.map((store) => (
-                <S.MyStoreItem key={store.id}>
-                  <Link
-                    to={`${ROUTE_LINK.TODAY.link}/${store.id}`}
-                    onClick={() =>
-                      handleStoreClick(store.businessName, store.id)
-                    }
-                  >
-                    {store.businessName}
-                  </Link>
+                <S.MyStoreItem
+                  key={store.id + store.businessName}
+                  color={theme.color.lightGreen}
+                  onClick={() => {
+                    handleStoreClick(store.businessName, store.id);
+                    navigate(`${ROUTE_LINK.TODAY.link}/${store.id}`);
+                  }}
+                >
+                  {store.businessName}
                 </S.MyStoreItem>
               ))}
             </>
           )}
-          <S.MyStoreItem>
-            {/* TODO: 매장 추가 페이지로 링크 연결하기 */}
-            <Link to={APIS.store}>+ 매장 추가</Link>
+          <S.MyStoreItem
+            color={theme.color.paleNavy}
+            onClick={() => navigate(`${ROUTE_LINK.STOREREGISTER.link}`)}
+          >
+            매장 추가
           </S.MyStoreItem>
         </S.MyStoreList>
       </S.MyStoreSection>

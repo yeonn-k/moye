@@ -1,6 +1,10 @@
 import styled from 'styled-components';
 import defaultAvatar from '../../assets/images/defaultAvatar.png';
 
+interface OwnerProfileProps {
+  color: string;
+}
+
 export const S = {
   OwnerProfileBox: styled.div`
     max-width: 1440px;
@@ -88,22 +92,21 @@ export const S = {
     gap: 10px;
     margin: 20px 0;
   `,
-  MyStoreItem: styled.li`
+  MyStoreItem: styled.li<OwnerProfileProps>`
     width: 280px;
     height: 280px;
-    background-color: ${(props) => props.theme.color.paleNavy};
+    background-color: ${(props) => props.color};
     border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 600;
     text-decoration: none;
-    color: #000;
+    color: #fff;
     cursor: pointer;
     position: relative;
     &:hover {
       &:before {
-        box-shadow: 0 0 5px 2px rgba(128, 128, 128, 0.5);
         outline: none;
         border-radius: 10px;
         content: '';

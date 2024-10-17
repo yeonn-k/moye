@@ -1,17 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import axios from 'axios';
+import { useState, useEffect } from 'react';
 
 import Dropdown from '../../components/common/Dropdown/Dropdown.tsx';
 import CalendarWrap from './CalendarWrap/CalendarWrap.tsx';
-import useCheckTheDate from '../../hooks/useCheckTheDate.tsx';
+
+import axios from 'axios';
+import { APIS } from '../../config/config.ts';
+
+import { useLocation } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { openModal } from '../../store/slices/modal/modalSlice.ts';
+
+import useCheckTheDate from '../../hooks/useCheckTheDate.tsx';
 import useCheckAuth from '../../hooks/useCheckAuth.tsx';
 
 import { S } from './MonthList.style.ts';
-
-import { useLocation } from 'react-router-dom';
-import { APIS } from '../../config/config.ts';
 
 interface Items {
   [key: string]: { ACCEPT: number; PENDING: number; CANCEL: number };

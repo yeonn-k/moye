@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
+
 import OuterCard from './OuterCard/OuterCard.tsx';
 
-import { S } from './CanvaBoard.style.ts';
 import useCheckTheDate from '../../../hooks/useCheckTheDate.tsx';
+
+import { S } from './CanvaBoard.style.ts';
 
 interface CanvanBoardProps {
   items: Items[];

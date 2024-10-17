@@ -1,17 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import { useLocation, useSearchParams } from 'react-router-dom';
-import { APIS, BASE_URL } from '../../config/config.ts';
+import { useEffect, useState } from 'react';
 
 import TimelineBox from './TimelineBox/TimelineBox.tsx';
 import CanvanBoard from './CanvanBoard/CanvanBoard.tsx';
-
 import UserInput from '../../components/common/UserInput/UserInput.tsx';
+
+import axios from 'axios';
+import { APIS } from '../../config/config.ts';
+
+import { useLocation } from 'react-router-dom';
+
+import useCheckAuth from '../../hooks/useCheckAuth.tsx';
 import useCheckTheDate from '../../hooks/useCheckTheDate.tsx';
 import useInputValue from '../../hooks/useInputValue.tsx';
-import useCheckAuth from '../../hooks/useCheckAuth.tsx';
 
 import { S } from './TodaysReservation.style.ts';
-import axios from 'axios';
 
 interface Items {
   id: number;

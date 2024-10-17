@@ -1,9 +1,12 @@
+import { Store } from '../../store/slices/auth/authSlice';
 import { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {
   setIsStoreSelected,
   updateUserProfileAction,
+  setStore,
+  setStoreReset,
 } from '../../store/slices/auth/authSlice';
 import { S } from './OwnerProfile.style';
 import { RootState } from '../../store/store';
@@ -14,22 +17,6 @@ import {
 import { formatPhoneNumber } from '../../utils/formatter';
 import OwnerAvatar from '../../components/common/OwnerAvatar/OwnerAvatar.tsx';
 import ROUTE_LINK from '../../routes/RouterLink.ts';
-
-// TODO: interface 외부 파일로 관리 필요
-interface Store {
-  address: string;
-  businessName: string;
-  businessRegistrationNumber: string;
-  contact: string;
-  id: number;
-  name: string;
-  registerDate: string;
-  registerUser: string;
-  seatCount: number;
-  tableCount: number;
-  updateDate: string;
-  updateUser: string;
-}
 
 const OwnerProfile = () => {
   const [stores, setStores] = useState<Store[]>([]);
@@ -72,12 +59,14 @@ const OwnerProfile = () => {
   useEffect(() => {
     const resetStoreSelected = () => {
       dispatch(setIsStoreSelected(true));
+      dispatch(setStoreReset());
     };
     resetStoreSelected();
   }, [dispatch]);
 
-  const handleLinkClick = () => {
+  const handleStoreClick = (businessName: string, id: number) => {
     dispatch(setIsStoreSelected(true));
+    dispatch(setStore({ businessName, id }));
   };
 
   const handleSelectAvatar = () => {
@@ -122,7 +111,9 @@ const OwnerProfile = () => {
                 <S.MyStoreItem key={store.id}>
                   <Link
                     to={`${ROUTE_LINK.TODAY.link}?storeId=${store.id}`}
-                    onClick={handleLinkClick}
+                    onClick={() =>
+                      handleStoreClick(store.businessName, store.id)
+                    }
                   >
                     {store.businessName}
                   </Link>

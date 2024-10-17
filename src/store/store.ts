@@ -16,6 +16,7 @@ const loadAuthState = () => {
           avatarUrl: null,
         },
         isStoreSelected: false,
+        store: null,
       };
 };
 
@@ -37,6 +38,7 @@ store.subscribe(() => {
       token: state.auth.token,
       user: state.auth.user,
       isStoreSelected: state.auth.isStoreSelected,
+      store: state.auth.store,
     }),
   );
 });

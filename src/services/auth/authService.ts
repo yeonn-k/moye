@@ -1,21 +1,6 @@
+import { Store } from '../../store/slices/auth/authSlice';
 import axios from 'axios';
 import api from '../api';
-
-interface Store {
-  address: string;
-  businessName: string;
-  businessRegistrationNumber: string;
-  contact: string;
-  id: number;
-  name: string;
-  registerDate: string;
-  registerUser: string;
-  seatCount: number;
-  tableCount: number;
-  updateDate: string;
-  updateUser: string;
-  description: string;
-}
 
 interface SignupRequest {
   email: string;
@@ -106,10 +91,6 @@ export const loginService = async ({ email, password }: LoginRequest) => {
     });
     if (response.status === 200) {
       return response;
-    } else {
-      if (response.status === 404) {
-        console.log(response);
-      }
     }
   } catch (e) {
     if (axios.isAxiosError(e) && e.response) {

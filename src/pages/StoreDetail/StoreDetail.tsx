@@ -10,10 +10,6 @@ import halloween from '../../assets/images/halloween.jpg';
 import { APIS } from '../../config/config.ts';
 import { RootState } from '../../store/store.ts';
 
-function isExist(data: any) {
-  return data !== null && data !== undefined;
-}
-
 const StoreDetail = () => {
   const [storeData, setStoreData] = useState<StoreDetailData>(initialState);
   const storeId = useSelector((state: RootState) => state.auth.store?.id);
@@ -24,10 +20,11 @@ const StoreDetail = () => {
 
   useEffect(() => {
     let auth = null;
-
-    if (isExist(localStorage) && isExist(localStorage.getItem('auth'))) {
-      auth = JSON.parse(localStorage.getItem('auth'));
+    const item = localStorage.getItem('auth');
+    if (item !== null) {
+      auth = JSON.parse(item);
     }
+
     axios
       .get(`${APIS.store}/${storeId}`, {
         headers: {

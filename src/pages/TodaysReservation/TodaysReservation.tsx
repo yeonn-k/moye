@@ -60,7 +60,14 @@ const TodaysReservation = ({}) => {
   }, [isRerender]);
 
   const filteredItems: Items[] = items.filter((item) => {
-    return item.name.includes(inputValue) || item.phone.includes(inputValue);
+    const nomalizedInput = inputValue.normalize('NFD').toLowerCase();
+    const nomalizedName = item.name.normalize('NFD').toLowerCase();
+    const nomalizedPhone = item.phone.normalize('NFD').toLowerCase();
+
+    return (
+      nomalizedName.includes(nomalizedInput) ||
+      nomalizedPhone.includes(nomalizedInput)
+    );
   });
 
   const openTime = () => {

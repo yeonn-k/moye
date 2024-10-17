@@ -14,4 +14,5 @@ export const APIS = {
   storeRegister: `${BASE_URL}${ROUTE_LINK.STOREREGISTER.link}`,
   storePictureUpload: `${BASE_URL}/uploads`,
   getImageBase: `${BASE_URL}/`,
+  users: `${BASE_URL}/users`,
 };

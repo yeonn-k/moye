@@ -33,9 +33,9 @@ const OwnerProfile = () => {
       try {
         const result = await getUserByEmailService({ email: loginUser.email });
         if (result?.body) {
-          const { name, phone } = result.body;
+          const { name, phone, id } = result.body;
           if (name !== loginUser.name || phone !== loginUser.phone) {
-            dispatch(updateUserProfileAction({ name, phone }));
+            dispatch(updateUserProfileAction({ name, phone, id }));
           }
         }
       } catch (e) {
@@ -47,7 +47,7 @@ const OwnerProfile = () => {
 
   useEffect(() => {
     const fetchStoresById = async () => {
-      if (!loginUser) return;
+      if (!loginUser || loginUser.id === null) return;
       try {
         const result = await getStoresByIdService({ userId: loginUser.id });
         if (!result) return;

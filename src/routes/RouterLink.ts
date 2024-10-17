@@ -1,13 +1,13 @@
 const ROUTE_LINK = {
   ENTRYPOINT: { path: '/', link: '/' },
   LOGIN: { path: '/login', link: '/login' },
-  SIGNUP: { path: '/signup', link: 'signup' },
+  SIGNUP: { path: '/signup', link: '/signup' },
   OWNER: { path: 'owner', link: '/owner' },
-  TODAY: { path: 'today', link: '/today' },
-  MONTH: { path: 'month', link: '/month' },
-  STORE: { path: 'store', link: '/store' },
-  STOREEDIT: { path: 'store/edit', link: '/store/edit' },
-  STOREREGISTER: { path: 'store/register', link: '/store/register' },
+  TODAY: { path: 'today/:storeId', link: '/today' },
+  MONTH: { path: 'month/:storeId', link: '/month' },
+  STORE: { path: 'stores/:storeId', link: '/stores' },
+  STOREEDIT: { path: 'stores/:storeId/edit', link: '/stores/edit' },
+  STOREREGISTER: { path: 'stores/register', link: '/stores/register' },
 };
 
 export default ROUTE_LINK;

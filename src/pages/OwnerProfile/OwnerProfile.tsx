@@ -17,6 +17,7 @@ import {
 import { formatPhoneNumber } from '../../utils/formatter';
 import OwnerAvatar from '../../components/common/OwnerAvatar/OwnerAvatar.tsx';
 import ROUTE_LINK from '../../routes/RouterLink.ts';
+import { APIS } from '../../config/config.ts';
 
 const OwnerProfile = () => {
   const [stores, setStores] = useState<Store[]>([]);
@@ -110,7 +111,7 @@ const OwnerProfile = () => {
               {stores.map((store) => (
                 <S.MyStoreItem key={store.id}>
                   <Link
-                    to={`${ROUTE_LINK.TODAY.link}?storeId=${store.id}`}
+                    to={`${ROUTE_LINK.TODAY.link}/${store.id}`}
                     onClick={() =>
                       handleStoreClick(store.businessName, store.id)
                     }
@@ -123,7 +124,7 @@ const OwnerProfile = () => {
           )}
           <S.MyStoreItem>
             {/* TODO: 매장 추가 페이지로 링크 연결하기 */}
-            <Link to="/owner">+ 매장 추가</Link>
+            <Link to={APIS.store}>+ 매장 추가</Link>
           </S.MyStoreItem>
         </S.MyStoreList>
       </S.MyStoreSection>

@@ -9,6 +9,7 @@ import {
   setStore,
   setStoreReset,
 } from '../../store/slices/auth/authSlice';
+import { openModal } from '../../store/slices/modal/modalSlice';
 import { S } from './OwnerProfile.style';
 import { RootState } from '../../store/store';
 import {
@@ -71,11 +72,8 @@ const OwnerProfile = () => {
     dispatch(setIsStoreSelected(true));
     dispatch(setStore({ businessName, id }));
   };
-
-  const handleSelectAvatar = () => {
-    // if (avatarInputRef.current) {
-    //   avatarInputRef.current.click();
-    // }
+  const handleOpenOwnerAvatarPreviewModal = () => {
+    dispatch(openModal('ownerAvatarPreview'));
   };
 
   return (
@@ -85,7 +83,7 @@ const OwnerProfile = () => {
           <OwnerAvatar $avatarUrl={loginUser?.avatarUrl} />
           {/* TODO: 프로필 변경 로직 추가 필요 */}
           <input accept="img/*" type="file" hidden ref={avatarInputRef} />
-          <S.AvatarSelectButton onClick={handleSelectAvatar}>
+          <S.AvatarSelectButton onClick={handleOpenOwnerAvatarPreviewModal}>
             프로필 변경
           </S.AvatarSelectButton>
         </S.AvatarArea>

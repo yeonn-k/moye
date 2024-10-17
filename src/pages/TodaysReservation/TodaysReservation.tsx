@@ -8,6 +8,7 @@ import CanvanBoard from './CanvanBoard/CanvanBoard.tsx';
 import UserInput from '../../components/common/UserInput/UserInput.tsx';
 import useCheckTheDate from '../../hooks/useCheckTheDate.tsx';
 import useInputValue from '../../hooks/useInputValue.tsx';
+import useCheckAuth from '../../hooks/useCheckAuth.tsx';
 
 import { S } from './TodaysReservation.style.ts';
 import axios from 'axios';
@@ -30,6 +31,7 @@ const TodaysReservation = ({}) => {
 
   const [items, setItems] = useState<Items[]>([]);
   const { month, date, days, day, minute, second } = useCheckTheDate();
+  const { auth } = useCheckAuth();
   const [businessHrs, setBusinessHrs] = useState({
     open: '',
     close: '',
@@ -40,13 +42,6 @@ const TodaysReservation = ({}) => {
 
   const [oClock, setOClock] = useState(false);
   const [thirty, setThirty] = useState(false);
-
-  let auth = null;
-  const authCheck = localStorage.getItem('auth');
-
-  if (authCheck !== null) {
-    auth = JSON.parse(authCheck);
-  }
 
   const getTodaysReservation = async () => {
     try {

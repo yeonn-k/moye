@@ -35,7 +35,7 @@ const SignUp = () => {
 
     setUserForm((prevState) => ({
       ...prevState,
-      [name]: value,
+      [name]: value.trim(),
     }));
     setValidErrors((prevErrors) => ({
       ...prevErrors,

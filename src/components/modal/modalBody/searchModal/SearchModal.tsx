@@ -3,10 +3,11 @@ import { S } from './SearchModal.style.ts';
 import UserInput from '../../../common/UserInput/UserInput.tsx';
 import useInputValue from '../../../../hooks/useInputValue.tsx';
 import useCheckTheDate from '../../../../hooks/useCheckTheDate.tsx';
+import useCheckAuth from '../../../../hooks/useCheckAuth.tsx';
+import axios from 'axios';
 
-import { BASE_URL } from '../../../../config/config.ts';
-import api from '../../../../services/api.ts';
 import { useLocation } from 'react-router-dom';
+import { APIS } from '../../../../config/config.ts';
 
 interface SearchModalProps {
   onClose: () => void;
@@ -27,6 +28,7 @@ const SearchModal = ({ onClose }: SearchModalProps) => {
   const [inputValue, setInputValue] = useInputValue();
   const [searched, setSearched] = useState([]);
   const { month } = useCheckTheDate();
+  const { auth } = useCheckAuth();
 
   // const location = useLocation();
   // const searchParams = new URLSearchParams(location.search);
@@ -35,10 +37,13 @@ const SearchModal = ({ onClose }: SearchModalProps) => {
 
   const searchByPhone = async (input: string) => {
     try {
-      const res = await api.get(
-        `${BASE_URL}/stores/${storeId}/reservations?search=${inputValue}`,
-        // http://localhost:5001/stores/3/reservations?search=
-        // http://localhost:5000/stores/1/reservations?search=0103333
+      const res = await axios.get(
+        `${APIS.store}/${storeId}/reservations?search=${inputValue}`,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        },
       );
       if (inputValue) {
         setSearched(res.data.body);

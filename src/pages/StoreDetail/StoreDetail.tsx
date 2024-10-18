@@ -12,11 +12,13 @@ import {
 import OperatingTimeTable from './OperatingTimeTable.tsx';
 import { APIS } from '../../config/config.ts';
 import { RootState } from '../../store/store.ts';
+import baseStoreImage from '../../assets/images/baseStoreImage.png';
 
 const StoreDetail = () => {
   const [storeData, setStoreData] = useState<StoreDetailData>(initialState);
   const storeId = useSelector((state: RootState) => state.auth.store?.id);
   const [previewImage, setPreviewImage] = useState('');
+  const [previousImageFile, setpreviousImageFile] = useState<File | string>('');
 
   useEffect(() => {
     async function asyncCall() {
@@ -48,9 +50,11 @@ const StoreDetail = () => {
             setPreviewImage(previewImage);
           };
           reader.readAsDataURL(newFile);
+          setpreviousImageFile(newFile);
         })
         .catch((error) => {
           console.log('Error: ', error);
+          setPreviewImage(baseStoreImage);
         });
     }
     asyncCall();
@@ -62,14 +66,18 @@ const StoreDetail = () => {
         <p>매장이름</p>
         <Link
           to={`${ROUTE_LINK.STOREEDIT.link}${storeId}/edit`}
-          state={{ data: storeData }}
+          state={{
+            data: storeData,
+            previewImage: previewImage,
+            previousImageFile: previousImageFile,
+          }}
         >
           <button>편집</button>
         </Link>
       </SD.TopBar>
       <SD.Body>
         <SD.BodyLeft>
-          <img src={previewImage} alt="매장사진"></img>
+          <img src={previewImage} alt="storeImage" />
           <ul>
             <li>
               <span>상호명</span>: {storeData.businessName}

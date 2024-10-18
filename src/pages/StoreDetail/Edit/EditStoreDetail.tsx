@@ -9,6 +9,7 @@ import DatePicker from 'react-datepicker';
 import ROUTE_LINK from '../../../routes/RouterLink';
 import 'react-datepicker/dist/react-datepicker.css';
 import { StoreDetailData } from '../StoreDetailInterface';
+import baseUploadImage from '../../../assets/images/baseUploadImage.png';
 
 let initialState = {
   name: '',
@@ -77,10 +78,14 @@ function addTimeSubfix(time: string) {
 
 const EditStoreDetail = () => {
   const storeData = useLocation().state.data;
+  const previousPreviewImage = useLocation().state.previewImage;
+  const previousImageFile = useLocation().state.previousImageFile;
   const navigate = useNavigate();
   const [inputs, setInputs] = useState(mapStoreData(storeData));
-  const [uploadedImage, setUploadedImage] = useState<File | string>('');
-  const [imagePreview, setImagePreview] = useState<any>(null);
+  const [uploadedImage, setUploadedImage] = useState<File | string>(
+    previousImageFile,
+  );
+  const [imagePreview, setImagePreview] = useState<any>(previousPreviewImage);
   const [regularClosedDays, setRegularClosedDays] = useState<number[]>([]);
   const [selectedClosedDate, setSelectedClosedDate] = useState(new Date());
   const [irregularClosedDays, setIrregularClosedDays] = useState<string[]>([]);
@@ -90,6 +95,18 @@ const EditStoreDetail = () => {
       ...inputs,
       [e.target.name]: e.target.value,
     });
+  };
+  const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setInputs({
+      ...inputs,
+      description: e.target.value,
+    });
+  };
+  const handleSetTab = (e: any) => {
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      setInputs({ ...inputs, description: inputs.description + '\t' });
+    }
   };
   const handleHourInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const hour = Number(e.target.value);
@@ -271,13 +288,17 @@ const EditStoreDetail = () => {
               value={inputs.numberPerTable}
               onChange={handleStoreDetailsInput}
             />
-            <ListInputElement
-              label="소개글"
-              type="text"
-              id="description"
-              value={inputs.description}
-              onChange={handleStoreDetailsInput}
-            />
+            <li>
+              <label htmlFor="description">소개글</label>
+              <div>
+                <textarea
+                  value={inputs.description}
+                  id="description"
+                  onChange={handleTextareaChange}
+                  onKeyDown={handleSetTab}
+                />
+              </div>
+            </li>
             <ListTimeElement
               totalLabel="영업시간"
               inputLabel="평일"
@@ -333,8 +354,8 @@ const EditStoreDetail = () => {
             <li>
               <div>
                 <img
-                  src={imagePreview ? imagePreview : ''}
-                  alt="imagePreview"
+                  src={imagePreview ? imagePreview : baseUploadImage}
+                  alt="storeImage"
                 />
                 <input
                   type="file"

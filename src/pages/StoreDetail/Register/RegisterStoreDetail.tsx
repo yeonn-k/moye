@@ -7,6 +7,7 @@ import ListTimeElement from '../Edit/ListTimeElement.tsx';
 import 'react-datepicker/dist/react-datepicker.css';
 import ROUTE_LINK from '../../../routes/RouterLink.ts';
 import { APIS } from '../../../config/config.ts';
+import baseUploadImage from '../../../assets/images/baseUploadImage.png';
 
 // interface localStorageData {
 //   token: string;
@@ -28,6 +29,7 @@ const initialState = {
   contact: '',
   totalSeats: '',
   numberPerTable: '',
+  description: '',
   weekdayOpen: '',
   weekdayClose: '',
   weekendOpen: '',
@@ -54,6 +56,18 @@ const RegisterStoreDetail = () => {
       ...inputs,
       [e.target.name]: e.target.value,
     });
+  };
+  const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setInputs({
+      ...inputs,
+      description: e.target.value,
+    });
+  };
+  const handleSetTab = (e: any) => {
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      setInputs({ ...inputs, description: inputs.description + '\t' });
+    }
   };
   const handleHourInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const hour = Number(e.target.value);
@@ -166,51 +180,62 @@ const RegisterStoreDetail = () => {
               label="매장 이름"
               type="text"
               id="name"
-              value=""
+              value={inputs.name}
               onChange={handleStoreDetailsInput}
             />
             <ListInputElement
               label="사업자 번호"
               type="text"
               id="businessNumber"
-              value=""
+              value={inputs.businessNumber}
               onChange={handleStoreDetailsInput}
             />
             <ListInputElement
               label="상호명"
               type="text"
               id="businessName"
-              value=""
+              value={inputs.businessName}
               onChange={handleStoreDetailsInput}
             />
             <ListInputElement
               label="주소"
               type="text"
               id="address"
-              value=""
+              value={inputs.address}
               onChange={handleStoreDetailsInput}
             />
             <ListInputElement
               label="전화번호"
               type="text"
               id="contact"
-              value=""
+              value={inputs.contact}
               onChange={handleStoreDetailsInput}
             />
             <ListInputElement
               label="좌석 수"
               type="text"
               id="totalSeats"
-              value=""
+              value={inputs.totalSeats}
               onChange={handleStoreDetailsInput}
             />
             <ListInputElement
               label="테이블 최대 인원"
               type="text"
               id="numberPerTable"
-              value=""
+              value={inputs.numberPerTable}
               onChange={handleStoreDetailsInput}
             />
+            <li>
+              <label htmlFor="description">소개글</label>
+              <div>
+                <textarea
+                  value={inputs.description}
+                  id="description"
+                  onChange={handleTextareaChange}
+                  onKeyDown={handleSetTab}
+                />
+              </div>
+            </li>
             <ListTimeElement
               totalLabel="영업시간"
               inputLabel="평일"
@@ -242,8 +267,8 @@ const RegisterStoreDetail = () => {
             <li>
               <div>
                 <img
-                  src={imagePreview ? imagePreview : ''}
-                  alt="imagePreview"
+                  src={imagePreview ? imagePreview : baseUploadImage}
+                  alt="storeImage"
                 />
                 <input
                   type="file"

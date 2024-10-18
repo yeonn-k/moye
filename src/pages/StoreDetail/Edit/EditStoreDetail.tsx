@@ -263,6 +263,36 @@ const EditStoreDetail = () => {
       );
     };
   };
+  const handleUpload = ({ target }: any) => {
+    try {
+      const imageFile = target.files?.[0];
+
+      if (imageFile) {
+        const reader = new FileReader();
+
+        setUploadedImage(imageFile);
+        reader.readAsDataURL(imageFile);
+        reader.onloadend = () => setImagePreview(reader.result);
+      }
+    } catch (error) {
+      console.log('Error: ', error);
+    }
+  };
+  const handleDrop = (e: any) => {
+    e.preventDefault();
+
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      const reader = new FileReader();
+
+      setUploadedImage(file);
+      reader.readAsDataURL(file);
+      reader.onloadend = () => setImagePreview(reader.result);
+    }
+  };
+  const handleDragOver = (e: any) => {
+    e.preventDefault();
+  };
 
   return (
     <ESD.EditStoreDetail>
@@ -381,19 +411,23 @@ const EditStoreDetail = () => {
         </ESD.BodyLeft>
         <ESD.BodyRight>
           <ul>
+            <li>매장 사진 업로드</li>
             <li>
-              <div>
-                <img
-                  src={imagePreview ? imagePreview : baseUploadImage}
-                  alt="storeImage"
-                />
+              <ESD.ImageUploadBox
+                onDragOver={handleDragOver}
+                onDrop={handleDrop}
+                htmlFor="imageUploadInput"
+              >
                 <input
                   type="file"
-                  accept="image/*"
-                  id="profileImg"
-                  onChange={handleUploadPictureClick}
+                  id="imageUploadInput"
+                  onChange={handleUpload}
                 />
-              </div>
+                <img
+                  src={imagePreview ? imagePreview : baseUploadImage}
+                  alt="storeImage.jpg"
+                />
+              </ESD.ImageUploadBox>
             </li>
             <li>
               <span>정기 휴무일</span>

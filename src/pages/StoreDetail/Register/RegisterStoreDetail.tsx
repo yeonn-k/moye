@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { RSD } from './RegisterStoreDetail.ts';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -85,9 +85,9 @@ const RegisterStoreDetail = () => {
       setRegularClosedDays(regularClosedDays.filter((item) => item !== id));
     }
   };
-  const handleUploadPictureClick = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleUpload = ({ target }: any) => {
     try {
-      const imageFile = e.target.files?.[0];
+      const imageFile = target.files?.[0];
 
       if (imageFile) {
         const reader = new FileReader();
@@ -151,6 +151,21 @@ const RegisterStoreDetail = () => {
     if (window.confirm('취소하시겠습니까?')) {
       navigate(`${ROUTE_LINK.OWNER.link}`);
     }
+  };
+  const handleDrop = (e: any) => {
+    e.preventDefault();
+
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      const reader = new FileReader();
+
+      setUploadedImage(file);
+      reader.readAsDataURL(file);
+      reader.onloadend = () => setImagePreview(reader.result);
+    }
+  };
+  const handleDragOver = (e: any) => {
+    e.preventDefault();
   };
 
   return (
@@ -247,7 +262,10 @@ const RegisterStoreDetail = () => {
         <RSD.BodyRight>
           <ul>
             <li>
-              <div>
+              <span>매장 사진 업로드</span>
+            </li>
+            <li>
+              {/* <div>
                 <img
                   src={imagePreview ? imagePreview : baseUploadImage}
                   alt="storeImage"
@@ -258,7 +276,22 @@ const RegisterStoreDetail = () => {
                   id="profileImg"
                   onChange={handleUploadPictureClick}
                 />
-              </div>
+              </div> */}
+              <RSD.ImageUploadBox
+                onDragOver={handleDragOver}
+                onDrop={handleDrop}
+                htmlFor="imageUploadInput"
+              >
+                <input
+                  type="file"
+                  id="imageUploadInput"
+                  onChange={handleUpload}
+                />
+                <img
+                  src={imagePreview ? imagePreview : baseUploadImage}
+                  alt="storeImage.jpg"
+                />
+              </RSD.ImageUploadBox>
             </li>
             <li>
               <span>정기 휴무일</span>

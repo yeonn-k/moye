@@ -8,10 +8,16 @@ import ListTimeElement from './ListTimeElement';
 import DatePicker from 'react-datepicker';
 import ROUTE_LINK from '../../../routes/RouterLink';
 import 'react-datepicker/dist/react-datepicker.css';
-import { StoreDetailData } from '../StoreDetailInterface';
+import {
+  StoreDetailData,
+  RegularHoliday,
+  IrregularCloseDay,
+} from '../StoreDetailInterface';
 import baseUploadImage from '../../../assets/images/baseUploadImage.png';
+import { APIS } from '../../../config/config';
 
 let initialState = {
+  id: '',
   name: '',
   businessName: '',
   businessNumber: '',
@@ -31,10 +37,10 @@ let initialState = {
 };
 
 function mapStoreData(storeData: StoreDetailData) {
-  // initialState.name = storeData.name;
+  initialState.name = storeData.name;
   initialState.businessName = storeData.businessName;
   initialState.businessNumber = storeData.businessRegistrationNumber;
-  // initialState.address = storeData.address;
+  initialState.address = storeData.address;
   initialState.contact = storeData.contact;
   initialState.totalSeats = storeData.totalSeats;
   initialState.numberPerTable = storeData.numberPerTable.toString();
@@ -66,6 +72,26 @@ function mapStoreData(storeData: StoreDetailData) {
   return initialState;
 }
 
+function mapRegularHoliday(storeData: StoreDetailData): number[] {
+  const newRegularHoliday: number[] = [];
+
+  storeData.regularHoliday.map((item: RegularHoliday) => {
+    if (!newRegularHoliday.includes(item.closedDay)) {
+      newRegularHoliday.push(item.closedDay);
+    }
+  });
+  return newRegularHoliday;
+}
+
+function mapIrregularClosedDays(storeData: StoreDetailData): string[] {
+  const newIrregularClosedDays: string[] = [];
+
+  storeData.closedDay.map((item: IrregularCloseDay) =>
+    newIrregularClosedDays.push(item.ymd),
+  );
+  return newIrregularClosedDays;
+}
+
 const DATE_FORMAT = 'YYYY-MM-DD';
 
 const TIME_SUBFIX = ':00';
@@ -76,8 +102,12 @@ function addTimeSubfix(time: string) {
   return time + TIME_SUBFIX;
 }
 
+function isEmpty(time: string) {
+  return time === '0' || time === '';
+}
+
 const EditStoreDetail = () => {
-  const storeData = useLocation().state.data;
+  const storeData: StoreDetailData = useLocation().state.data;
   const previousPreviewImage = useLocation().state.previewImage;
   const previousImageFile = useLocation().state.previousImageFile;
   const navigate = useNavigate();
@@ -86,9 +116,13 @@ const EditStoreDetail = () => {
     previousImageFile,
   );
   const [imagePreview, setImagePreview] = useState<any>(previousPreviewImage);
-  const [regularClosedDays, setRegularClosedDays] = useState<number[]>([]);
+  const [regularClosedDays, setRegularClosedDays] = useState<number[]>(
+    mapRegularHoliday(storeData),
+  );
   const [selectedClosedDate, setSelectedClosedDate] = useState(new Date());
-  const [irregularClosedDays, setIrregularClosedDays] = useState<string[]>([]);
+  const [irregularClosedDays, setIrregularClosedDays] = useState<string[]>(
+    mapIrregularClosedDays(storeData),
+  );
 
   const handleStoreDetailsInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputs({
@@ -102,12 +136,12 @@ const EditStoreDetail = () => {
       description: e.target.value,
     });
   };
-  const handleSetTab = (e: any) => {
-    if (e.key === 'Tab') {
-      e.preventDefault();
-      setInputs({ ...inputs, description: inputs.description + '\t' });
-    }
-  };
+  // const handleSetTab = (e: any) => {
+  //   if (e.key === 'Tab') {
+  //     e.preventDefault();
+  //     setInputs({ ...inputs, description: inputs.description + '\t' });
+  //   }
+  // };
   const handleHourInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const hour = Number(e.target.value);
     if (!isNaN(hour) && hour >= 0 && hour <= 24) {
@@ -166,49 +200,50 @@ const EditStoreDetail = () => {
           closeTo: addTimeSubfix(inputs.weekendBreakEnd),
         },
       ];
-      const postData = {
-        businessRegistrationNumber: inputs.businessNumber,
-        businessName: inputs.businessName,
-        description: inputs.description,
-        name: inputs.name,
-        address: inputs.address,
-        contact: inputs.contact,
-        totalSeats: inputs.totalSeats,
-        numberPerTable: inputs.numberPerTable,
-        openingHour: openingHourData,
-        breakTime: breakTimeData,
-        closedDay: irregularClosedDays,
-        dayOfWeekDay: regularClosedDays.map((index: number) => index + 1),
-      };
-      // backend에서 요일을 일=1, 월=2 ~ 토=7으로 받음, front에서는 0~6으로 배정됨
-
+      formData.append('businessRegistrationNumber', inputs.businessNumber);
+      formData.append('businessName', inputs.businessName);
+      formData.append('name', inputs.name);
+      formData.append('address', inputs.address);
+      formData.append('contact', inputs.contact);
+      formData.append('totalSeats', inputs.totalSeats);
+      formData.append('numberPerTable', inputs.numberPerTable);
+      formData.append('description', inputs.description);
+      formData.append('openingHour', JSON.stringify(openingHourData));
+      formData.append('closedDay', JSON.stringify(irregularClosedDays));
+      formData.append('dayOfWeekDay', JSON.stringify(regularClosedDays));
+      formData.append('files', uploadedImage);
+      if (
+        !isEmpty(inputs.weekdayBreakStart) &&
+        !isEmpty(inputs.weekdayBreakEnd) &&
+        !isEmpty(inputs.weekendBreakStart) &&
+        !isEmpty(inputs.weekendBreakEnd)
+      ) {
+        formData.append('breakTime', JSON.stringify(breakTimeData));
+      }
       await axios
-        .post('http://localhost:5005/stores', JSON.stringify(postData), {
+        .put(`${APIS.store}/${storeData.id}`, formData, {
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'multipart/form-data',
           },
         })
         .then((res) => {
-          alert('매장이 등록되었습니다.');
-          console.log(res);
+          alert('매장 정보가 수정되었습니다.');
+          console.log(res.data);
         })
         .catch((error) => {
-          alert('매장 등록에 실패하였습니다.');
           console.log('Error: ', error);
+          alert('매장 수정에 실패했습니다.');
         });
-      formData.append('files', uploadedImage);
-      axios.post('http://localhost:5005/uploads/3', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
     } catch (error) {
       console.log('Error: ', error);
+      alert('매장 수정에 실패했습니다.');
+    } finally {
+      navigate(`${ROUTE_LINK.STORE.link}/${storeData.id}`);
     }
   };
   const handleCancleFormClick = () => {
     if (window.confirm('취소하시겠습니까?')) {
-      navigate(`${ROUTE_LINK.OWNER.link}`);
+      navigate(`${ROUTE_LINK.STORE.link}/${storeData.id}`);
     }
   };
   const handleIrregularClosedDaysClick = () => {
@@ -228,10 +263,6 @@ const EditStoreDetail = () => {
       );
     };
   };
-
-  // useEffect(() => {
-  //   setInputs(mapStoreData(storeData));
-  // }, []);
 
   return (
     <ESD.EditStoreDetail>
@@ -295,7 +326,6 @@ const EditStoreDetail = () => {
                   value={inputs.description}
                   id="description"
                   onChange={handleTextareaChange}
-                  onKeyDown={handleSetTab}
                 />
               </div>
             </li>

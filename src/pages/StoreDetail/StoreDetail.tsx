@@ -8,11 +8,41 @@ import {
   StoreDetailData,
   initialState,
   StoreImage,
+  RegularHoliday,
 } from './StoreDetailInterface.ts';
 import OperatingTimeTable from './OperatingTimeTable.tsx';
 import { APIS } from '../../config/config.ts';
 import { RootState } from '../../store/store.ts';
 import baseStoreImage from '../../assets/images/baseStoreImage.png';
+import dayjs from 'dayjs';
+
+function mapResToStoreData(res: any) {
+  let newData: StoreDetailData = {
+    ...res.data.body,
+    regularHoliday: res.data.body.regularHoliday.map(
+      (item: RegularHoliday) => ({
+        closedDay: item.closedDay - 1,
+      }),
+    ),
+  };
+  if (
+    newData.openingHour[0].startBreakTime === newData.openingHour[0].closeTo &&
+    newData.openingHour[0].endBreakTime === newData.openingHour[0].openFrom &&
+    newData.openingHour[1].startBreakTime === newData.openingHour[1].closeTo &&
+    newData.openingHour[1].endBreakTime === newData.openingHour[1].openFrom
+  ) {
+    newData.openingHour[0].startBreakTime = '';
+    newData.openingHour[0].endBreakTime = '';
+    newData.openingHour[1].startBreakTime = '';
+    newData.openingHour[1].endBreakTime = '';
+  }
+  newData.closedDay = newData.closedDay
+    .sort((a, b) => {
+      return dayjs(a.ymd).diff(b.ymd, 'days');
+    })
+    .filter((date) => dayjs(new Date()).diff(date.ymd, 'days'));
+  return newData;
+}
 
 const StoreDetail = () => {
   const [storeData, setStoreData] = useState<StoreDetailData>(initialState);
@@ -27,11 +57,11 @@ const StoreDetail = () => {
       await axios
         .get(`${APIS.store}/${storeId}`)
         .then((res) => {
-          setStoreData(res.data.body);
+          setStoreData(mapResToStoreData(res));
+          console.log(res.data.body);
           imageSrc = res.data.body.image.filter(
             (item: StoreImage) => item.url !== '' && item.url !== null,
           )[0].url;
-          console.log(res.data.body);
         })
         .catch((error) => {
           console.log('Error: ', error);
@@ -77,7 +107,13 @@ const StoreDetail = () => {
       </SD.TopBar>
       <SD.Body>
         <SD.BodyLeft>
-          <img src={previewImage} alt="storeImage" />
+          <img
+            src={previewImage}
+            alt="storeImage"
+            onClick={() => {
+              console.log(storeData);
+            }}
+          />
           <ul>
             <li>
               <span>상호명</span>: {storeData.businessName}

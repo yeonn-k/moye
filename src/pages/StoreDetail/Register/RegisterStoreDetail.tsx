@@ -63,12 +63,12 @@ const RegisterStoreDetail = () => {
       description: e.target.value,
     });
   };
-  const handleSetTab = (e: any) => {
-    if (e.key === 'Tab') {
-      e.preventDefault();
-      setInputs({ ...inputs, description: inputs.description + '\t' });
-    }
-  };
+  // const handleSetTab = (e: any) => {
+  //   if (e.key === 'Tab') {
+  //     e.preventDefault();
+  //     setInputs({ ...inputs, description: inputs.description + '\t' });
+  //   }
+  // };
   const handleHourInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const hour = Number(e.target.value);
     if (!isNaN(hour) && hour >= 0 && hour <= 24) {
@@ -102,9 +102,7 @@ const RegisterStoreDetail = () => {
   };
   const handlePostFormSubmit = async () => {
     try {
-      let storeId = '';
       const formData = new FormData();
-
       const openingHourData = [
         {
           type: '평일',
@@ -117,51 +115,36 @@ const RegisterStoreDetail = () => {
           closeTo: addTimeSubfix(inputs.weekendClose),
         },
       ];
-      const postData = {
-        businessRegistrationNumber: inputs.businessNumber,
-        businessName: inputs.businessName,
-        name: inputs.name,
-        address: inputs.address,
-        contact: inputs.contact,
-        totalSeats: inputs.totalSeats,
-        numberPerTable: inputs.numberPerTable,
-        openingHour: openingHourData,
-        dayOfWeekDay: regularClosedDays.map((index: number) => index + 1),
-      };
-      // backend에서 요일을 일=1, 월=2 ~ 토=7으로 받음, front에서는 0~6으로 배정됨
+      formData.append('businessRegistrationNumber', inputs.businessNumber);
+      formData.append('businessName', inputs.businessName);
+      formData.append('name', inputs.name);
+      formData.append('address', inputs.address);
+      formData.append('contact', inputs.contact);
+      formData.append('totalSeats', inputs.totalSeats);
+      formData.append('numberPerTable', inputs.numberPerTable);
+      formData.append('description', inputs.description);
+      formData.append('openingHour', JSON.stringify(openingHourData));
+      formData.append('dayOfWeekDay', JSON.stringify(regularClosedDays));
+      formData.append('files', uploadedImage);
 
       await axios
-        .post(APIS.store, JSON.stringify(postData), {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
-        .then((res) => {
-          console.log('매장 등록 완료');
-          storeId = res.data.body.id;
-          console.log('in: ', res.data.body.id);
-        })
-        .catch((error) => {
-          alert('매장 등록에 실패하였습니다.');
-          console.log('Error: ', error);
-        });
-      formData.append('files', uploadedImage);
-      await axios
-        .post(`${APIS.storePictureUpload}/${storeId}`, formData, {
+        .post(APIS.store, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
         })
         .then((res) => {
-          console.log('사진 업로드 성공');
-          navigate(ROUTE_LINK.OWNER.link);
+          console.log(res.data);
+          console.log('매장등록성공');
         })
         .catch((error) => {
-          alert('사진 업로드에 실패했습니다.');
           console.log('Error: ', error);
+          alert('매장 등록에 실패했습니다.');
         });
     } catch (error) {
       console.log('Error: ', error);
+    } finally {
+      navigate(ROUTE_LINK.OWNER.link);
     }
   };
   const handleCancleFormClick = () => {
@@ -232,7 +215,6 @@ const RegisterStoreDetail = () => {
                   value={inputs.description}
                   id="description"
                   onChange={handleTextareaChange}
-                  onKeyDown={handleSetTab}
                 />
               </div>
             </li>

@@ -18,33 +18,33 @@ function AppRouter() {
     {
       path: ROUTE_LINK.ENTRYPOINT.path,
       element: (
-        // <PublicRoute>
-        <EntryPoint />
-        // </PublicRoute>
+        <PublicRoute>
+          <EntryPoint />
+        </PublicRoute>
       ),
     },
     {
       path: ROUTE_LINK.LOGIN.path,
       element: (
-        // <PublicRoute>
-        <Login />
-        // </PublicRoute>
+        <PublicRoute>
+          <Login />
+        </PublicRoute>
       ),
     },
     {
       path: ROUTE_LINK.SIGNUP.path,
       element: (
-        // <PublicRoute>
-        <SignUp />
-        // </PublicRoute>
+        <PublicRoute>
+          <SignUp />
+        </PublicRoute>
       ),
     },
     {
       path: '/',
       element: (
-        // <ProtectedRoute>
-        <Layout />
-        // </ProtectedRoute>
+        <ProtectedRoute>
+          <Layout />
+        </ProtectedRoute>
       ),
       children: [
         {

@@ -14,10 +14,11 @@ const Login = () => {
   });
 
   const [validError, setValidError] = useState('');
+  const [submitError, setSubmitError] = useState('');
   const [responseError, setResponseError] = useState('');
 
-  const emailRef = useRef<HTMLInputElement>(null);
-  const passwordRef = useRef<HTMLInputElement>(null);
+  const emailInputRef = useRef<HTMLInputElement>(null);
+  const passwordInputRef = useRef<HTMLInputElement>(null);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -27,15 +28,16 @@ const Login = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (emailRef.current && passwordRef.current) {
-      emailRef.current.value = '';
-      passwordRef.current.value = '';
-      emailRef.current.focus();
+    if (emailInputRef.current && passwordInputRef.current) {
+      emailInputRef.current.value = '';
+      passwordInputRef.current.value = '';
+      emailInputRef.current.focus();
     }
   }, [responseError]);
 
   const handleUserFormChange = (e: ChangeEvent<HTMLInputElement>) => {
     setResponseError('');
+    setSubmitError('');
     const { name, value } = e.target;
     setUserForm((prevState) => ({
       ...prevState,
@@ -44,17 +46,21 @@ const Login = () => {
     if (name === 'email') {
       const error = validateEmail(value);
       setValidError(error);
-    } else {
-      setValidError('');
     }
   };
 
   const handleSubmitButtonClick = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setSubmitError('');
+    setResponseError('');
     const { email, password } = userForm;
     const loginForm = { email, password };
-    if (userForm.email === '' || userForm.password === '') {
-      setResponseError('이메일, 비밀번호를 모두 입력해주세요.');
+    if (email === '' || password === '') {
+      setSubmitError('이메일, 비밀번호를 모두 입력해주세요.');
+      return;
+    }
+    if (validError) {
+      setSubmitError(validError);
       return;
     }
 
@@ -72,6 +78,7 @@ const Login = () => {
         dispatch(
           loginAction({
             user: loginUser,
+            isLoggedIn: true,
           }),
         );
 
@@ -84,7 +91,13 @@ const Login = () => {
       }
     } catch (e) {
       if (e instanceof Error) {
-        setResponseError(e.message);
+        if (e.message === 'Network Error') {
+          setResponseError(
+            '현재 네트워크 상태가 불안정합니다. 잠시 후 다시 시도해주세요.',
+          );
+        } else {
+          setResponseError(e.message);
+        }
       }
     }
   };
@@ -106,8 +119,8 @@ const Login = () => {
               placeholder="이메일"
               value={userForm.email}
               onChange={handleUserFormChange}
-              autoComplete="email"
-              ref={emailRef}
+              autoComplete="off"
+              ref={emailInputRef}
             />
             <S.UserInput
               name="password"
@@ -115,19 +128,26 @@ const Login = () => {
               type="password"
               value={userForm.password}
               onChange={handleUserFormChange}
-              autoComplete="off"
-              ref={passwordRef}
+              autoComplete="new-password"
+              ref={passwordInputRef}
             />
           </S.UserInputBox>
+          {submitError && (
+            <S.SubmitErrorMessage className={submitError ? 'visible' : ''}>
+              {submitError}
+            </S.SubmitErrorMessage>
+          )}
           {responseError && (
-            <S.ErrorMessage className={responseError ? 'visible' : ''}>
+            <S.ResponseErrorMessage className={responseError ? 'visible' : ''}>
               {responseError}
-            </S.ErrorMessage>
+            </S.ResponseErrorMessage>
           )}
           <S.SubmitButton>로그인</S.SubmitButton>
           <S.SignUpPrompt>
             <S.SignUpPromptMessage>계정이 없으신가요?</S.SignUpPromptMessage>
-            <S.SignUpPromptLink to="/signup">가입하기</S.SignUpPromptLink>
+            <S.SignUpPromptLink to={ROUTE_LINK.SIGNUP.link}>
+              가입하기
+            </S.SignUpPromptLink>
           </S.SignUpPrompt>
         </S.LoginForm>
       </S.BoxOverlay>

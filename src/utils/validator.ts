@@ -15,7 +15,7 @@ export const validateForm = (name: string, value: string, userForm: any) => {
   if (name === 'password') {
     const passwordRegex = /^[A-Za-z\d!@#$%^&*]{12,}$/;
     if (value && !passwordRegex.test(value)) {
-      error = '비밀번호는 12자 이상, 알파벳, 숫자 및 특수문자(!@#$%^&*)가 포함';
+      error = '비밀번호는 12자 이상, 알파벳, 숫자 및 특수문자(!@#$%^&*)를 포함';
     }
   }
 

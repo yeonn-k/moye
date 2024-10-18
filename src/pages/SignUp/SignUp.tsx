@@ -23,6 +23,7 @@ const SignUp = () => {
   });
 
   const [submitError, setSubmitError] = useState(false);
+  const [responseError, setResponseError] = useState('');
 
   const emailInputRef = useRef<HTMLInputElement>(null);
 
@@ -68,10 +69,19 @@ const SignUp = () => {
     try {
       const response = await signUpService(signUpForm);
       if (response) {
-        navigate(ROUTE_LINK.LOGIN.path);
+        navigate(ROUTE_LINK.LOGIN.link);
       }
     } catch (e) {
-      console.error(e);
+      if (e instanceof Error) {
+        if (e.message === 'Network Error') {
+          setResponseError(
+            '현재 네트워크 상태가 불안정합니다. 잠시 후 다시 시도해주세요.',
+          );
+        } else {
+          console.error(e.message);
+          setResponseError(e.message);
+        }
+      }
     }
   };
 
@@ -108,6 +118,7 @@ const SignUp = () => {
               onChange={handleUserFormChange}
               autoComplete="off"
             />
+
             <S.UserInputLabel>
               <span>비밀번호 재확인*</span>
               <S.ErrorMessage
@@ -146,11 +157,16 @@ const SignUp = () => {
               onChange={handleUserFormChange}
             />
           </S.UserInputBox>
-
-          <S.SubmitErrorMessage className={submitError ? 'visible' : ''}>
-            모든 정보를 올바르게 입력한 후 다시 시도해 주세요.
-          </S.SubmitErrorMessage>
-
+          {submitError && (
+            <S.SubmitErrorMessage className={submitError ? 'visible' : ''}>
+              모든 정보를 올바르게 입력한 후 다시 시도해 주세요.
+            </S.SubmitErrorMessage>
+          )}
+          {responseError && (
+            <S.ResponseErrorMessage className={responseError ? 'visible' : ''}>
+              {responseError}
+            </S.ResponseErrorMessage>
+          )}
           <S.SubmitButton>가입하기</S.SubmitButton>
           <S.LoginPrompt>
             <S.LoginPromptMessage>이미 계정이 있으신가요?</S.LoginPromptMessage>

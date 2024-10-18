@@ -33,8 +33,8 @@ export const S = {
     gap: 50px;
   `,
   Logo: styled.div`
-    width: 274px;
-    height: 115px;
+    width: 242px;
+    height: 101px;
     background-image: url(${logo});
     background-size: cover;
     background-position: center;
@@ -44,7 +44,7 @@ export const S = {
     height: 470px;
     background-color: #fff;
     border-radius: 10px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.2);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -98,6 +98,30 @@ export const S = {
   ErrorMessage: styled.p<{ visible?: boolean }>`
     color: ${(props) => props.theme.color.coral};
     font-size: 10px;
+    font-weight: 600;
+    opacity: 0;
+    animation: ${fadeIn} 0.3s ease forwards;
+    opacity: 1;
+    display: none;
+    &.visible {
+      display: block;
+    }
+  `,
+  SubmitErrorMessage: styled.p<{ visible?: boolean }>`
+    color: #f00;
+    font-size: 12px;
+    font-weight: 600;
+    opacity: 0;
+    animation: ${fadeIn} 0.3s ease forwards;
+    opacity: 1;
+    display: none;
+    &.visible {
+      display: block;
+    }
+  `,
+  ResponseErrorMessage: styled.p<{ visible?: boolean }>`
+    color: #f00;
+    font-size: 12px;
     font-weight: 600;
     opacity: 0;
     animation: ${fadeIn} 0.3s ease forwards;

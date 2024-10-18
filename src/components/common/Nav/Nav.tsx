@@ -25,29 +25,39 @@ const Nav = () => {
   };
 
   return (
-    <N.NavBar>
+    <N.NavBar $storeId={storeId}>
       <div>
         <Link to={ROUTE_LINK.OWNER.link}>
-          <img className="nav_logo" src="프로젝트로고url" alt="navLogo" />
+          <N.NavLogo />
         </Link>
       </div>
       {storeId > 0 && (
-        <N.NavMenu>
-          <li>
-            <Link to={`${ROUTE_LINK.TODAY.link}/${storeId}`}>Today</Link>
-          </li>
-          <li>
-            <Link to={`${ROUTE_LINK.MONTH.link}/${storeId}`}>Month</Link>
-          </li>
-          <li>
-            <Link to={`${ROUTE_LINK.STORE.link}/${storeId}`}>Store</Link>
-          </li>
-        </N.NavMenu>
+        <N.NavMenuList>
+          <N.NavMenuItem>
+            <N.NavMenuLink to={`${ROUTE_LINK.TODAY.link}/${storeId}`}>
+              Today
+            </N.NavMenuLink>
+          </N.NavMenuItem>
+          <N.NavMenuItem>
+            <N.NavMenuLink to={`${ROUTE_LINK.MONTH.link}/${storeId}`}>
+              Month
+            </N.NavMenuLink>
+          </N.NavMenuItem>
+          <N.NavMenuItem>
+            <N.NavMenuLink to={`${ROUTE_LINK.STORE.link}/${storeId}`}>
+              Store
+            </N.NavMenuLink>
+          </N.NavMenuItem>
+        </N.NavMenuList>
       )}
-      <N.UserMenu>
-        <OwnerAvatar $avatarUrl={avatarUrl} width="35px" height="35px" />
-        <button onClick={handleLogoutClick}>로그아웃</button>
-      </N.UserMenu>
+      <N.UserMenuList>
+        <N.UserMenuItem>
+          <OwnerAvatar $avatarUrl={avatarUrl} width="35px" height="35px" />
+        </N.UserMenuItem>
+        <N.UserMenuItem>
+          <N.LogoutButton onClick={handleLogoutClick}>로그아웃</N.LogoutButton>
+        </N.UserMenuItem>
+      </N.UserMenuList>
     </N.NavBar>
   );
 };

@@ -1,5 +1,5 @@
 import { Store } from '../../store/slices/auth/authSlice';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from 'styled-components';
@@ -24,7 +24,6 @@ const OwnerProfile = () => {
   const [stores, setStores] = useState<Store[]>([]);
   const loginUser = useSelector((state: RootState) => state.auth.user);
   const dispatch = useDispatch();
-  const avatarInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const theme = useTheme();
 
@@ -62,15 +61,15 @@ const OwnerProfile = () => {
 
   useEffect(() => {
     const resetStoreSelected = () => {
-      dispatch(setIsStoreSelected(true));
+      dispatch(setIsStoreSelected(false));
       dispatch(setStoreReset());
     };
     resetStoreSelected();
   }, [dispatch]);
 
-  const handleStoreClick = (businessName: string, id: number) => {
+  const handleStoreClick = (id: number, businessName: string, name: string) => {
     dispatch(setIsStoreSelected(true));
-    dispatch(setStore({ businessName, id }));
+    dispatch(setStore({ id, businessName, name }));
   };
   const handleOpenOwnerAvatarPreviewModal = () => {
     dispatch(openModal('ownerAvatarPreview'));
@@ -81,10 +80,8 @@ const OwnerProfile = () => {
       <S.ProfileSection>
         <S.AvatarArea>
           <OwnerAvatar $avatarUrl={loginUser?.avatarUrl} />
-          {/* TODO: 프로필 변경 로직 추가 필요 */}
-          <input accept="img/*" type="file" hidden ref={avatarInputRef} />
           <S.AvatarSelectButton onClick={handleOpenOwnerAvatarPreviewModal}>
-            프로필 변경
+            아바타 변경
           </S.AvatarSelectButton>
         </S.AvatarArea>
         <S.OwnerInfoArea>
@@ -104,7 +101,9 @@ const OwnerProfile = () => {
       </S.ProfileSection>
       <S.Divider />
       <S.MyStoreSection>
-        <S.MyStoreTitle>나의 가게</S.MyStoreTitle>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+          <S.MyStoreTitle>나의 가게</S.MyStoreTitle>
+        </div>
         <S.MyStoreList>
           {stores.length > 0 && (
             <>
@@ -113,22 +112,21 @@ const OwnerProfile = () => {
                   key={store.id + store.businessName}
                   color={theme.color.lightGreen}
                   onClick={() => {
-                    handleStoreClick(store.businessName, store.id);
+                    handleStoreClick(store.id, store.businessName, store.name);
                     navigate(`${ROUTE_LINK.TODAY.link}/${store.id}`);
                   }}
                 >
-                  {store.businessName}
+                  {store.name}
                 </S.MyStoreItem>
               ))}
             </>
           )}
-          <S.MyStoreItem
-            color={theme.color.paleNavy}
-            onClick={() => navigate(`${ROUTE_LINK.STOREREGISTER.link}`)}
-          >
-            매장 추가
-          </S.MyStoreItem>
         </S.MyStoreList>
+        <S.AddStoreItem
+          onClick={() => navigate(`${ROUTE_LINK.STOREREGISTER.link}`)}
+        >
+          매장 추가
+        </S.AddStoreItem>
       </S.MyStoreSection>
     </S.OwnerProfileBox>
   );

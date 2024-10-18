@@ -7,8 +7,8 @@ const EntryPoint = () => {
       <S.BoxOverlay>
         <S.Logo />
         <S.AuthBox>
-          <S.LoginButton to={ROUTE_LINK.LOGIN.link}>로그인</S.LoginButton>
-          <S.SignupButton to={ROUTE_LINK.SIGNUP.link}>회원가입</S.SignupButton>
+          <S.LinkButton to={ROUTE_LINK.LOGIN.link}>로그인</S.LinkButton>
+          <S.LinkButton to={ROUTE_LINK.SIGNUP.link}>회원가입</S.LinkButton>
         </S.AuthBox>
       </S.BoxOverlay>
     </S.EntryPointBox>

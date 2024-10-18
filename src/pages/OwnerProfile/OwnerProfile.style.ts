@@ -1,10 +1,6 @@
 import styled from 'styled-components';
 import defaultAvatar from '../../assets/images/defaultAvatar.png';
 
-interface OwnerProfileProps {
-  color: string;
-}
-
 export const S = {
   OwnerProfileBox: styled.div`
     max-width: 1440px;
@@ -55,7 +51,7 @@ export const S = {
     gap: 50px;
   `,
   OwnerInfoLabel: styled.label`
-    font-size: 16px;
+    font-size: 20px;
     display: flex;
     gap: 20px;
     align-items: center;
@@ -67,7 +63,7 @@ export const S = {
     gap: 50px;
   `,
   OwnerInfoValue: styled.span`
-    font-size: 16px;
+    font-size: 20px;
     font-weight: 600;
   `,
   Divider: styled.div`
@@ -79,8 +75,13 @@ export const S = {
     width: 100%;
     padding: 20px;
   `,
+  TitleWithLoader: styled.div`
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  `,
   MyStoreTitle: styled.h2`
-    font-size: 16px;
+    font-size: 20px;
     font-weight: 600;
   `,
   MyStoreList: styled.ul`
@@ -92,10 +93,10 @@ export const S = {
     gap: 10px;
     margin: 20px 0;
   `,
-  MyStoreItem: styled.li<OwnerProfileProps>`
-    width: 280px;
-    height: 280px;
-    background-color: ${(props) => props.color};
+  MyStoreItem: styled.li`
+    width: 230px;
+    height: 230px;
+    background-color: ${(props) => props.theme.color.paleGreen};
     border-radius: 10px;
     display: flex;
     align-items: center;
@@ -104,20 +105,30 @@ export const S = {
     text-decoration: none;
     color: #fff;
     cursor: pointer;
-    position: relative;
+    transition: transform 0.2s;
+    &:active {
+      transform: scale(0.95);
+    }
+  `,
+  AddStoreItem: styled.div`
+    width: 230px;
+    height: 230px;
+    border: 4px dashed #cfcfcf;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 20px;
+    text-decoration: none;
+    color: #000;
+    cursor: pointer;
+    transition: transform 0.2s;
+    &:active {
+      transform: scale(0.95);
+    }
     &:hover {
-      &:before {
-        outline: none;
-        border-radius: 10px;
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: rgba(128, 128, 128, 0.2);
-        pointer-events: none;
-      }
+      background-color: ${(props) => props.theme.color.paleGreen};
     }
   `,
 };

@@ -24,10 +24,7 @@ interface LoginRequest {
 interface LoginResponse {
   status: number;
   data: {
-    body: {
-      access: string;
-      refresh: string;
-    };
+    body: string;
   };
 }
 
@@ -66,21 +63,23 @@ export const signUpService = async ({
   password,
 }: SignupRequest) => {
   try {
-    const response: SignupResponse = await axios.post(APIS.signup, {
+    const response: SignupResponse = await axios.post(APIS.users, {
       email,
       name,
       phone,
       password,
     });
-    if (response.status === 200) {
+    if (response.status === 201) {
       return response.data;
     }
   } catch (e) {
-    // TODO: 회원가입 응답 에러 처리 로직 필요
-    // if (axios.isAxiosError(e) && e.response) {
-    //   throw new Error(e.response.data);
-    // }
-    console.error('회원가입 에러: ', e);
+    if (axios.isAxiosError(e) && e.response) {
+      throw new Error(e.response.data.message);
+    } else {
+      if (e instanceof Error) {
+        throw new Error(e.message);
+      }
+    }
   }
 };
 
@@ -96,8 +95,11 @@ export const loginService = async ({ email, password }: LoginRequest) => {
   } catch (e) {
     if (axios.isAxiosError(e) && e.response) {
       throw new Error(e.response.data.message);
+    } else {
+      if (e instanceof Error) {
+        throw new Error(e.message);
+      }
     }
-    console.error('로그인 에러: ', e);
   }
 };
 
@@ -108,15 +110,15 @@ export const getUserByEmailService = async ({ email }: GetUserRequest) => {
     );
     if (response.status === 200) {
       return response.data;
-    } else {
-      return null;
     }
   } catch (e) {
-    // TODO: 회원 조회 에러 처리 로직 필요
-    // if (axios.isAxiosError(e) && e.response) {
-    //   throw new Error(e.response.data);
-    // }
-    console.error('회원 조회 에러: ', e);
+    if (axios.isAxiosError(e) && e.response) {
+      throw new Error(e.response.data);
+    } else {
+      if (e instanceof Error) {
+        throw new Error(e.message);
+      }
+    }
   }
 };
 
@@ -129,14 +131,12 @@ export const getStoresByIdService = async ({ userId }: GetStoresRequest) => {
       return response.data.body.stores;
     }
   } catch (e) {
-    // TODO: 가게 조회 에러 처리 로직 필요
-    // if (axios.isAxiosError(e) && e.response) {
-    //   throw new Error(e.response.data);
-    // }
-    console.error('가게 조회 에러', e);
+    if (axios.isAxiosError(e) && e.response) {
+      throw new Error(e.response.data);
+    } else {
+      if (e instanceof Error) {
+        throw new Error(e.message);
+      }
+    }
   }
 };
-
-// export const logout = async () => {
-//   await api.post('/logout');
-// };

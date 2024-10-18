@@ -35,7 +35,7 @@ export const S = {
     flex-direction: column;
     gap: 15px;
   `,
-  SignupButton: styled(Link)`
+  LinkButton: styled(Link)`
     all: unset;
     display: flex;
     justify-content: center;
@@ -47,18 +47,11 @@ export const S = {
     border-radius: 5px;
     font-weight: 600;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-  `,
-  LoginButton: styled(Link)`
-    all: unset;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 305px;
-    height: 60px;
-    cursor: pointer;
-    background-color: #fff;
-    border-radius: 5px;
-    font-weight: 600;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    transition:
+      transform 0.1s,
+      background-color 0.1s;
+    &:active {
+      transform: scale(0.95);
+    }
   `,
 };

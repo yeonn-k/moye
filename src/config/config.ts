@@ -1,7 +1,7 @@
 import ROUTE_LINK from '../routes/RouterLink';
 const URL = process.env.REACT_APP_API_URL;
 const PORT = process.env.REACT_APP_API_PORT;
-export const BASE_URL = `${URL}:${PORT}`;
+export const BASE_URL = `${URL}:${PORT}/api`;
 
 export const APIS = {
   login: `${BASE_URL}${ROUTE_LINK.LOGIN.link}`,

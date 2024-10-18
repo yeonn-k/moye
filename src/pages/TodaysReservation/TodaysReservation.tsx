@@ -25,7 +25,7 @@ interface Items {
   status: string;
 }
 
-const TodaysReservation = ({}) => {
+const TodaysReservation = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   // const storeId = searchParams.get('storeId');
@@ -77,7 +77,7 @@ const TodaysReservation = ({}) => {
   };
 
   useEffect(() => {
-    const interval = setInterval(checkTime, 1000);
+    const interval = setInterval(checkTime, 15000);
     return () => clearInterval(interval);
   }, []);
 
@@ -85,9 +85,15 @@ const TodaysReservation = ({}) => {
     getTodaysReservation();
   }, []);
 
-  useEffect(() => {
-    getTodaysReservation();
+  const autoRerendering = async () => {
+    await getTodaysReservation();
     setIsRerender(false);
+  };
+
+  useEffect(() => {
+    console.log('beforeAuto:', isRerender);
+    autoRerendering();
+    console.log('afterAuto:', isRerender);
   }, [isRerender]);
 
   const filteredItems: Items[] = items.filter((item) => {

@@ -22,7 +22,6 @@ const initialState: OperatingTimeTableData = {
 };
 
 const dayOfTheWeeks = [
-  '',
   '일요일',
   '월요일',
   '화요일',

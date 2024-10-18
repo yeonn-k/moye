@@ -26,14 +26,18 @@ interface StoreDetailData {
   image: StoreImage[];
   businessRegistrationNumber: string;
   businessName: string;
+  name: string;
+  address: string;
   contact: string;
   totalSeats: string;
   numberPerTable: number;
   description: string;
   email: string;
+  id: string;
 }
 
 const initialState: StoreDetailData = {
+  id: '',
   openingHour: [],
   closedDay: [],
   regularHoliday: [],
@@ -50,6 +54,8 @@ const initialState: StoreDetailData = {
   numberPerTable: 0,
   description: '',
   email: '',
+  name: '',
+  address: '',
 };
 
 export type {

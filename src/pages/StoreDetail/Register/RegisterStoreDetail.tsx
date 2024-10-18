@@ -7,6 +7,7 @@ import ListTimeElement from '../Edit/ListTimeElement.tsx';
 import 'react-datepicker/dist/react-datepicker.css';
 import ROUTE_LINK from '../../../routes/RouterLink.ts';
 import { APIS } from '../../../config/config.ts';
+import baseUploadImage from '../../../assets/images/baseUploadImage.png';
 
 // interface localStorageData {
 //   token: string;
@@ -28,6 +29,7 @@ const initialState = {
   contact: '',
   totalSeats: '',
   numberPerTable: '',
+  description: '',
   weekdayOpen: '',
   weekdayClose: '',
   weekendOpen: '',
@@ -55,6 +57,18 @@ const RegisterStoreDetail = () => {
       [e.target.name]: e.target.value,
     });
   };
+  const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setInputs({
+      ...inputs,
+      description: e.target.value,
+    });
+  };
+  // const handleSetTab = (e: any) => {
+  //   if (e.key === 'Tab') {
+  //     e.preventDefault();
+  //     setInputs({ ...inputs, description: inputs.description + '\t' });
+  //   }
+  // };
   const handleHourInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const hour = Number(e.target.value);
     if (!isNaN(hour) && hour >= 0 && hour <= 24) {
@@ -88,9 +102,7 @@ const RegisterStoreDetail = () => {
   };
   const handlePostFormSubmit = async () => {
     try {
-      let storeId = '';
       const formData = new FormData();
-
       const openingHourData = [
         {
           type: '평일',
@@ -103,51 +115,36 @@ const RegisterStoreDetail = () => {
           closeTo: addTimeSubfix(inputs.weekendClose),
         },
       ];
-      const postData = {
-        businessRegistrationNumber: inputs.businessNumber,
-        businessName: inputs.businessName,
-        name: inputs.name,
-        address: inputs.address,
-        contact: inputs.contact,
-        totalSeats: inputs.totalSeats,
-        numberPerTable: inputs.numberPerTable,
-        openingHour: openingHourData,
-        dayOfWeekDay: regularClosedDays.map((index: number) => index + 1),
-      };
-      // backend에서 요일을 일=1, 월=2 ~ 토=7으로 받음, front에서는 0~6으로 배정됨
+      formData.append('businessRegistrationNumber', inputs.businessNumber);
+      formData.append('businessName', inputs.businessName);
+      formData.append('name', inputs.name);
+      formData.append('address', inputs.address);
+      formData.append('contact', inputs.contact);
+      formData.append('totalSeats', inputs.totalSeats);
+      formData.append('numberPerTable', inputs.numberPerTable);
+      formData.append('description', inputs.description);
+      formData.append('openingHour', JSON.stringify(openingHourData));
+      formData.append('dayOfWeekDay', JSON.stringify(regularClosedDays));
+      formData.append('files', uploadedImage);
 
       await axios
-        .post(APIS.store, JSON.stringify(postData), {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
-        .then((res) => {
-          console.log('매장 등록 완료');
-          storeId = res.data.body.id;
-          console.log('in: ', res.data.body.id);
-        })
-        .catch((error) => {
-          alert('매장 등록에 실패하였습니다.');
-          console.log('Error: ', error);
-        });
-      formData.append('files', uploadedImage);
-      await axios
-        .post(`${APIS.storePictureUpload}/${storeId}`, formData, {
+        .post(APIS.store, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
         })
         .then((res) => {
-          console.log('사진 업로드 성공');
-          navigate(ROUTE_LINK.OWNER.link);
+          console.log(res.data);
+          console.log('매장등록성공');
         })
         .catch((error) => {
-          alert('사진 업로드에 실패했습니다.');
           console.log('Error: ', error);
+          alert('매장 등록에 실패했습니다.');
         });
     } catch (error) {
       console.log('Error: ', error);
+    } finally {
+      navigate(ROUTE_LINK.OWNER.link);
     }
   };
   const handleCancleFormClick = () => {
@@ -166,51 +163,61 @@ const RegisterStoreDetail = () => {
               label="매장 이름"
               type="text"
               id="name"
-              value=""
+              value={inputs.name}
               onChange={handleStoreDetailsInput}
             />
             <ListInputElement
               label="사업자 번호"
               type="text"
               id="businessNumber"
-              value=""
+              value={inputs.businessNumber}
               onChange={handleStoreDetailsInput}
             />
             <ListInputElement
               label="상호명"
               type="text"
               id="businessName"
-              value=""
+              value={inputs.businessName}
               onChange={handleStoreDetailsInput}
             />
             <ListInputElement
               label="주소"
               type="text"
               id="address"
-              value=""
+              value={inputs.address}
               onChange={handleStoreDetailsInput}
             />
             <ListInputElement
               label="전화번호"
               type="text"
               id="contact"
-              value=""
+              value={inputs.contact}
               onChange={handleStoreDetailsInput}
             />
             <ListInputElement
               label="좌석 수"
               type="text"
               id="totalSeats"
-              value=""
+              value={inputs.totalSeats}
               onChange={handleStoreDetailsInput}
             />
             <ListInputElement
               label="테이블 최대 인원"
               type="text"
               id="numberPerTable"
-              value=""
+              value={inputs.numberPerTable}
               onChange={handleStoreDetailsInput}
             />
+            <li>
+              <label htmlFor="description">소개글</label>
+              <div>
+                <textarea
+                  value={inputs.description}
+                  id="description"
+                  onChange={handleTextareaChange}
+                />
+              </div>
+            </li>
             <ListTimeElement
               totalLabel="영업시간"
               inputLabel="평일"
@@ -242,8 +249,8 @@ const RegisterStoreDetail = () => {
             <li>
               <div>
                 <img
-                  src={imagePreview ? imagePreview : ''}
-                  alt="imagePreview"
+                  src={imagePreview ? imagePreview : baseUploadImage}
+                  alt="storeImage"
                 />
                 <input
                   type="file"

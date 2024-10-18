@@ -8,15 +8,47 @@ import {
   StoreDetailData,
   initialState,
   StoreImage,
+  RegularHoliday,
 } from './StoreDetailInterface.ts';
 import OperatingTimeTable from './OperatingTimeTable.tsx';
 import { APIS } from '../../config/config.ts';
 import { RootState } from '../../store/store.ts';
+import baseStoreImage from '../../assets/images/baseStoreImage.png';
+import dayjs from 'dayjs';
+
+function mapResToStoreData(res: any) {
+  let newData: StoreDetailData = {
+    ...res.data.body,
+    regularHoliday: res.data.body.regularHoliday.map(
+      (item: RegularHoliday) => ({
+        closedDay: item.closedDay - 1,
+      }),
+    ),
+  };
+  if (
+    newData.openingHour[0].startBreakTime === newData.openingHour[0].closeTo &&
+    newData.openingHour[0].endBreakTime === newData.openingHour[0].openFrom &&
+    newData.openingHour[1].startBreakTime === newData.openingHour[1].closeTo &&
+    newData.openingHour[1].endBreakTime === newData.openingHour[1].openFrom
+  ) {
+    newData.openingHour[0].startBreakTime = '';
+    newData.openingHour[0].endBreakTime = '';
+    newData.openingHour[1].startBreakTime = '';
+    newData.openingHour[1].endBreakTime = '';
+  }
+  newData.closedDay = newData.closedDay
+    .sort((a, b) => {
+      return dayjs(a.ymd).diff(b.ymd, 'days');
+    })
+    .filter((date) => dayjs(new Date()).diff(date.ymd, 'days'));
+  return newData;
+}
 
 const StoreDetail = () => {
   const [storeData, setStoreData] = useState<StoreDetailData>(initialState);
   const storeId = useSelector((state: RootState) => state.auth.store?.id);
   const [previewImage, setPreviewImage] = useState('');
+  const [previousImageFile, setpreviousImageFile] = useState<File | string>('');
 
   useEffect(() => {
     async function asyncCall() {
@@ -25,11 +57,11 @@ const StoreDetail = () => {
       await axios
         .get(`${APIS.store}/${storeId}`)
         .then((res) => {
-          setStoreData(res.data.body);
+          setStoreData(mapResToStoreData(res));
+          console.log(res.data.body);
           imageSrc = res.data.body.image.filter(
             (item: StoreImage) => item.url !== '' && item.url !== null,
           )[0].url;
-          console.log(res.data.body);
         })
         .catch((error) => {
           console.log('Error: ', error);
@@ -48,9 +80,11 @@ const StoreDetail = () => {
             setPreviewImage(previewImage);
           };
           reader.readAsDataURL(newFile);
+          setpreviousImageFile(newFile);
         })
         .catch((error) => {
           console.log('Error: ', error);
+          setPreviewImage(baseStoreImage);
         });
     }
     asyncCall();
@@ -62,14 +96,24 @@ const StoreDetail = () => {
         <p>매장이름</p>
         <Link
           to={`${ROUTE_LINK.STOREEDIT.link}${storeId}/edit`}
-          state={{ data: storeData }}
+          state={{
+            data: storeData,
+            previewImage: previewImage,
+            previousImageFile: previousImageFile,
+          }}
         >
           <button>편집</button>
         </Link>
       </SD.TopBar>
       <SD.Body>
         <SD.BodyLeft>
-          <img src={previewImage} alt="매장사진"></img>
+          <img
+            src={previewImage}
+            alt="storeImage"
+            onClick={() => {
+              console.log(storeData);
+            }}
+          />
           <ul>
             <li>
               <span>상호명</span>: {storeData.businessName}

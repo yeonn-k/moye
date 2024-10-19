@@ -5,7 +5,6 @@ import ROUTE_LINK from '../../../routes/RouterLink';
 import { RootState } from '../../../store/store';
 import { logoutAction } from '../../../store/slices/auth/authSlice';
 import OwnerAvatar from '../OwnerAvatar/OwnerAvatar';
-import Logo from '../../../assets/images/logo.png';
 
 const Nav = () => {
   const storeId = useSelector((state: RootState) => {
@@ -14,9 +13,8 @@ const Nav = () => {
     }
     return state.auth.store.id;
   });
-  const avatarUrl = useSelector(
-    (state: RootState) => state.auth.user?.avatarUrl ?? null,
-  );
+  const loginUser = useSelector((state: RootState) => state.auth.user);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -53,7 +51,11 @@ const Nav = () => {
       )}
       <N.UserMenuList>
         <N.UserMenuItem>
-          <OwnerAvatar $avatarUrl={avatarUrl} width="35px" height="35px" />
+          <OwnerAvatar
+            $avatarUrl={loginUser?.avatarUrl || ''}
+            width="35px"
+            height="35px"
+          />
         </N.UserMenuItem>
         <N.UserMenuItem>
           <N.LogoutButton onClick={handleLogoutClick}>로그아웃</N.LogoutButton>

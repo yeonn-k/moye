@@ -70,7 +70,11 @@ const OwnerAvatarPreviewModal = ({ onClose }: OwnerAvatarPreviewModalProps) => {
       <S.ModalCloseButton onClick={onClose}>&times;</S.ModalCloseButton>
       <S.ModalText>아바타 변경</S.ModalText>
       <S.ImagePreviewBox>
-        {imagePreview && <img src={imagePreview} alt="imagePreview" />}
+        {imagePreview ? (
+          <img src={imagePreview} alt="imagePreview" />
+        ) : (
+          <S.Avatar width="100%" height="100%" $avatarUrl={''} />
+        )}
       </S.ImagePreviewBox>
       <S.ImageSelectButton onClick={handleImageSelectButtonClick}>
         {imagePreview ? '이미지 다시 선택' : '이미지 선택'}

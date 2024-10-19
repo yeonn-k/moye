@@ -79,7 +79,7 @@ const OwnerProfile = () => {
     <S.OwnerProfileBox>
       <S.ProfileSection>
         <S.AvatarArea>
-          <OwnerAvatar $avatarUrl={loginUser?.avatarUrl} />
+          <OwnerAvatar $avatarUrl={loginUser?.avatarUrl || ''} />
           <S.AvatarSelectButton onClick={handleOpenOwnerAvatarPreviewModal}>
             아바타 변경
           </S.AvatarSelectButton>
@@ -103,6 +103,11 @@ const OwnerProfile = () => {
       <S.MyStoreSection>
         <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
           <S.MyStoreTitle>나의 가게</S.MyStoreTitle>
+          <S.AddStoreItem
+            onClick={() => navigate(`${ROUTE_LINK.STOREREGISTER.link}`)}
+          >
+            매장 추가
+          </S.AddStoreItem>
         </div>
         <S.MyStoreList>
           {stores.length > 0 && (
@@ -116,17 +121,12 @@ const OwnerProfile = () => {
                     navigate(`${ROUTE_LINK.TODAY.link}/${store.id}`);
                   }}
                 >
-                  {store.name}
+                  <S.MyStoreName>{store.name}</S.MyStoreName>
                 </S.MyStoreItem>
               ))}
             </>
           )}
         </S.MyStoreList>
-        <S.AddStoreItem
-          onClick={() => navigate(`${ROUTE_LINK.STOREREGISTER.link}`)}
-        >
-          매장 추가
-        </S.AddStoreItem>
       </S.MyStoreSection>
     </S.OwnerProfileBox>
   );

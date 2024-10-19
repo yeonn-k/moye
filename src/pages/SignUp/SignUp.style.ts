@@ -1,7 +1,12 @@
+import { ChangeEvent } from 'react';
 import { Link } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 import backgroundImage from '../../assets/images/backgroundImage.png';
 import logo from '../../assets/images/logo.png';
+
+interface ButtonProps {
+  onClick: (e: ChangeEvent<HTMLInputElement>) => void;
+}
 
 const fadeIn = keyframes`
   from {
@@ -52,9 +57,9 @@ export const S = {
     padding: 20px;
   `,
   FormTitle: styled.h3`
-    font-size: 16px;
+    font-size: 20px;
     color: #000;
-    font-weight: 600;
+    font-weight: 700;
   `,
   UserInputBox: styled.div`
     display: flex;
@@ -90,7 +95,30 @@ export const S = {
       box-shadow: 0 0 5px ${(props) => props.theme.color.deepGreen};
     }
   `,
+  ButtonBox: styled.div`
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+  `,
   SubmitButton: styled.button`
+    all: unset;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    height: 40px;
+    cursor: pointer;
+    background-color: ${(props) => props.theme.color.darkGreen};
+    color: #fff;
+    border-radius: 5px;
+    transition: transform 0.2s;
+    &:active {
+      transform: scale(0.95);
+    }
+  `,
+  ResetButton: styled.button<ButtonProps>`
     all: unset;
     display: flex;
     justify-content: center;

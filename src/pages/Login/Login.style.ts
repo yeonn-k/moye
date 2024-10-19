@@ -52,9 +52,9 @@ export const S = {
     gap: 30px;
   `,
   FormTitle: styled.h3`
-    font-size: 16px;
+    font-size: 20px;
     color: #000;
-    font-weight: 600;
+    font-weight: 700;
   `,
   UserInputBox: styled.div`
     display: flex;
@@ -94,6 +94,10 @@ export const S = {
     background-color: ${(props) => props.theme.color.deepGreen};
     color: #fff;
     border-radius: 5px;
+    transition: transform 0.2s;
+    &:active {
+      transform: scale(0.95);
+    }
   `,
   ErrorMessage: styled.p<{ visible?: boolean }>`
     color: ${(props) => props.theme.color.coral};

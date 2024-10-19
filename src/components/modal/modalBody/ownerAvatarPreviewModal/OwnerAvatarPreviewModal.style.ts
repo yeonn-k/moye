@@ -1,4 +1,11 @@
 import styled from 'styled-components';
+import defaultAvatar from '../../../../assets/images/defaultAvatar.png';
+
+interface AvatarProps {
+  width: string;
+  height: string;
+  $avatarUrl: string | null;
+}
 
 export const S = {
   ModalBox: styled.div`
@@ -21,7 +28,7 @@ export const S = {
     font-size: 26px;
   `,
   ModalText: styled.h2`
-    font-size: 18px;
+    font-size: 20px;
     position: absolute;
     top: 48px;
     font-weight: 600;
@@ -40,17 +47,32 @@ export const S = {
     &:hover {
       cursor: pointer;
     }
+    transition: transform 0.2s;
+    &:active {
+      transform: scale(0.95);
+    }
   `,
   ImagePreviewBox: styled.div`
     width: 230px;
-    height: 220px;
-    border-radius: 10px;
+    height: 230px;
+    border-radius: 50%;
     overflow: hidden;
     img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
+  `,
+  Avatar: styled.div<AvatarProps>`
+    width: ${(props) => props.width};
+    height: ${(props) => props.height};
+    border-radius: 50%;
+    background-image: ${(props) =>
+      props.$avatarUrl ? `url(${props.$avatarUrl})` : `url(${defaultAvatar})`};
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    cursor: pointer;
   `,
   ModalButtonGroup: styled.div`
     display: flex;
@@ -70,6 +92,10 @@ export const S = {
     &:hover {
       cursor: pointer;
     }
+    transition: transform 0.2s;
+    &:active {
+      transform: scale(0.95);
+    }
   `,
   CancelButton: styled.button`
     all: unset;
@@ -83,6 +109,10 @@ export const S = {
     color: #fff;
     &:hover {
       cursor: pointer;
+    }
+    transition: transform 0.2s;
+    &:active {
+      transform: scale(0.95);
     }
   `,
 };

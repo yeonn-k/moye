@@ -112,12 +112,9 @@ export const getUserByEmailService = async ({ email }: GetUserRequest) => {
       return response.data;
     }
   } catch (e) {
-    if (axios.isAxiosError(e) && e.response) {
-      throw new Error(e.response.data);
-    } else {
-      if (e instanceof Error) {
-        throw new Error(e.message);
-      }
+    if (e instanceof Error) {
+      console.error(e);
+      throw new Error(e.message);
     }
   }
 };
@@ -131,12 +128,9 @@ export const getStoresByIdService = async ({ userId }: GetStoresRequest) => {
       return response.data.body.stores;
     }
   } catch (e) {
-    if (axios.isAxiosError(e) && e.response) {
-      throw new Error(e.response.data);
-    } else {
-      if (e instanceof Error) {
-        throw new Error(e.message);
-      }
+    if (e instanceof Error) {
+      console.error(e);
+      throw new Error(e.message);
     }
   }
 };

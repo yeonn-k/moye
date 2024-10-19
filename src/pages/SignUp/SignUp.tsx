@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useRef, useState } from 'react';
+import { ChangeEvent, FormEvent, useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { S } from './SignUp.style';
 import { signUpService } from '../../services/auth/authService';
@@ -29,6 +29,12 @@ const SignUp = () => {
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (emailInputRef.current) {
+      emailInputRef.current.focus();
+    }
+  }, []);
+
   const handleUserFormChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSubmitError(false);
     const { name, value } = e.target;
@@ -42,6 +48,29 @@ const SignUp = () => {
       ...prevErrors,
       [name]: error,
     }));
+  };
+
+  const handleResetForm = (e: ChangeEvent<HTMLInputElement>) => {
+    setResponseError('');
+    setSubmitError(false);
+    e.preventDefault();
+    setUserForm({
+      email: '',
+      password: '',
+      passwordConfirm: '',
+      name: '',
+      phone: '',
+    });
+    setValidErrors({
+      email: '',
+      password: '',
+      passwordConfirm: '',
+      name: '',
+      phone: '',
+    });
+    if (emailInputRef.current) {
+      emailInputRef.current.focus();
+    }
   };
 
   const handleSubmitButtonClick = async (e: FormEvent<HTMLFormElement>) => {
@@ -167,7 +196,10 @@ const SignUp = () => {
               {responseError}
             </S.ResponseErrorMessage>
           )}
-          <S.SubmitButton>가입하기</S.SubmitButton>
+          <S.ButtonBox>
+            <S.SubmitButton>가입하기</S.SubmitButton>
+            <S.ResetButton onClick={handleResetForm}>초기화</S.ResetButton>
+          </S.ButtonBox>
           <S.LoginPrompt>
             <S.LoginPromptMessage>이미 계정이 있으신가요?</S.LoginPromptMessage>
             <S.LoginPromptLink to={ROUTE_LINK.LOGIN.link}>

@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import defaultAvatar from '../../assets/images/defaultAvatar.png';
+import baseStoreImage from '../../assets/images/baseStoreImage.png';
 
 export const S = {
   OwnerProfileBox: styled.div`
@@ -97,29 +98,37 @@ export const S = {
     width: 230px;
     height: 230px;
     background-color: ${(props) => props.theme.color.paleGreen};
+    background-image: url(${baseStoreImage});
+    background-position: center;
+    background-size: cover;
     border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 600;
+    font-weight: 700;
     text-decoration: none;
-    color: #fff;
+    color: #000;
     cursor: pointer;
     transition: transform 0.2s;
     &:active {
       transform: scale(0.95);
     }
   `,
+  MyStoreName: styled.div`
+    background-color: #fff;
+    padding: 8px 12px;
+    border-radius: 5px;
+  `,
   AddStoreItem: styled.div`
-    width: 230px;
-    height: 230px;
+    width: 136px;
+    height: 43px;
     border: 4px dashed #cfcfcf;
     border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 700;
-    font-size: 20px;
+    font-size: 16px;
     text-decoration: none;
     color: #000;
     cursor: pointer;

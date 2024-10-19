@@ -3,13 +3,13 @@ import { S } from './OwnerAvatar.style';
 interface DefaultAvatarProps {
   width?: string;
   height?: string;
-  $avatarUrl?: string | null;
+  $avatarUrl?: string;
 }
 
 const OwnerAvatar = ({
   width = '180px',
   height = '180px',
-  $avatarUrl = null,
+  $avatarUrl = '',
 }: DefaultAvatarProps) => {
   return (
     <S.AvatarBox>

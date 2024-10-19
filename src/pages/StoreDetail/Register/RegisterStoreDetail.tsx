@@ -270,7 +270,9 @@ const RegisterStoreDetail = () => {
       </RSD.Body>
       <RSD.ConfirmBar>
         <button onClick={handlePostFormSubmit}>확인</button>
-        <button onClick={handleCancleFormClick}>취소</button>
+        <RSD.CancleButton onClick={handleCancleFormClick}>
+          취소
+        </RSD.CancleButton>
       </RSD.ConfirmBar>
     </RSD.EditStoreDetail>
   );

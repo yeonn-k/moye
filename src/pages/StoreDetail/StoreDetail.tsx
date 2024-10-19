@@ -141,7 +141,7 @@ const StoreDetail = () => {
         </SD.BodyLeft>
         <SD.BodyRight>
           <SD.Description>
-            <span>Description</span>
+            <span>소개글</span>
             <br />
             <br />
             <p>{storeData.description}</p>

@@ -80,7 +80,7 @@ export const ESD = {
   `,
   DateAddButton: styled.button`
     padding: 8px 12px;
-    border: 2px solid ${(props) => props.theme.color.green};
+    border: 1px solid ${(props) => props.theme.color.green};
     border-radius: 10px;
     background: transparent;
     cursor: pointer;
@@ -90,11 +90,16 @@ export const ESD = {
     button {
       margin: 10px 20px;
       background: white;
-      border: 2px solid ${(props) => props.theme.color.green};
+      border: 3px solid ${(props) => props.theme.color.green};
       border-radius: 5px;
       width: 60px;
       height: 40px;
       cursor: pointer;
+    }
+  `,
+  CancleButton: styled.button`
+    &&& {
+      border: 3px solid ${(props) => props.theme.color.coral};
     }
   `,
   TimeInput: styled.input`
@@ -114,7 +119,7 @@ export const ESD = {
     align-items: center;
     cursor: pointer;
     &:hover {
-      border-color: ${(props) => props.theme.color.darkGreen};
+      border-color: ${(props) => props.theme.color.navy};
     }
     input {
       display: none;
@@ -149,5 +154,57 @@ export const ESD = {
     height: ${(props) => (props.uploaded ? '100%' : '100px')};
     border: none;
     object-fit: contain;
+  `,
+  DatePickerContainer: styled.div`
+    div div {
+      input {
+        margin: 0 16px;
+        border: 1px solid ${(props) => props.theme.color.green};
+        border-radius: 5px;
+        box-sizing: border-box;
+        background-color: white;
+        width: 120px;
+        height: 32px;
+        text-align: center;
+      }
+      input:focus {
+        border: 2px solid ${(props) => props.theme.color.coral};
+      }
+    }
+    & .react-datepicker {
+      font-family: 'Noto Sans KR';
+      border: 1px solid ${(props) => props.theme.color.green};
+    }
+    & .react-datepicker__header {
+      background-color: white;
+      border-bottom: 1px solid ${(props) => props.theme.color.green};
+    }
+    &
+      .react-datepicker__navigation-icon
+      react-datepicker__navigation-icon--next {
+      color: black;
+    }
+    & .react-datepicker__day--today {
+      font-weight: bold;
+      color: ${(props) => props.theme.color.navy};
+    }
+    & .react-datepicker__day--selected {
+      background-color: ${(props) => props.theme.color.coral};
+      border-radius: 10px;
+    }
+    & .react-datepicker__day:hover {
+      border-radius: 10px;
+      background-color: ${(props) => props.theme.color.coral};
+      color: black;
+    }
+    & .react-datepicker__day--disabled:hover {
+      border: none;
+      background-color: white;
+      color: lightgray;
+    }
+    & .react-datepicker-popper {
+      border-radius: 5px;
+      box-shadow: 0 0 2px ${(props) => props.theme.color.green};
+    }
   `,
 };

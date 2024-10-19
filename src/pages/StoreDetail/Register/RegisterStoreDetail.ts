@@ -90,11 +90,16 @@ export const RSD = {
     button {
       margin: 10px 20px;
       background: white;
-      border: 2px solid ${(props) => props.theme.color.green};
+      border: 3px solid ${(props) => props.theme.color.green};
       border-radius: 5px;
       width: 60px;
       height: 40px;
       cursor: pointer;
+    }
+  `,
+  CancleButton: styled.button`
+    &&& {
+      border: 3px solid ${(props) => props.theme.color.coral};
     }
   `,
   TimeInput: styled.input`
@@ -114,7 +119,7 @@ export const RSD = {
     align-items: center;
     cursor: pointer;
     &:hover {
-      border-color: ${(props) => props.theme.color.darkGreen};
+      border-color: ${(props) => props.theme.color.navy};
     }
     input {
       display: none;

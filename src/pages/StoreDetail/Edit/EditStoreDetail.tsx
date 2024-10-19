@@ -407,12 +407,18 @@ const EditStoreDetail = () => {
             </li>
             <li>
               <span>비정기 휴무일</span>
-              <div>
+              <ESD.DatePickerContainer>
                 <DatePicker
+                  className="datePicker"
+                  dateFormat="yyyy/MM/dd"
+                  shouldCloseOnSelect
+                  minDate={new Date()}
+                  showPopperArrow={false}
+                  fixedHeight
                   selected={selectedClosedDate}
                   onChange={handleIrregularClosedDateChange}
                 />
-              </div>
+              </ESD.DatePickerContainer>
               <ESD.DateAddButton onClick={handleIrregularClosedDaysClick}>
                 달력에서 추가하기
               </ESD.DateAddButton>
@@ -434,7 +440,9 @@ const EditStoreDetail = () => {
       </ESD.Body>
       <ESD.ConfirmBar>
         <button onClick={handlePostFormSubmit}>확인</button>
-        <button onClick={handleCancleFormClick}>취소</button>
+        <ESD.CancleButton onClick={handleCancleFormClick}>
+          취소
+        </ESD.CancleButton>
       </ESD.ConfirmBar>
     </ESD.EditStoreDetail>
   );

@@ -1,51 +1,65 @@
-import { ESD } from './EditStoreDetail';
+import { useState, useEffect } from 'react';
+import CustomDropdown from './CustomDropdown.tsx';
 
 interface ListTimeElementProps {
   totalLabel: string;
   inputLabel: string;
-  type: string;
-  min: number;
-  max: number;
   startName: string;
-  endName: string;
   startValue: string;
+  endName: string;
   endValue: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (name: string, value: string) => void;
 }
 
 const ListTimeElement = (props: ListTimeElementProps) => {
-  function changeTime(time: string): number {
-    const result = Number(time.slice(0, 2));
-    if (!isNaN(result)) {
-      return result;
-    }
-    return 0;
-  }
+  const [startHour, setStartHour] = useState(
+    props.startValue.length > 2 ? props.startValue.slice(0, 2) : '',
+  );
+  const [startMin, setStartMin] = useState(
+    props.startValue.length > 2 ? props.startValue.slice(3, 5) : '',
+  );
+  const [endHour, setEndHour] = useState(
+    props.endValue.length > 2 ? props.endValue.slice(0, 2) : '',
+  );
+  const [endMin, setEndMin] = useState(
+    props.endValue.length > 2 ? props.endValue.slice(3, 5) : '',
+  );
+
+  useEffect(() => {
+    props.onChange(props.startName, `${startHour}:${startMin}`);
+  }, [startHour, startMin]);
+
+  useEffect(() => {
+    props.onChange(props.endName, `${endHour}:${endMin}`);
+  }, [endHour, endMin]);
 
   return (
     <li>
       <span>{props.totalLabel}</span>
-      <div>
-        {props.inputLabel}&nbsp;
-        <ESD.TimeInput
-          type={props.type}
-          min={props.min}
-          max={props.max}
-          name={props.startName}
-          value={changeTime(props.startValue)}
-          onChange={props.onChange}
-        />{' '}
-        시 ~&nbsp;
-        <ESD.TimeInput
-          type={props.type}
-          min={props.min}
-          max={props.max}
-          name={props.endName}
-          value={changeTime(props.endValue)}
-          onChange={props.onChange}
-        />{' '}
-        시
-      </div>
+      {props.inputLabel}
+      <CustomDropdown
+        onClickTime={setStartHour}
+        prevValue={startHour}
+        type="hour"
+      />
+      :
+      <CustomDropdown
+        onClickTime={setStartMin}
+        prevValue={startMin}
+        type="minute"
+      />
+      ~
+      <CustomDropdown
+        onClickTime={setEndHour}
+        prevValue={endHour}
+        type="hour"
+      />
+      :
+      <CustomDropdown
+        onClickTime={setEndMin}
+        prevValue={endMin}
+        type="minute"
+      />
     </li>
   );
 };

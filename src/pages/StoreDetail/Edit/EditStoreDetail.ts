@@ -3,6 +3,9 @@ import styled from 'styled-components';
 export const ESD = {
   EditStoreDetail: styled.div`
     height: 100%;
+    max-width: 1080px;
+    margin: 0 auto;
+    font-size: 20px;
   `,
   TopBar: styled.div`
     font-size: 28px;
@@ -20,18 +23,6 @@ export const ESD = {
       display: flex;
       justify-content: flex-start;
       align-items: center;
-      span {
-        width: 40%;
-      }
-      div {
-        margin-left: auto;
-      }
-      input {
-        border: 1px solid ${(props) => props.theme.color.green};
-        border-radius: 5px;
-        height: 28px;
-        padding: 4px;
-      }
     }
   `,
   BodyLeft: styled.div`
@@ -104,8 +95,7 @@ export const ESD = {
     }
   `,
   TimeInput: styled.input`
-    width: 50px;
-    text-align: center;
+    display: none;
   `,
   ImageUploadBox: styled.label`
     width: 100%;

@@ -94,13 +94,7 @@ function mapIrregularClosedDays(storeData: StoreDetailData): string[] {
 
 const DATE_FORMAT = 'YYYY-MM-DD';
 
-const TIME_SUBFIX = ':00';
-
 const dayOfTheWeeks = ['일', '월', '화', '수', '목', '금', '토'];
-
-function addTimeSubfix(time: string) {
-  return time + TIME_SUBFIX;
-}
 
 function isEmpty(time: string) {
   return time === '0' || time === '';
@@ -136,20 +130,11 @@ const EditStoreDetail = () => {
       description: e.target.value,
     });
   };
-  // const handleSetTab = (e: any) => {
-  //   if (e.key === 'Tab') {
-  //     e.preventDefault();
-  //     setInputs({ ...inputs, description: inputs.description + '\t' });
-  //   }
-  // };
-  const handleHourInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const hour = Number(e.target.value);
-    if (!isNaN(hour) && hour >= 0 && hour <= 24) {
-      setInputs({
-        ...inputs,
-        [e.target.name]: e.target.value,
-      });
-    }
+  const handleHourInput = (name: string, value: string) => {
+    setInputs({
+      ...inputs,
+      [name]: value,
+    });
   };
   const changeHandler = (checked: boolean, id: number) => {
     if (checked) {
@@ -158,46 +143,31 @@ const EditStoreDetail = () => {
       setRegularClosedDays(regularClosedDays.filter((item) => item !== id));
     }
   };
-  const handleUploadPictureClick = (e: React.ChangeEvent<HTMLInputElement>) => {
-    try {
-      const imageFile = e.target.files?.[0];
-
-      if (imageFile) {
-        const reader = new FileReader();
-
-        setUploadedImage(imageFile);
-        reader.readAsDataURL(imageFile);
-        reader.onloadend = () => setImagePreview(reader.result);
-      }
-    } catch (error) {
-      console.log('Error: ', error);
-    }
-  };
   const handlePostFormSubmit = async () => {
     try {
       const formData = new FormData();
       const openingHourData = [
         {
           type: '평일',
-          openFrom: addTimeSubfix(inputs.weekdayOpen),
-          closeTo: addTimeSubfix(inputs.weekdayClose),
+          openFrom: inputs.weekdayOpen,
+          closeTo: inputs.weekdayClose,
         },
         {
           type: '주말',
-          openFrom: addTimeSubfix(inputs.weekendOpen),
-          closeTo: addTimeSubfix(inputs.weekendClose),
+          openFrom: inputs.weekendOpen,
+          closeTo: inputs.weekendClose,
         },
       ];
       const breakTimeData = [
         {
           type: '평일',
-          openFrom: addTimeSubfix(inputs.weekdayBreakStart),
-          closeTo: addTimeSubfix(inputs.weekdayBreakEnd),
+          openFrom: inputs.weekdayBreakStart,
+          closeTo: inputs.weekdayBreakEnd,
         },
         {
           type: '주말',
-          openFrom: addTimeSubfix(inputs.weekendBreakStart),
-          closeTo: addTimeSubfix(inputs.weekendBreakEnd),
+          openFrom: inputs.weekendBreakStart,
+          closeTo: inputs.weekendBreakEnd,
         },
       ];
       formData.append('businessRegistrationNumber', inputs.businessNumber);
@@ -362,9 +332,6 @@ const EditStoreDetail = () => {
             <ListTimeElement
               totalLabel="영업시간"
               inputLabel="평일"
-              type="number"
-              min={0}
-              max={24}
               startName="weekdayOpen"
               startValue={inputs.weekdayOpen}
               endName="weekdayClose"
@@ -374,9 +341,6 @@ const EditStoreDetail = () => {
             <ListTimeElement
               totalLabel=""
               inputLabel="주말"
-              type="number"
-              min={0}
-              max={24}
               startName="weekendOpen"
               startValue={inputs.weekendOpen}
               endName="weekendClose"
@@ -386,9 +350,6 @@ const EditStoreDetail = () => {
             <ListTimeElement
               totalLabel="휴식시간"
               inputLabel="평일"
-              type="number"
-              min={0}
-              max={24}
               startName="weekdayBreakStart"
               startValue={inputs.weekdayBreakStart}
               endName="weekdayBreakEnd"
@@ -398,9 +359,6 @@ const EditStoreDetail = () => {
             <ListTimeElement
               totalLabel=""
               inputLabel="주말"
-              type="number"
-              min={0}
-              max={24}
               startName="weekendBreakStart"
               startValue={inputs.weekendBreakStart}
               endName="weekendBreakEnd"

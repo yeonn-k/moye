@@ -39,13 +39,6 @@ export const RSD = {
   BodyRight: styled.div`
     padding: 8px 12px;
     width: 50%;
-    img {
-      width: 400px;
-      height: 300px;
-      object-fix: contain;
-      border: 2px solid ${(props) => props.theme.color.green};
-      border-radius: 5px;
-    }
     li span {
       width: 25%;
     }
@@ -114,20 +107,14 @@ export const RSD = {
     margin: auto;
     border-radius: 5px;
     border: 3px dashed #eee;
-    padding: 70px;
+    padding: 12px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    img {
-      width: 300px;
-      height: 150px;
-      border: none;
-      object-fit: contain;
-    }
     &:hover {
-      border-color: #111;
+      border-color: ${(props) => props.theme.color.darkGreen};
     }
     input {
       display: none;
@@ -156,5 +143,11 @@ export const RSD = {
     &:focus {
       box-shadow: 0 0 5px ${(props) => props.theme.color.deepGreen};
     }
+  `,
+  CustomImgPreview: styled.img<{ uploaded: boolean }>`
+    width: ${(props) => (props.uploaded ? '100%' : '200px')};
+    height: ${(props) => (props.uploaded ? '100%' : '100px')};
+    border: none;
+    object-fit: contain;
   `,
 };

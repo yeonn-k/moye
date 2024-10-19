@@ -13,16 +13,23 @@ export const ESD = {
     color: ${(props) => props.theme.color.green};
     text-align: center;
     padding: 8px 12px;
+    margin: 20px;
   `,
   Body: styled.div`
     display: flex;
     padding: 8px 12px;
     li {
       padding: 4px 8px;
-      margin: 8px 8px;
+      margin: 16px 8px;
       display: flex;
       justify-content: flex-start;
       align-items: center;
+      span {
+        width: 40%;
+      }
+      div {
+        margin-left: auto;
+      }
     }
   `,
   BodyLeft: styled.div`
@@ -32,13 +39,6 @@ export const ESD = {
   BodyRight: styled.div`
     padding: 8px 12px;
     width: 50%;
-    img {
-      width: 400px;
-      height: 300px;
-      object-fix: contain;
-      border: 2px solid ${(props) => props.theme.color.green};
-      border-radius: 5px;
-    }
     li span {
       width: 25%;
     }
@@ -48,16 +48,18 @@ export const ESD = {
         display: none;
       }
       span {
-        width: 30px;
+        text-align: center;
+        width: 36px;
+        height: 36px;
         position: relative;
         display: inline-block;
         background: white;
-        margin: 4px 4px;
-        padding: 4px 8px;
+        margin: 8px 6px;
+        padding: 8px 0;
         color: ${(props) => props.theme.color.green};
         border: 1px solid ${(props) => props.theme.color.green};
         border-radius: 10px;
-        font-size: 13px;
+        font-size: 16px;
         transition: 0.5s;
         user-select: none;
         overflow: hidden;
@@ -92,10 +94,12 @@ export const ESD = {
       border-radius: 5px;
       width: 60px;
       height: 40px;
+      cursor: pointer;
     }
   `,
   TimeInput: styled.input`
-    display: none;
+    width: 50px;
+    text-align: center;
   `,
   ImageUploadBox: styled.label`
     width: 100%;
@@ -103,20 +107,14 @@ export const ESD = {
     margin: auto;
     border-radius: 5px;
     border: 3px dashed #eee;
-    padding: 70px;
+    padding: 12px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    img {
-      width: 300px;
-      height: 150px;
-      border: none;
-      object-fit: contain;
-    }
     &:hover {
-      border-color: #111;
+      border-color: ${(props) => props.theme.color.darkGreen};
     }
     input {
       display: none;
@@ -129,7 +127,27 @@ export const ESD = {
       cursor: pointer;
     }
     p {
-      margin: 20px 0 10px;
+      margin: 10px;
+      font-size: 13px;
+      color: gray;
     }
+  `,
+  CustomTextarea: styled.textarea`
+    width: 260px;
+    height: 80px;
+    border: 1px solid ${(props) => props.theme.color.green};
+    border-radius: 5px;
+    outline: none;
+    padding: 8px;
+    resize: none;
+    &:focus {
+      box-shadow: 0 0 5px ${(props) => props.theme.color.deepGreen};
+    }
+  `,
+  CustomImgPreview: styled.img<{ uploaded: boolean }>`
+    width: ${(props) => (props.uploaded ? '100%' : '200px')};
+    height: ${(props) => (props.uploaded ? '100%' : '100px')};
+    border: none;
+    object-fit: contain;
   `,
 };

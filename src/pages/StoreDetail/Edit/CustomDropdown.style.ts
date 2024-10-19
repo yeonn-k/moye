@@ -5,7 +5,6 @@ export const D = {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 8px;
     margin-left: 8px;
     margin-right: 8px;
     width: 40px;
@@ -15,12 +14,12 @@ export const D = {
     width: 100%;
     display: flex;
     align-items: center;
-    height: 36px;
+    height: 32px;
     margin-top: 8px;
     background-color: white;
     border: 1px solid ${(props) => props.theme.color.green};
     border-radius: 5px;
-    padding: 8px;
+    padding: 4px;
     cursor: pointer;
   `,
   Select: styled.div`
@@ -29,7 +28,7 @@ export const D = {
     border: none;
     color: ${(props) => props.theme.color.green};
     font-size: 16px;
-    text-align: left;
+    text-align: center;
   `,
   Dropdown: styled.div`
     position: absolute;

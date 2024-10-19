@@ -59,23 +59,19 @@ const OperatingTimeTable = ({
         <tr>
           <td>평일</td>
           <td>
-            {weekday.openFrom.substring(0, 5)} ~{' '}
-            {weekday.closeTo.substring(0, 5)}
+            {`${weekday.openFrom.substring(0, 5)} ~ ${weekday.closeTo.substring(0, 5)}`}
           </td>
           <td>
-            {weekday.startBreakTime.substring(0, 5)} ~{' '}
-            {weekday.endBreakTime.substring(0, 5)}
+            {`${weekday.startBreakTime.substring(0, 5)} ~ ${weekday.endBreakTime.substring(0, 5)}`}
           </td>
         </tr>
         <tr>
           <td>주말</td>
           <td>
-            {weekend.openFrom.substring(0, 5)} ~{' '}
-            {weekend.closeTo.substring(0, 5)}
+            {`${weekend.openFrom.substring(0, 5)} ~ ${weekend.closeTo.substring(0, 5)}`}
           </td>
           <td>
-            {weekend.startBreakTime.substring(0, 5)} ~{' '}
-            {weekend.endBreakTime.substring(0, 5)}
+            {`${weekend.startBreakTime.substring(0, 5)} ~ ${weekend.endBreakTime.substring(0, 5)}`}
           </td>
         </tr>
         <tr>

@@ -1,3 +1,5 @@
+import { L } from './ListInputElement.style.ts';
+
 interface ListInputElementProps {
   label: string;
   type: string;
@@ -11,7 +13,7 @@ const ListInputElement = (props: ListInputElementProps) => {
     <li>
       <label htmlFor={props.id}>{props.label}</label>
       <div>
-        <input
+        <L.CustomInput
           type={props.type}
           id={props.id}
           name={props.id}

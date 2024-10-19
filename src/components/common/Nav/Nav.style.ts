@@ -65,4 +65,10 @@ export const N = {
       cursor: pointer;
     }
   `,
+  Logo: styled.img`
+    width: 140px;
+    height: 60px;
+    margin-left: 20px;
+    margin-bottom: 6px;
+  `,
 };

@@ -5,6 +5,7 @@ import ROUTE_LINK from '../../../routes/RouterLink';
 import { RootState } from '../../../store/store';
 import { logoutAction } from '../../../store/slices/auth/authSlice';
 import OwnerAvatar from '../OwnerAvatar/OwnerAvatar';
+import Logo from '../../../assets/images/logo.png';
 
 const Nav = () => {
   const storeId = useSelector((state: RootState) => {

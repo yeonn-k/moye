@@ -3,6 +3,9 @@ import styled from 'styled-components';
 export const ESD = {
   EditStoreDetail: styled.div`
     height: 100%;
+    max-width: 1080px;
+    margin: 0 auto;
+    font-size: 20px;
   `,
   TopBar: styled.div`
     font-size: 28px;
@@ -20,18 +23,6 @@ export const ESD = {
       display: flex;
       justify-content: flex-start;
       align-items: center;
-      span {
-        width: 40%;
-      }
-      div {
-        margin-left: auto;
-      }
-      input {
-        border: 1px solid ${(props) => props.theme.color.green};
-        border-radius: 5px;
-        height: 28px;
-        padding: 4px;
-      }
     }
   `,
   BodyLeft: styled.div`
@@ -104,7 +95,41 @@ export const ESD = {
     }
   `,
   TimeInput: styled.input`
-    width: 50px;
-    text-align: center;
+    display: none;
+  `,
+  ImageUploadBox: styled.label`
+    width: 100%;
+    height: 400px;
+    margin: auto;
+    border-radius: 5px;
+    border: 3px dashed #eee;
+    padding: 70px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    img {
+      width: 300px;
+      height: 150px;
+      border: none;
+      object-fit: contain;
+    }
+    &:hover {
+      border-color: #111;
+    }
+    input {
+      display: none;
+    }
+    input::file-selector-button {
+      font-size: 13px;
+      border: 1px solid black;
+      border-radius: 10px;
+      padding: 4px 32px;
+      cursor: pointer;
+    }
+    p {
+      margin: 20px 0 10px;
+    }
   `,
 };

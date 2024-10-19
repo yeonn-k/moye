@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { RSD } from './RegisterStoreDetail.ts';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -8,18 +8,6 @@ import 'react-datepicker/dist/react-datepicker.css';
 import ROUTE_LINK from '../../../routes/RouterLink.ts';
 import { APIS } from '../../../config/config.ts';
 import baseUploadImage from '../../../assets/images/baseUploadImage.png';
-
-// interface localStorageData {
-//   token: string;
-//   user: {
-//     id: number;
-//     email: string;
-//     name: string;
-//     phone: string;
-//     stores: string;
-//     avatarUrl: string;
-//   };
-// }
 
 const initialState = {
   name: '',
@@ -36,13 +24,7 @@ const initialState = {
   weekendClose: '',
 };
 
-const TIME_SUBFIX = ':00';
-
 const dayOfTheWeeks = ['일', '월', '화', '수', '목', '금', '토'];
-
-function addTimeSubfix(time: string) {
-  return time + TIME_SUBFIX;
-}
 
 const RegisterStoreDetail = () => {
   const navigate = useNavigate();
@@ -63,20 +45,11 @@ const RegisterStoreDetail = () => {
       description: e.target.value,
     });
   };
-  // const handleSetTab = (e: any) => {
-  //   if (e.key === 'Tab') {
-  //     e.preventDefault();
-  //     setInputs({ ...inputs, description: inputs.description + '\t' });
-  //   }
-  // };
-  const handleHourInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const hour = Number(e.target.value);
-    if (!isNaN(hour) && hour >= 0 && hour <= 24) {
-      setInputs({
-        ...inputs,
-        [e.target.name]: e.target.value,
-      });
-    }
+  const handleHourInput = (name: string, value: string) => {
+    setInputs({
+      ...inputs,
+      [name]: value,
+    });
   };
   const changeHandler = (checked: boolean, id: number) => {
     if (checked) {
@@ -85,9 +58,9 @@ const RegisterStoreDetail = () => {
       setRegularClosedDays(regularClosedDays.filter((item) => item !== id));
     }
   };
-  const handleUploadPictureClick = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleUpload = ({ target }: any) => {
     try {
-      const imageFile = e.target.files?.[0];
+      const imageFile = target.files?.[0];
 
       if (imageFile) {
         const reader = new FileReader();
@@ -106,13 +79,13 @@ const RegisterStoreDetail = () => {
       const openingHourData = [
         {
           type: '평일',
-          openFrom: addTimeSubfix(inputs.weekdayOpen),
-          closeTo: addTimeSubfix(inputs.weekdayClose),
+          openFrom: inputs.weekdayOpen,
+          closeTo: inputs.weekdayClose,
         },
         {
           type: '주말',
-          openFrom: addTimeSubfix(inputs.weekendOpen),
-          closeTo: addTimeSubfix(inputs.weekendClose),
+          openFrom: inputs.weekendOpen,
+          closeTo: inputs.weekendClose,
         },
       ];
       formData.append('businessRegistrationNumber', inputs.businessNumber);
@@ -134,12 +107,10 @@ const RegisterStoreDetail = () => {
           },
         })
         .then((res) => {
-          console.log(res.data);
           console.log('매장등록성공');
         })
         .catch((error) => {
           console.log('Error: ', error);
-          alert('매장 등록에 실패했습니다.');
         });
     } catch (error) {
       console.log('Error: ', error);
@@ -148,9 +119,25 @@ const RegisterStoreDetail = () => {
     }
   };
   const handleCancleFormClick = () => {
-    if (window.confirm('취소하시겠습니까?')) {
-      navigate(`${ROUTE_LINK.OWNER.link}`);
+    // if (window.confirm('취소하시겠습니까?')) {
+    //   navigate(`${ROUTE_LINK.OWNER.link}`);
+    // }
+    console.log(inputs);
+  };
+  const handleDrop = (e: any) => {
+    e.preventDefault();
+
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      const reader = new FileReader();
+
+      setUploadedImage(file);
+      reader.readAsDataURL(file);
+      reader.onloadend = () => setImagePreview(reader.result);
     }
+  };
+  const handleDragOver = (e: any) => {
+    e.preventDefault();
   };
 
   return (
@@ -211,7 +198,7 @@ const RegisterStoreDetail = () => {
             <li>
               <label htmlFor="description">소개글</label>
               <div>
-                <textarea
+                <RSD.CustomTextarea
                   value={inputs.description}
                   id="description"
                   onChange={handleTextareaChange}
@@ -221,9 +208,6 @@ const RegisterStoreDetail = () => {
             <ListTimeElement
               totalLabel="영업시간"
               inputLabel="평일"
-              type="number"
-              min={0}
-              max={24}
               startName="weekdayOpen"
               startValue={inputs.weekdayOpen}
               endName="weekdayClose"
@@ -233,9 +217,6 @@ const RegisterStoreDetail = () => {
             <ListTimeElement
               totalLabel=""
               inputLabel="주말"
-              type="number"
-              min={0}
-              max={24}
               startName="weekendOpen"
               startValue={inputs.weekendOpen}
               endName="weekendClose"
@@ -247,18 +228,24 @@ const RegisterStoreDetail = () => {
         <RSD.BodyRight>
           <ul>
             <li>
-              <div>
-                <img
-                  src={imagePreview ? imagePreview : baseUploadImage}
-                  alt="storeImage"
-                />
+              <RSD.ImageUploadBox
+                onDragOver={handleDragOver}
+                onDrop={handleDrop}
+                htmlFor="imageUploadInput"
+              >
                 <input
                   type="file"
-                  accept="image/*"
-                  id="profileImg"
-                  onChange={handleUploadPictureClick}
+                  id="imageUploadInput"
+                  onChange={handleUpload}
                 />
-              </div>
+                <img
+                  src={imagePreview ? imagePreview : baseUploadImage}
+                  alt="storeImage.jpg"
+                />
+                {!imagePreview && (
+                  <p>사진을 업로드하려면 클릭하거나 마우스로 올려주세요</p>
+                )}
+              </RSD.ImageUploadBox>
             </li>
             <li>
               <span>정기 휴무일</span>

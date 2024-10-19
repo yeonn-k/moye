@@ -73,7 +73,9 @@ const StoreDetail = () => {
           responseType: 'blob',
         })
         .then((res) => {
-          const newFile = new File([res.data], 'storeImg');
+          const newFile = new File([res.data], 'storeImage.jpg', {
+            type: 'image/jpeg',
+          });
           const reader = new FileReader();
           reader.onload = (event) => {
             const previewImage = String(event.target?.result);

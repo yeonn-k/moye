@@ -97,7 +97,7 @@ const DATE_FORMAT = 'YYYY-MM-DD';
 const dayOfTheWeeks = ['일', '월', '화', '수', '목', '금', '토'];
 
 function isEmpty(time: string) {
-  return time === '0' || time === '';
+  return time === '' || time === ':';
 }
 
 const EditStoreDetail = () => {
@@ -322,7 +322,7 @@ const EditStoreDetail = () => {
             <li>
               <label htmlFor="description">소개글</label>
               <div>
-                <textarea
+                <ESD.CustomTextarea
                   value={inputs.description}
                   id="description"
                   onChange={handleTextareaChange}
@@ -369,7 +369,6 @@ const EditStoreDetail = () => {
         </ESD.BodyLeft>
         <ESD.BodyRight>
           <ul>
-            <li>매장 사진 업로드</li>
             <li>
               <ESD.ImageUploadBox
                 onDragOver={handleDragOver}
@@ -381,7 +380,8 @@ const EditStoreDetail = () => {
                   id="imageUploadInput"
                   onChange={handleUpload}
                 />
-                <img
+                <ESD.CustomImgPreview
+                  uploaded={uploadedImage !== ''}
                   src={imagePreview ? imagePreview : baseUploadImage}
                   alt="storeImage.jpg"
                 />

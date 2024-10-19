@@ -91,9 +91,9 @@ const StoreDetail = () => {
   }, [storeId]);
 
   return (
-    <>
+    <SD.Main>
       <SD.TopBar>
-        <p>매장이름</p>
+        <p>{storeData.name}</p>
         <Link
           to={`${ROUTE_LINK.STOREEDIT.link}${storeId}/edit`}
           state={{
@@ -151,7 +151,7 @@ const StoreDetail = () => {
           />
         </SD.BodyRight>
       </SD.Body>
-    </>
+    </SD.Main>
   );
 };
 

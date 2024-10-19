@@ -5,6 +5,7 @@ import ROUTE_LINK from '../../../routes/RouterLink';
 import { RootState } from '../../../store/store';
 import { logoutAction } from '../../../store/slices/auth/authSlice';
 import OwnerAvatar from '../OwnerAvatar/OwnerAvatar';
+import Logo from '../../../assets/images/logo.png';
 
 const Nav = () => {
   const storeId = useSelector((state: RootState) => {
@@ -28,7 +29,7 @@ const Nav = () => {
     <N.NavBar>
       <div>
         <Link to={ROUTE_LINK.OWNER.link}>
-          <img className="nav_logo" src="프로젝트로고url" alt="navLogo" />
+          <N.Logo src={Logo} alt="Logo" />
         </Link>
       </div>
       {storeId > 0 && (

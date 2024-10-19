@@ -1,6 +1,10 @@
 import styled from 'styled-components';
 
 export const SD = {
+  Main: styled.div`
+    max-width: 1080px;
+    margin: 0 auto;
+  `,
   TopBar: styled.div`
     margin: 0px 12px;
     padding: 8px 12px;

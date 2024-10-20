@@ -109,15 +109,15 @@ const StoreDetail = () => {
       </SD.TopBar>
       <SD.Body>
         <SD.BodyLeft>
-          <div>
-            <img
+          <SD.StoreImageContainer>
+            <SD.StoreImage
               src={previewImage}
               alt="storeImage"
               onClick={() => {
                 console.log(storeData);
               }}
             />
-          </div>
+          </SD.StoreImageContainer>
           <ul>
             <li>
               <span>상호명</span>: {storeData.businessName}
@@ -142,17 +142,15 @@ const StoreDetail = () => {
           </ul>
         </SD.BodyLeft>
         <SD.BodyRight>
-          <SD.Description>
-            <span>소개글</span>
-            <br />
-            <br />
-            <p>{storeData.description}</p>
-          </SD.Description>
           <OperatingTimeTable
             openingHour={storeData.openingHour}
             regularHoliday={storeData.regularHoliday}
             closedDay={storeData.closedDay}
           />
+          <SD.Description>
+            <span>소개글</span>
+            <div>{storeData.description}</div>
+          </SD.Description>
         </SD.BodyRight>
       </SD.Body>
     </SD.Main>

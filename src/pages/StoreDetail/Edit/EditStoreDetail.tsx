@@ -429,7 +429,7 @@ const EditStoreDetail = () => {
           </ul>
           {irregularClosedDays.length > 0 ? (
             <>
-              <ESD.ClosedDaysTitle>예정된 휴무일</ESD.ClosedDaysTitle>
+              <ESD.ClosedDaysTitle>예정된 비정기 휴무일</ESD.ClosedDaysTitle>
               <ESD.ClosedDaysContainer>
                 {irregularClosedDays.map((item) => (
                   <div key={item}>

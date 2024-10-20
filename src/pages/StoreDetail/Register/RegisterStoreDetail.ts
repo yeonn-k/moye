@@ -1,4 +1,15 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
 
 export const RSD = {
   EditStoreDetail: styled.div`
@@ -20,7 +31,7 @@ export const RSD = {
     padding: 8px 12px;
     li {
       padding: 4px 8px;
-      margin: 16px 8px;
+      margin: 0px 8px 16px 8px;
       display: flex;
       justify-content: flex-start;
       align-items: center;
@@ -154,5 +165,18 @@ export const RSD = {
     height: ${(props) => (props.uploaded ? '100%' : '100px')};
     border: none;
     object-fit: contain;
+  `,
+  ErrorMessage: styled.p<{ visible?: boolean }>`
+    color: ${(props) => props.theme.color.coral};
+    text-align: right;
+    font-size: 11px;
+    margin: 0px 16px;
+    opacity: 0;
+    animation: ${fadeIn} 0.3s ease forwards;
+    opacity: 1;
+    display: none;
+    &.visible {
+      display: block;
+    }
   `,
 };

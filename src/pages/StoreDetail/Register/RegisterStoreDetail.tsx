@@ -8,6 +8,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import ROUTE_LINK from '../../../routes/RouterLink.ts';
 import { APIS } from '../../../config/config.ts';
 import baseUploadImage from '../../../assets/images/baseUploadImage.png';
+import { storeValidate } from '../../../utils/storeValidator.ts';
 
 const initialState = {
   name: '',
@@ -32,12 +33,26 @@ const RegisterStoreDetail = () => {
   const [uploadedImage, setUploadedImage] = useState<File | string>('');
   const [imagePreview, setImagePreview] = useState<any>(null);
   const [regularClosedDays, setRegularClosedDays] = useState<number[]>([]);
+  const [validErrors, setValidErrors] = useState({
+    name: '',
+    businessName: '',
+    businessNumber: '',
+    address: '',
+    contact: '',
+    totalSeats: '',
+    numberPerTable: '',
+  });
 
   const handleStoreDetailsInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputs({
       ...inputs,
       [e.target.name]: e.target.value,
     });
+    const error = storeValidate(e.target.name, e.target.value);
+    setValidErrors((prev) => ({
+      ...prev,
+      [e.target.name]: error,
+    }));
   };
   const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputs({
@@ -75,6 +90,19 @@ const RegisterStoreDetail = () => {
   };
   const handlePostFormSubmit = async () => {
     try {
+      if (
+        !inputs.weekdayOpen ||
+        !inputs.weekdayClose ||
+        !inputs.weekendOpen ||
+        !inputs.weekendClose
+      ) {
+        throw new Error('영업 시간을 입력해주세요.');
+      }
+      for (const item of Object.values(validErrors)) {
+        if (item || item === '') {
+          throw new Error(`형식에 맞지 않는 값이 있습니다.`);
+        }
+      }
       const formData = new FormData();
       const openingHourData = [
         {
@@ -111,11 +139,11 @@ const RegisterStoreDetail = () => {
         })
         .catch((error) => {
           console.log('Error: ', error);
+          alert('매장 등록 중에 오류가 발생했습니다.');
         });
-    } catch (error) {
-      console.log('Error: ', error);
-    } finally {
       navigate(ROUTE_LINK.OWNER.link);
+    } catch (error) {
+      alert(error);
     }
   };
   const handleCancleFormClick = () => {
@@ -145,6 +173,9 @@ const RegisterStoreDetail = () => {
       <RSD.Body>
         <RSD.BodyLeft>
           <ul>
+            <RSD.ErrorMessage className={validErrors.name ? 'visible' : ''}>
+              {validErrors.name}
+            </RSD.ErrorMessage>
             <ListInputElement
               label="매장 이름"
               type="text"
@@ -152,6 +183,11 @@ const RegisterStoreDetail = () => {
               value={inputs.name}
               onChange={handleStoreDetailsInput}
             />
+            <RSD.ErrorMessage
+              className={validErrors.businessNumber ? 'visible' : ''}
+            >
+              {validErrors.businessNumber}
+            </RSD.ErrorMessage>
             <ListInputElement
               label="사업자 번호"
               type="text"
@@ -159,6 +195,11 @@ const RegisterStoreDetail = () => {
               value={inputs.businessNumber}
               onChange={handleStoreDetailsInput}
             />
+            <RSD.ErrorMessage
+              className={validErrors.businessName ? 'visible' : ''}
+            >
+              {validErrors.businessName}
+            </RSD.ErrorMessage>
             <ListInputElement
               label="상호명"
               type="text"
@@ -166,6 +207,9 @@ const RegisterStoreDetail = () => {
               value={inputs.businessName}
               onChange={handleStoreDetailsInput}
             />
+            <RSD.ErrorMessage className={validErrors.address ? 'visible' : ''}>
+              {validErrors.address}
+            </RSD.ErrorMessage>
             <ListInputElement
               label="주소"
               type="text"
@@ -173,6 +217,9 @@ const RegisterStoreDetail = () => {
               value={inputs.address}
               onChange={handleStoreDetailsInput}
             />
+            <RSD.ErrorMessage className={validErrors.contact ? 'visible' : ''}>
+              {validErrors.contact}
+            </RSD.ErrorMessage>
             <ListInputElement
               label="전화번호"
               type="text"
@@ -180,6 +227,11 @@ const RegisterStoreDetail = () => {
               value={inputs.contact}
               onChange={handleStoreDetailsInput}
             />
+            <RSD.ErrorMessage
+              className={validErrors.totalSeats ? 'visible' : ''}
+            >
+              {validErrors.totalSeats}
+            </RSD.ErrorMessage>
             <ListInputElement
               label="좌석 수"
               type="text"
@@ -187,6 +239,11 @@ const RegisterStoreDetail = () => {
               value={inputs.totalSeats}
               onChange={handleStoreDetailsInput}
             />
+            <RSD.ErrorMessage
+              className={validErrors.numberPerTable ? 'visible' : ''}
+            >
+              {validErrors.numberPerTable}
+            </RSD.ErrorMessage>
             <ListInputElement
               label="테이블 최대 인원"
               type="text"

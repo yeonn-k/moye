@@ -17,6 +17,7 @@ import baseUploadImage from '../../../assets/images/baseUploadImage.png';
 import trashcan from '../../../assets/images/trashcan.png';
 import { APIS } from '../../../config/config';
 import { ko } from 'date-fns/locale';
+import { storeValidate } from '../../../utils/storeValidator.ts';
 
 let initialState = {
   id: '',
@@ -119,12 +120,26 @@ const EditStoreDetail = () => {
   const [irregularClosedDays, setIrregularClosedDays] = useState<string[]>(
     mapIrregularClosedDays(storeData),
   );
+  const [validErrors, setValidErrors] = useState({
+    name: '',
+    businessName: '',
+    businessNumber: '',
+    address: '',
+    contact: '',
+    totalSeats: '',
+    numberPerTable: '',
+  });
 
   const handleStoreDetailsInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputs({
       ...inputs,
       [e.target.name]: e.target.value,
     });
+    const error = storeValidate(e.target.name, e.target.value);
+    setValidErrors((prev) => ({
+      ...prev,
+      [e.target.name]: error,
+    }));
   };
   const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputs({
@@ -147,6 +162,19 @@ const EditStoreDetail = () => {
   };
   const handlePostFormSubmit = async () => {
     try {
+      if (
+        !inputs.weekdayOpen ||
+        !inputs.weekdayClose ||
+        !inputs.weekendOpen ||
+        !inputs.weekendClose
+      ) {
+        throw new Error('영업 시간을 입력해주세요.');
+      }
+      for (const item of Object.values(validErrors)) {
+        if (item || item === '') {
+          throw new Error(`형식에 맞지 않는 값이 있습니다.`);
+        }
+      }
       const formData = new FormData();
       const openingHourData = [
         {
@@ -200,17 +228,14 @@ const EditStoreDetail = () => {
         })
         .then((res) => {
           alert('매장 정보가 수정되었습니다.');
-          console.log(res.data);
         })
         .catch((error) => {
           console.log('Error: ', error);
-          alert('매장 수정에 실패했습니다.');
+          alert('매장 수정 중에 오류가 발생했습니다.');
         });
-    } catch (error) {
-      console.log('Error: ', error);
-      alert('매장 수정에 실패했습니다.');
-    } finally {
       navigate(`${ROUTE_LINK.STORE.link}/${storeData.id}`);
+    } catch (error) {
+      alert(error);
     }
   };
   const handleCancleFormClick = () => {
@@ -272,6 +297,9 @@ const EditStoreDetail = () => {
       <ESD.Body>
         <ESD.BodyLeft>
           <ul>
+            <ESD.ErrorMessage className={validErrors.name ? 'visible' : ''}>
+              {validErrors.name}
+            </ESD.ErrorMessage>
             <ListInputElement
               label="매장 이름"
               type="text"
@@ -279,6 +307,11 @@ const EditStoreDetail = () => {
               value={inputs.name}
               onChange={handleStoreDetailsInput}
             />
+            <ESD.ErrorMessage
+              className={validErrors.businessNumber ? 'visible' : ''}
+            >
+              {validErrors.businessNumber}
+            </ESD.ErrorMessage>
             <ListInputElement
               label="사업자 번호"
               type="text"
@@ -286,6 +319,11 @@ const EditStoreDetail = () => {
               value={inputs.businessNumber}
               onChange={handleStoreDetailsInput}
             />
+            <ESD.ErrorMessage
+              className={validErrors.businessName ? 'visible' : ''}
+            >
+              {validErrors.businessName}
+            </ESD.ErrorMessage>
             <ListInputElement
               label="상호명"
               type="text"
@@ -293,6 +331,9 @@ const EditStoreDetail = () => {
               value={inputs.businessName}
               onChange={handleStoreDetailsInput}
             />
+            <ESD.ErrorMessage className={validErrors.address ? 'visible' : ''}>
+              {validErrors.address}
+            </ESD.ErrorMessage>
             <ListInputElement
               label="주소"
               type="text"
@@ -300,6 +341,9 @@ const EditStoreDetail = () => {
               value={inputs.address}
               onChange={handleStoreDetailsInput}
             />
+            <ESD.ErrorMessage className={validErrors.contact ? 'visible' : ''}>
+              {validErrors.contact}
+            </ESD.ErrorMessage>
             <ListInputElement
               label="전화번호"
               type="text"
@@ -307,6 +351,11 @@ const EditStoreDetail = () => {
               value={inputs.contact}
               onChange={handleStoreDetailsInput}
             />
+            <ESD.ErrorMessage
+              className={validErrors.totalSeats ? 'visible' : ''}
+            >
+              {validErrors.totalSeats}
+            </ESD.ErrorMessage>
             <ListInputElement
               label="좌석 수"
               type="text"
@@ -314,6 +363,11 @@ const EditStoreDetail = () => {
               value={inputs.totalSeats}
               onChange={handleStoreDetailsInput}
             />
+            <ESD.ErrorMessage
+              className={validErrors.numberPerTable ? 'visible' : ''}
+            >
+              {validErrors.numberPerTable}
+            </ESD.ErrorMessage>
             <ListInputElement
               label="테이블 최대 인원"
               type="text"

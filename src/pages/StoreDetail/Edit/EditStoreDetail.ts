@@ -1,11 +1,12 @@
 import styled from 'styled-components';
+import trashcan from '../../../assets/images/trashcan.png';
 
 export const ESD = {
   EditStoreDetail: styled.div`
     height: 100%;
     max-width: 1080px;
     margin: 0 auto;
-    font-size: 20px;
+    font-size: 16px;
   `,
   TopBar: styled.div`
     font-size: 28px;
@@ -167,9 +168,6 @@ export const ESD = {
         height: 32px;
         text-align: center;
       }
-      input:focus {
-        border: 2px solid ${(props) => props.theme.color.coral};
-      }
     }
     & .react-datepicker {
       font-family: 'Noto Sans KR';
@@ -206,5 +204,41 @@ export const ESD = {
       border-radius: 5px;
       box-shadow: 0 0 2px ${(props) => props.theme.color.green};
     }
+  `,
+  ClosedDaysContainer: styled.div`
+    padding: 12px;
+    margin: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    flex-wrap: wrap;
+    gap: 16px;
+    border: 3px dashed ${(props) => props.theme.color.coral};
+    border-radius: 10px;
+    div {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 16px;
+      border: 1px solid ${(props) => props.theme.color.green};
+      border-radius: 5px;
+      width: 140px;
+      height: 32px;
+      box-shadow: 0 0 2px ${(props) => props.theme.color.lightGreen};
+    }
+  `,
+  DeleteButton: styled.img`
+    margin: auto 0;
+    width: 20px;
+    height: 20px;
+    border: none;
+    object-fit: contain;
+    cursor: pointer;
+  `,
+  ClosedDaysTitle: styled.div`
+    color: ${(props) => props.theme.color.green};
+    font-weight: bold;
+    text-align: center;
+    margin: 16px;
   `,
 };

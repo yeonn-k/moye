@@ -14,7 +14,9 @@ import {
   IrregularCloseDay,
 } from '../StoreDetailInterface';
 import baseUploadImage from '../../../assets/images/baseUploadImage.png';
+import trashcan from '../../../assets/images/trashcan.png';
 import { APIS } from '../../../config/config';
+import { ko } from 'date-fns/locale';
 
 let initialState = {
   id: '',
@@ -409,6 +411,7 @@ const EditStoreDetail = () => {
               <span>비정기 휴무일</span>
               <ESD.DatePickerContainer>
                 <DatePicker
+                  locale={ko}
                   className="datePicker"
                   dateFormat="yyyy/MM/dd"
                   shouldCloseOnSelect
@@ -424,18 +427,24 @@ const EditStoreDetail = () => {
               </ESD.DateAddButton>
             </li>
           </ul>
-          <ul>
-            {irregularClosedDays.map((item) => (
-              <li key={item}>
-                {item}
-                <ESD.DateAddButton
-                  onClick={handleDeleteSelectedDateClick(item)}
-                >
-                  삭제
-                </ESD.DateAddButton>
-              </li>
-            ))}
-          </ul>
+          {irregularClosedDays.length > 0 ? (
+            <>
+              <ESD.ClosedDaysTitle>예정된 휴무일</ESD.ClosedDaysTitle>
+              <ESD.ClosedDaysContainer>
+                {irregularClosedDays.map((item) => (
+                  <div key={item}>
+                    <p>{item}</p>
+                    <ESD.DeleteButton
+                      src={trashcan}
+                      onClick={handleDeleteSelectedDateClick(item)}
+                    />
+                  </div>
+                ))}
+              </ESD.ClosedDaysContainer>
+            </>
+          ) : (
+            ''
+          )}
         </ESD.BodyRight>
       </ESD.Body>
       <ESD.ConfirmBar>

@@ -40,8 +40,14 @@ export const SD = {
     span {
       font-weight: bold;
     }
+  `,
+  StoreImageContainer: styled.div`
+    border-bottom: 2px solid ${(props) => props.theme.color.green};
+    width: 100%;
+    height: 60%;
     img {
-      width: 80%;
+      width: 400px;
+      height: 400px;
       object-fix: contain;
       border: 1px solid;
       margin: 12px 24px;

@@ -109,13 +109,15 @@ const StoreDetail = () => {
       </SD.TopBar>
       <SD.Body>
         <SD.BodyLeft>
-          <img
-            src={previewImage}
-            alt="storeImage"
-            onClick={() => {
-              console.log(storeData);
-            }}
-          />
+          <div>
+            <img
+              src={previewImage}
+              alt="storeImage"
+              onClick={() => {
+                console.log(storeData);
+              }}
+            />
+          </div>
           <ul>
             <li>
               <span>상호명</span>: {storeData.businessName}

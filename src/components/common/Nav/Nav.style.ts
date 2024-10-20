@@ -20,19 +20,31 @@ export const N = {
     background-position: center;
   `,
   NavMenuList: styled.ul`
+    align-items: center;
+    height: 100%;
     display: flex;
     flex: 1;
     list-style: none;
     padding-left: 0;
   `,
   NavMenuItem: styled.li`
-    padding: 8px 18px;
+    align-content: center;
+    height: 100%;
+    padding: 0 18px;
     &:hover {
-      background-color: ${(props) => props.theme.color.green};
-      border-radius: 4px;
+      @keyframes navItem {
+        0% {
+          transform: scale(1);
+        }
+        100% {
+          transform: scale(1.3);
+        }
+      }
+      animation: navItem 0.8s forwards;
     }
   `,
   NavMenuLink: styled(Link)`
+    height: 100%;
     color: #fff;
     text-decoration: none;
     font-weight: 800;

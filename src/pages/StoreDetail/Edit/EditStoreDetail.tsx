@@ -14,7 +14,9 @@ import {
   IrregularCloseDay,
 } from '../StoreDetailInterface';
 import baseUploadImage from '../../../assets/images/baseUploadImage.png';
+import trashcan from '../../../assets/images/trashcan.png';
 import { APIS } from '../../../config/config';
+import { ko } from 'date-fns/locale';
 
 let initialState = {
   id: '',
@@ -97,7 +99,7 @@ const DATE_FORMAT = 'YYYY-MM-DD';
 const dayOfTheWeeks = ['일', '월', '화', '수', '목', '금', '토'];
 
 function isEmpty(time: string) {
-  return time === '0' || time === '';
+  return time === '' || time === ':';
 }
 
 const EditStoreDetail = () => {
@@ -322,7 +324,7 @@ const EditStoreDetail = () => {
             <li>
               <label htmlFor="description">소개글</label>
               <div>
-                <textarea
+                <ESD.CustomTextarea
                   value={inputs.description}
                   id="description"
                   onChange={handleTextareaChange}
@@ -369,7 +371,6 @@ const EditStoreDetail = () => {
         </ESD.BodyLeft>
         <ESD.BodyRight>
           <ul>
-            <li>매장 사진 업로드</li>
             <li>
               <ESD.ImageUploadBox
                 onDragOver={handleDragOver}
@@ -381,7 +382,8 @@ const EditStoreDetail = () => {
                   id="imageUploadInput"
                   onChange={handleUpload}
                 />
-                <img
+                <ESD.CustomImgPreview
+                  uploaded={uploadedImage !== ''}
                   src={imagePreview ? imagePreview : baseUploadImage}
                   alt="storeImage.jpg"
                 />
@@ -407,34 +409,49 @@ const EditStoreDetail = () => {
             </li>
             <li>
               <span>비정기 휴무일</span>
-              <div>
+              <ESD.DatePickerContainer>
                 <DatePicker
+                  locale={ko}
+                  className="datePicker"
+                  dateFormat="yyyy/MM/dd"
+                  shouldCloseOnSelect
+                  minDate={new Date()}
+                  showPopperArrow={false}
+                  fixedHeight
                   selected={selectedClosedDate}
                   onChange={handleIrregularClosedDateChange}
                 />
-              </div>
+              </ESD.DatePickerContainer>
               <ESD.DateAddButton onClick={handleIrregularClosedDaysClick}>
                 달력에서 추가하기
               </ESD.DateAddButton>
             </li>
           </ul>
-          <ul>
-            {irregularClosedDays.map((item) => (
-              <li key={item}>
-                {item}
-                <ESD.DateAddButton
-                  onClick={handleDeleteSelectedDateClick(item)}
-                >
-                  삭제
-                </ESD.DateAddButton>
-              </li>
-            ))}
-          </ul>
+          {irregularClosedDays.length > 0 ? (
+            <>
+              <ESD.ClosedDaysTitle>예정된 휴무일</ESD.ClosedDaysTitle>
+              <ESD.ClosedDaysContainer>
+                {irregularClosedDays.map((item) => (
+                  <div key={item}>
+                    <p>{item}</p>
+                    <ESD.DeleteButton
+                      src={trashcan}
+                      onClick={handleDeleteSelectedDateClick(item)}
+                    />
+                  </div>
+                ))}
+              </ESD.ClosedDaysContainer>
+            </>
+          ) : (
+            ''
+          )}
         </ESD.BodyRight>
       </ESD.Body>
       <ESD.ConfirmBar>
         <button onClick={handlePostFormSubmit}>확인</button>
-        <button onClick={handleCancleFormClick}>취소</button>
+        <ESD.CancleButton onClick={handleCancleFormClick}>
+          취소
+        </ESD.CancleButton>
       </ESD.ConfirmBar>
     </ESD.EditStoreDetail>
   );

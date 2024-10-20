@@ -73,7 +73,9 @@ const StoreDetail = () => {
           responseType: 'blob',
         })
         .then((res) => {
-          const newFile = new File([res.data], 'storeImg');
+          const newFile = new File([res.data], 'storeImage.jpg', {
+            type: 'image/jpeg',
+          });
           const reader = new FileReader();
           reader.onload = (event) => {
             const previewImage = String(event.target?.result);
@@ -107,13 +109,15 @@ const StoreDetail = () => {
       </SD.TopBar>
       <SD.Body>
         <SD.BodyLeft>
-          <img
-            src={previewImage}
-            alt="storeImage"
-            onClick={() => {
-              console.log(storeData);
-            }}
-          />
+          <div>
+            <img
+              src={previewImage}
+              alt="storeImage"
+              onClick={() => {
+                console.log(storeData);
+              }}
+            />
+          </div>
           <ul>
             <li>
               <span>상호명</span>: {storeData.businessName}
@@ -139,7 +143,7 @@ const StoreDetail = () => {
         </SD.BodyLeft>
         <SD.BodyRight>
           <SD.Description>
-            <span>Description</span>
+            <span>소개글</span>
             <br />
             <br />
             <p>{storeData.description}</p>

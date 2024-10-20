@@ -32,21 +32,15 @@ const Nav = () => {
       </div>
       {storeId > 0 && (
         <N.NavMenuList>
-          <N.NavMenuItem>
-            <N.NavMenuLink to={`${ROUTE_LINK.TODAY.link}/${storeId}`}>
-              Today
-            </N.NavMenuLink>
-          </N.NavMenuItem>
-          <N.NavMenuItem>
-            <N.NavMenuLink to={`${ROUTE_LINK.MONTH.link}/${storeId}`}>
-              Month
-            </N.NavMenuLink>
-          </N.NavMenuItem>
-          <N.NavMenuItem>
-            <N.NavMenuLink to={`${ROUTE_LINK.STORE.link}/${storeId}`}>
-              Store
-            </N.NavMenuLink>
-          </N.NavMenuItem>
+          <N.NavMenuLink to={`${ROUTE_LINK.TODAY.link}/${storeId}`}>
+            <N.NavMenuItem>Today</N.NavMenuItem>
+          </N.NavMenuLink>
+          <N.NavMenuLink to={`${ROUTE_LINK.MONTH.link}/${storeId}`}>
+            <N.NavMenuItem>Month</N.NavMenuItem>
+          </N.NavMenuLink>
+          <N.NavMenuLink to={`${ROUTE_LINK.STORE.link}/${storeId}`}>
+            <N.NavMenuItem>Store</N.NavMenuItem>
+          </N.NavMenuLink>
         </N.NavMenuList>
       )}
       <N.UserMenuList>

@@ -1,11 +1,12 @@
 import styled from 'styled-components';
+import trashcan from '../../../assets/images/trashcan.png';
 
 export const ESD = {
   EditStoreDetail: styled.div`
     height: 100%;
     max-width: 1080px;
     margin: 0 auto;
-    font-size: 20px;
+    font-size: 16px;
   `,
   TopBar: styled.div`
     font-size: 28px;
@@ -13,16 +14,23 @@ export const ESD = {
     color: ${(props) => props.theme.color.green};
     text-align: center;
     padding: 8px 12px;
+    margin: 20px;
   `,
   Body: styled.div`
     display: flex;
     padding: 8px 12px;
     li {
       padding: 4px 8px;
-      margin: 8px 8px;
+      margin: 16px 8px;
       display: flex;
       justify-content: flex-start;
       align-items: center;
+      span {
+        width: 40%;
+      }
+      div {
+        margin-left: auto;
+      }
     }
   `,
   BodyLeft: styled.div`
@@ -32,13 +40,6 @@ export const ESD = {
   BodyRight: styled.div`
     padding: 8px 12px;
     width: 50%;
-    img {
-      width: 400px;
-      height: 300px;
-      object-fix: contain;
-      border: 2px solid ${(props) => props.theme.color.green};
-      border-radius: 5px;
-    }
     li span {
       width: 25%;
     }
@@ -48,16 +49,18 @@ export const ESD = {
         display: none;
       }
       span {
-        width: 30px;
+        text-align: center;
+        width: 36px;
+        height: 36px;
         position: relative;
         display: inline-block;
         background: white;
-        margin: 4px 4px;
-        padding: 4px 8px;
+        margin: 8px 6px;
+        padding: 8px 0;
         color: ${(props) => props.theme.color.green};
         border: 1px solid ${(props) => props.theme.color.green};
         border-radius: 10px;
-        font-size: 13px;
+        font-size: 16px;
         transition: 0.5s;
         user-select: none;
         overflow: hidden;
@@ -78,7 +81,7 @@ export const ESD = {
   `,
   DateAddButton: styled.button`
     padding: 8px 12px;
-    border: 2px solid ${(props) => props.theme.color.green};
+    border: 1px solid ${(props) => props.theme.color.green};
     border-radius: 10px;
     background: transparent;
     cursor: pointer;
@@ -88,14 +91,21 @@ export const ESD = {
     button {
       margin: 10px 20px;
       background: white;
-      border: 2px solid ${(props) => props.theme.color.green};
+      border: 3px solid ${(props) => props.theme.color.green};
       border-radius: 5px;
       width: 60px;
       height: 40px;
+      cursor: pointer;
+    }
+  `,
+  CancleButton: styled.button`
+    &&& {
+      border: 3px solid ${(props) => props.theme.color.coral};
     }
   `,
   TimeInput: styled.input`
-    display: none;
+    width: 50px;
+    text-align: center;
   `,
   ImageUploadBox: styled.label`
     width: 100%;
@@ -103,20 +113,14 @@ export const ESD = {
     margin: auto;
     border-radius: 5px;
     border: 3px dashed #eee;
-    padding: 70px;
+    padding: 12px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    img {
-      width: 300px;
-      height: 150px;
-      border: none;
-      object-fit: contain;
-    }
     &:hover {
-      border-color: #111;
+      border-color: ${(props) => props.theme.color.navy};
     }
     input {
       display: none;
@@ -129,7 +133,112 @@ export const ESD = {
       cursor: pointer;
     }
     p {
-      margin: 20px 0 10px;
+      margin: 10px;
+      font-size: 13px;
+      color: gray;
     }
+  `,
+  CustomTextarea: styled.textarea`
+    width: 260px;
+    height: 80px;
+    border: 1px solid ${(props) => props.theme.color.green};
+    border-radius: 5px;
+    outline: none;
+    padding: 8px;
+    resize: none;
+    &:focus {
+      box-shadow: 0 0 5px ${(props) => props.theme.color.deepGreen};
+    }
+  `,
+  CustomImgPreview: styled.img<{ uploaded: boolean }>`
+    width: ${(props) => (props.uploaded ? '100%' : '200px')};
+    height: ${(props) => (props.uploaded ? '100%' : '100px')};
+    border: none;
+    object-fit: contain;
+  `,
+  DatePickerContainer: styled.div`
+    div div {
+      input {
+        margin: 0 16px;
+        border: 1px solid ${(props) => props.theme.color.green};
+        border-radius: 5px;
+        box-sizing: border-box;
+        background-color: white;
+        width: 120px;
+        height: 32px;
+        text-align: center;
+      }
+    }
+    & .react-datepicker {
+      font-family: 'Noto Sans KR';
+      border: 1px solid ${(props) => props.theme.color.green};
+    }
+    & .react-datepicker__header {
+      background-color: white;
+      border-bottom: 1px solid ${(props) => props.theme.color.green};
+    }
+    &
+      .react-datepicker__navigation-icon
+      react-datepicker__navigation-icon--next {
+      color: black;
+    }
+    & .react-datepicker__day--today {
+      font-weight: bold;
+      color: ${(props) => props.theme.color.navy};
+    }
+    & .react-datepicker__day--selected {
+      background-color: ${(props) => props.theme.color.coral};
+      border-radius: 10px;
+    }
+    & .react-datepicker__day:hover {
+      border-radius: 10px;
+      background-color: ${(props) => props.theme.color.coral};
+      color: black;
+    }
+    & .react-datepicker__day--disabled:hover {
+      border: none;
+      background-color: white;
+      color: lightgray;
+    }
+    & .react-datepicker-popper {
+      border-radius: 5px;
+      box-shadow: 0 0 2px ${(props) => props.theme.color.green};
+    }
+  `,
+  ClosedDaysContainer: styled.div`
+    padding: 12px;
+    margin: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    flex-wrap: wrap;
+    gap: 16px;
+    border: 3px dashed ${(props) => props.theme.color.coral};
+    border-radius: 10px;
+    div {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 16px;
+      border: 1px solid ${(props) => props.theme.color.green};
+      border-radius: 5px;
+      width: 140px;
+      height: 32px;
+      box-shadow: 0 0 2px ${(props) => props.theme.color.lightGreen};
+    }
+  `,
+  DeleteButton: styled.img`
+    margin: auto 0;
+    width: 20px;
+    height: 20px;
+    border: none;
+    object-fit: contain;
+    cursor: pointer;
+  `,
+  ClosedDaysTitle: styled.div`
+    color: ${(props) => props.theme.color.green};
+    font-weight: bold;
+    text-align: center;
+    margin: 16px;
   `,
 };

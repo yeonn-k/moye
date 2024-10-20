@@ -119,10 +119,9 @@ const RegisterStoreDetail = () => {
     }
   };
   const handleCancleFormClick = () => {
-    // if (window.confirm('취소하시겠습니까?')) {
-    //   navigate(`${ROUTE_LINK.OWNER.link}`);
-    // }
-    console.log(inputs);
+    if (window.confirm('취소하시겠습니까?')) {
+      navigate(`${ROUTE_LINK.OWNER.link}`);
+    }
   };
   const handleDrop = (e: any) => {
     e.preventDefault();
@@ -238,7 +237,8 @@ const RegisterStoreDetail = () => {
                   id="imageUploadInput"
                   onChange={handleUpload}
                 />
-                <img
+                <RSD.CustomImgPreview
+                  uploaded={uploadedImage !== ''}
                   src={imagePreview ? imagePreview : baseUploadImage}
                   alt="storeImage.jpg"
                 />
@@ -270,7 +270,9 @@ const RegisterStoreDetail = () => {
       </RSD.Body>
       <RSD.ConfirmBar>
         <button onClick={handlePostFormSubmit}>확인</button>
-        <button onClick={handleCancleFormClick}>취소</button>
+        <RSD.CancleButton onClick={handleCancleFormClick}>
+          취소
+        </RSD.CancleButton>
       </RSD.ConfirmBar>
     </RSD.EditStoreDetail>
   );

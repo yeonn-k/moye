@@ -7,11 +7,11 @@ import UserInput from '../../components/common/UserInput/UserInput.tsx';
 import axios from 'axios';
 import { APIS } from '../../config/config.ts';
 
-import { useLocation } from 'react-router-dom';
-
-import useCheckAuth from '../../hooks/useCheckAuth.tsx';
 import useCheckTheDate from '../../hooks/useCheckTheDate.tsx';
 import useInputValue from '../../hooks/useInputValue.tsx';
+
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/store.ts';
 
 import { S } from './TodaysReservation.style.ts';
 
@@ -23,17 +23,18 @@ interface Items {
   endTime: string;
   phone: string;
   status: string;
+  email: string;
 }
 
 const TodaysReservation = () => {
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  // const storeId = searchParams.get('storeId');
+  // const storeId = useSelector((state: RootState) => state.auth.store?.id);
+  const storeName = useSelector(
+    (state: RootState) => state.auth.store?.businessName,
+  );
   const storeId = 3;
 
   const [items, setItems] = useState<Items[]>([]);
   const { month, date, days, day, minute, second } = useCheckTheDate();
-  const { auth } = useCheckAuth();
   const [businessHrs, setBusinessHrs] = useState({
     open: '',
     close: '',
@@ -47,17 +48,13 @@ const TodaysReservation = () => {
 
   const getTodaysReservation = async () => {
     try {
-      const res = await axios.get(`${APIS.store}/${storeId}/reservations`, {
-        headers: {
-          Authorization: `Bearer ${auth.token}`,
-        },
-      });
+      const res = await axios.get(`${APIS.store}/${storeId}/reservations`);
+
       setItems(res.data.body.reservations);
       setBusinessHrs({
         open: res.data.body.open,
         close: res.data.body.close,
       });
-      console.log(res.data.body.reservations);
     } catch (err) {
       console.error(err);
     }
@@ -91,9 +88,7 @@ const TodaysReservation = () => {
   };
 
   useEffect(() => {
-    console.log('beforeAuto:', isRerender);
     autoRerendering();
-    console.log('afterAuto:', isRerender);
   }, [isRerender]);
 
   const filteredItems: Items[] = items.filter((item) => {
@@ -134,7 +129,7 @@ const TodaysReservation = () => {
   return (
     <S.TodaysReservation>
       <S.TitleBox>
-        <S.StoreName>store Name</S.StoreName>
+        <S.StoreName>{storeName}</S.StoreName>
       </S.TitleBox>
       <S.UpperBox>
         <S.FlexBox>

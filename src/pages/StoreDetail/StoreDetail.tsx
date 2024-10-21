@@ -58,7 +58,7 @@ const StoreDetail = () => {
         .get(`${APIS.store}/${storeId}`)
         .then((res) => {
           setStoreData(mapResToStoreData(res));
-          console.log(res.data.body);
+
           imageSrc = res.data.body.image.filter(
             (item: StoreImage) => item.url !== '' && item.url !== null,
           )[0].url;

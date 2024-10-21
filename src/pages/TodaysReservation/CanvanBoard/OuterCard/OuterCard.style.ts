@@ -17,7 +17,7 @@ export const S = {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 130px;
+    width: 160px;
     height: 40px;
   `,
   CardName: styled.span`
@@ -88,6 +88,7 @@ export const S = {
     overflow: scroll;
 
     -ms-overflow-style: none;
+    scrollbar-width: none;
 
     ::-webkit-scrollbar {
       display: none;

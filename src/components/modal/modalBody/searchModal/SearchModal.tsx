@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { S } from './SearchModal.style.ts';
 import UserInput from '../../../common/UserInput/UserInput.tsx';
 import useInputValue from '../../../../hooks/useInputValue.tsx';
-import useCheckTheDate from '../../../../hooks/useCheckTheDate.tsx';
-import useCheckAuth from '../../../../hooks/useCheckAuth.tsx';
 import axios from 'axios';
 
 import { APIS } from '../../../../config/config.ts';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../store/store.ts';
 
 interface SearchModalProps {
   onClose: () => void;
@@ -27,8 +27,7 @@ const SearchModal = ({ onClose }: SearchModalProps) => {
   const [inputValue, setInputValue] = useInputValue();
   const [searched, setSearched] = useState([]);
 
-  // const storeId = useSelector((state: RootState) => state.auth.store?.id);
-  const storeId = 3;
+  const storeId = useSelector((state: RootState) => state.auth.store?.id);
 
   const searchByPhone = async (input: string) => {
     try {

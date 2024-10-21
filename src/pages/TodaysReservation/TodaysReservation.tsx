@@ -27,11 +27,10 @@ interface Items {
 }
 
 const TodaysReservation = () => {
-  // const storeId = useSelector((state: RootState) => state.auth.store?.id);
+  const storeId = useSelector((state: RootState) => state.auth.store?.id);
   const storeName = useSelector(
     (state: RootState) => state.auth.store?.businessName,
   );
-  const storeId = 3;
 
   const [items, setItems] = useState<Items[]>([]);
   const { month, date, days, day, minute, second } = useCheckTheDate();

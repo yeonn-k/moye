@@ -6,8 +6,8 @@ import CalendarWrap from './CalendarWrap/CalendarWrap.tsx';
 import axios from 'axios';
 import { APIS } from '../../config/config.ts';
 
-import { useLocation } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../store/store.ts';
 import { openModal } from '../../store/slices/modal/modalSlice.ts';
 
 import useCheckTheDate from '../../hooks/useCheckTheDate.tsx';
@@ -31,10 +31,12 @@ const MonthList = () => {
 
   const dispatch = useDispatch();
 
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  // const storeId = searchParams.get('storeId')
+  // const storeId = useSelector((state: RootState) => state.auth.store?.id);
   const storeId = 3;
+  const storeName = useSelector(
+    (state: RootState) => state.auth.store?.businessName,
+  );
+
   const handleOpenSearchModal = () => {
     dispatch(openModal('search'));
   };
@@ -77,7 +79,7 @@ const MonthList = () => {
     <S.MonthList>
       <S.FlexBoxBetween>
         <S.FlexBox>
-          <S.StoreName>store Name</S.StoreName>
+          <S.StoreName>{storeName}</S.StoreName>
           <S.Today>{`${month}월 ${date}일 ${days[day]}요일`}</S.Today>
         </S.FlexBox>
         <S.AlignCenter>

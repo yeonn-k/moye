@@ -6,7 +6,6 @@ import useCheckTheDate from '../../../../hooks/useCheckTheDate.tsx';
 import useCheckAuth from '../../../../hooks/useCheckAuth.tsx';
 import axios from 'axios';
 
-import { useLocation } from 'react-router-dom';
 import { APIS } from '../../../../config/config.ts';
 
 interface SearchModalProps {
@@ -27,23 +26,14 @@ interface Items {
 const SearchModal = ({ onClose }: SearchModalProps) => {
   const [inputValue, setInputValue] = useInputValue();
   const [searched, setSearched] = useState([]);
-  const { month } = useCheckTheDate();
-  const { auth } = useCheckAuth();
 
-  // const location = useLocation();
-  // const searchParams = new URLSearchParams(location.search);
-  // const storeId = searchParams.get('storeId');
+  // const storeId = useSelector((state: RootState) => state.auth.store?.id);
   const storeId = 3;
 
   const searchByPhone = async (input: string) => {
     try {
       const res = await axios.get(
         `${APIS.store}/${storeId}/reservations?search=${inputValue}`,
-        {
-          headers: {
-            Authorization: `Bearer ${auth.token}`,
-          },
-        },
       );
       if (inputValue) {
         setSearched(res.data.body);

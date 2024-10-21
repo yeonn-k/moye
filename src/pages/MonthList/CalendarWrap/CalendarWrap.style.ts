@@ -66,6 +66,10 @@ export const S = {
     .react-calendar__tile:enabled:hover {
       background-color: #dbf7d2;
     }
+
+    .react-calendar__month-view__days__day abbr {
+      /* color: ${(props) => props.theme.color.green}; */
+    }
   `,
   ItemBox: styled.div`
     display: flex;
@@ -75,7 +79,7 @@ export const S = {
 
     width: 112px;
     height: 84px;
-    border: 5px solid ${(props) => props.theme.color.paleGreen};
+    /* border: 5px solid ${(props) => props.theme.color.paleGreen}; */
     border-radius: 6px;
   `,
   Item: styled.div`

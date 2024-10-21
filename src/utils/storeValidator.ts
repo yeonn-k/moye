@@ -24,25 +24,19 @@ export const storeValidate = (name: string, value: string) => {
     }
   }
   if (name === 'name') {
-    if (!value || value === '') {
+    if (!value) {
       return '매장 이름을 입력해주세요';
     }
   }
   if (name === 'businessName') {
-    if (!value || value === '') {
+    if (!value) {
       return '상호명을 입력해주세요';
     }
   }
   if (name === 'address') {
-    if (!value || value === '') {
+    if (!value) {
       return '주소를 입력해주세요';
     }
   }
-  if (name === 'description') {
-    if (!value || value === '') {
-      return '소개글을 입력해주세요';
-    }
-  }
-
   return '';
 };

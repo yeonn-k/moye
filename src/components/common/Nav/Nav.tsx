@@ -5,6 +5,8 @@ import ROUTE_LINK from '../../../routes/RouterLink';
 import { RootState } from '../../../store/store';
 import { logoutAction } from '../../../store/slices/auth/authSlice';
 import OwnerAvatar from '../OwnerAvatar/OwnerAvatar';
+import { APIS } from '../../../config/config';
+import axios from 'axios';
 
 const Nav = () => {
   const storeId = useSelector((state: RootState) => {
@@ -19,6 +21,16 @@ const Nav = () => {
   const navigate = useNavigate();
 
   const handleLogoutClick = () => {
+    async function logout() {
+      await axios
+        .post(`${APIS.logout}`)
+        .then((res) => alert('로그아웃되었습니다.'))
+        .catch((error) => {
+          console.log('Error: ', error);
+          alert('로그아웃에 실패했습니다.');
+        });
+    }
+    logout();
     dispatch(logoutAction());
     navigate('/');
   };

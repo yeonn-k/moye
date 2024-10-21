@@ -38,18 +38,51 @@ const OperatingTimeTable = ({
 }: OperatingTimeTableProps) => {
   const [weekday, setWeekday] = useState<OperatingTimeTableData>(initialState);
   const [weekend, setWeekend] = useState<OperatingTimeTableData>(initialState);
+  const [displayHoliday, setDisplayHoliday] = useState<number[]>([]);
 
   const weekdayOpen = useMemo(() => {
-    return `${weekday.openFrom.substring(0, 5)} ~ ${weekday.closeTo.substring(0, 5)}`;
+    if (
+      weekday.openFrom !== null &&
+      weekday.closeTo !== null &&
+      weekday.openFrom.length > 0 &&
+      weekday.closeTo.length > 0
+    ) {
+      return `${weekday.openFrom.substring(0, 5)} ~ ${weekday.closeTo.substring(0, 5)}`;
+    }
+    return '';
   }, [weekday]);
   const weekdayBreak = useMemo(() => {
-    return `${weekday.startBreakTime.substring(0, 5)} ~ ${weekday.endBreakTime.substring(0, 5)}`;
+    if (
+      weekday.startBreakTime !== null &&
+      weekday.endBreakTime !== null &&
+      weekday.startBreakTime.length > 0 &&
+      weekday.endBreakTime.length > 0
+    ) {
+      return `${weekday.startBreakTime.substring(0, 5)} ~ ${weekday.endBreakTime.substring(0, 5)}`;
+    }
+    return '';
   }, [weekday]);
   const weekendOpen = useMemo(() => {
-    return `${weekend.openFrom.substring(0, 5)} ~ ${weekend.closeTo.substring(0, 5)}`;
+    if (
+      weekend.openFrom !== null &&
+      weekend.closeTo !== null &&
+      weekend.openFrom.length > 0 &&
+      weekend.closeTo.length > 0
+    ) {
+      return `${weekend.openFrom.substring(0, 5)} ~ ${weekend.closeTo.substring(0, 5)}`;
+    }
+    return '';
   }, [weekend]);
   const weekendBreak = useMemo(() => {
-    return `${weekend.startBreakTime.substring(0, 5)} ~ ${weekend.endBreakTime.substring(0, 5)}`;
+    if (
+      weekend.startBreakTime !== null &&
+      weekend.endBreakTime !== null &&
+      weekend.startBreakTime.length > 0 &&
+      weekend.endBreakTime.length > 0
+    ) {
+      return `${weekend.startBreakTime.substring(0, 5)} ~ ${weekend.endBreakTime.substring(0, 5)}`;
+    }
+    return '';
   }, [weekend]);
 
   useEffect(() => {
@@ -58,6 +91,24 @@ const OperatingTimeTable = ({
       setWeekend(openingHour.filter((item) => item.type === '주말')[0]);
     }
   }, [openingHour]);
+
+  useEffect(() => {
+    let newList: number[] = [];
+    let flag = true;
+    for (const day of regularHoliday) {
+      flag = true;
+      for (const index of newList) {
+        if (index === day.closedDay) {
+          flag = false;
+          break;
+        }
+      }
+      if (flag) {
+        newList.push(day.closedDay);
+      }
+    }
+    setDisplayHoliday(newList);
+  }, [regularHoliday]);
 
   return (
     <T.OperationTimeTalbeContainer>
@@ -85,10 +136,10 @@ const OperatingTimeTable = ({
               <T.RegularHoliday>정기휴일</T.RegularHoliday>
             </T.LeftCol>
             <td colSpan={2}>
-              매주&nbsp;
-              {regularHoliday
-                .map((day) => dayOfTheWeeks[day.closedDay])
-                .join(', ')}
+              {displayHoliday.length > 0
+                ? `매주 
+              ${displayHoliday.map((day) => dayOfTheWeeks[day]).join(', ')}`
+                : '주중무휴'}
             </td>
           </tr>
           <tr>
@@ -96,13 +147,17 @@ const OperatingTimeTable = ({
               <T.IrregularHoliday>비정기 휴일</T.IrregularHoliday>
             </T.LeftCol>
             <td colSpan={2}>
-              {closedDay
-                .map((date) => {
-                  if (dayjs(date.ymd).diff(dayjs(new Date()), 'days') >= 0) {
-                    return date.ymd;
-                  }
-                })
-                .join(', ')}
+              {closedDay.length > 0
+                ? `${closedDay
+                    .map((date) => {
+                      if (
+                        dayjs(date.ymd).diff(dayjs(new Date()), 'days') >= 0
+                      ) {
+                        return date.ymd;
+                      }
+                    })
+                    .join(', ')}`
+                : '예정 없음'}
             </td>
           </tr>
         </tbody>

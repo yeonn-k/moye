@@ -29,7 +29,7 @@ const hourTable = [
   '24',
 ];
 
-const minuteTable = ['00', '10', '20', '30', '40', '50'];
+const minuteTable = ['00', '30'];
 
 interface CustomDropdownProps {
   onClickTime: (time: string) => void;

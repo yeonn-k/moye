@@ -170,10 +170,16 @@ const EditStoreDetail = () => {
       ) {
         throw new Error('영업 시간을 입력해주세요.');
       }
-      for (const item of Object.values(validErrors)) {
-        if (item || item === '') {
-          throw new Error(`형식에 맞지 않는 값이 있습니다.`);
-        }
+      if (
+        validErrors.name !== '' ||
+        validErrors.businessName !== '' ||
+        validErrors.address !== '' ||
+        validErrors.businessNumber !== '' ||
+        validErrors.contact !== '' ||
+        validErrors.numberPerTable !== '' ||
+        validErrors.totalSeats !== ''
+      ) {
+        throw new Error(`형식에 맞지 않는 값이 있습니다.`);
       }
       const formData = new FormData();
       const openingHourData = [
@@ -219,6 +225,7 @@ const EditStoreDetail = () => {
         !isEmpty(inputs.weekendBreakEnd)
       ) {
         formData.append('breakTime', JSON.stringify(breakTimeData));
+        console.log(regularClosedDays);
       }
       await axios
         .put(`${APIS.store}/${storeData.id}`, formData, {

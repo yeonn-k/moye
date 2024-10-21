@@ -13,4 +13,5 @@ export const APIS = {
   storePictureUpload: `${BASE_URL}/uploads`,
   getImageBase: `${BASE_URL}/`,
   users: `${BASE_URL}/users`,
+  logout: `${BASE_URL}/logout`,
 };

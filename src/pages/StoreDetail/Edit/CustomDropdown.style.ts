@@ -33,8 +33,6 @@ export const D = {
   Dropdown: styled.div`
     position: absolute;
     width: 100%;
-    background-color: white;
-    border-radius: 5px;
     top: 40px;
     height: 108px;
     overflow-y: auto;
@@ -56,10 +54,9 @@ export const D = {
     width: 100%;
     color: ${(props) => props.theme.color.green};
     font-size: 16px;
-    height: 20px;
+    height: 28px;
     background-color: white;
     border: 1px solid ${(props) => props.theme.color.lightGreen};
-    border-radius: 5px;
     &:hover {
       background-color: ${(props) => props.theme.color.lightGreen};
       cursor: pointer;

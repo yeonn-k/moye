@@ -5,7 +5,8 @@ import useInputValue from '../../../../hooks/useInputValue.tsx';
 import useCheckTheDate from '../../../../hooks/useCheckTheDate.tsx';
 import useCheckAuth from '../../../../hooks/useCheckAuth.tsx';
 import axios from 'axios';
-
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../store/store.ts';
 import { APIS } from '../../../../config/config.ts';
 
 interface SearchModalProps {

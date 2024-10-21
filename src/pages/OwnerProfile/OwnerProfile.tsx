@@ -80,9 +80,9 @@ const OwnerProfile = () => {
       <S.ProfileSection>
         <S.AvatarArea>
           <OwnerAvatar $avatarUrl={loginUser?.avatarUrl || ''} />
-          <S.AvatarSelectButton onClick={handleOpenOwnerAvatarPreviewModal}>
+          {/* <S.AvatarSelectButton onClick={handleOpenOwnerAvatarPreviewModal}>
             아바타 변경
-          </S.AvatarSelectButton>
+          </S.AvatarSelectButton> */}
         </S.AvatarArea>
         <S.OwnerInfoArea>
           <S.OwnerInfoLabeBox>

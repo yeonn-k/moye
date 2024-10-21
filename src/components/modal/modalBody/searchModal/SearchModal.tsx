@@ -7,6 +7,8 @@ import useCheckAuth from '../../../../hooks/useCheckAuth.tsx';
 import axios from 'axios';
 
 import { APIS } from '../../../../config/config.ts';
+import { RootState } from '../../../../store/store.ts';
+import { useSelector } from 'react-redux';
 
 interface SearchModalProps {
   onClose: () => void;

@@ -29,6 +29,7 @@ interface Items {
   endTime: string;
   phone: string;
   status: string;
+  email: string;
 }
 
 const InnerCard = ({
@@ -67,7 +68,7 @@ const InnerCard = ({
         `${BASE_URL}/send-email`,
         {
           subject: title,
-          receiver: 'yeonnnnn.k@gmail.com',
+          email: item.email,
           content: emailForm,
         },
         {

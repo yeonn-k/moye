@@ -102,23 +102,41 @@ const TodaysReservation = () => {
   });
 
   const openTime = () => {
-    const open = parseInt(businessHrs.open.slice(0, 2));
+    if (
+      businessHrs &&
+      typeof businessHrs.open === 'string' &&
+      typeof businessHrs.close === 'string'
+    ) {
+      const open = parseInt(businessHrs.open.slice(0, 2));
 
-    const checkClose = () => {
-      return parseInt(businessHrs.close.slice(0, 2));
-    };
+      const checkClose = () => {
+        if (businessHrs.close) {
+          return parseInt(businessHrs.close.slice(0, 2));
+        }
+        return null;
+      };
 
-    const close = checkClose();
+      const close = checkClose();
 
-    const newOperating: (number | string)[] = [];
-    for (let i = open; i <= close; i++) {
-      if (i < close) {
-        newOperating.push(i);
-        newOperating.push(i + 0.5);
-      } else newOperating.push(i);
+      if (close === null) {
+        setOperating([0, 1]);
+        return;
+      }
+
+      const newOperating: (number | string)[] = [];
+      for (let i = open; i <= close; i++) {
+        if (i < close) {
+          newOperating.push(i);
+          newOperating.push(i + 0.5);
+        } else {
+          newOperating.push(i);
+        }
+      }
+
+      setOperating(newOperating);
+    } else {
+      setOperating([0, 1]);
     }
-
-    setOperating(newOperating);
   };
 
   useEffect(() => {

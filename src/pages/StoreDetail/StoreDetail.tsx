@@ -46,9 +46,9 @@ function mapResToStoreData(res: any) {
 
 const StoreDetail = () => {
   const [storeData, setStoreData] = useState<StoreDetailData>(initialState);
-  const storeId = useSelector((state: RootState) => state.auth.store?.id);
   const [previewImage, setPreviewImage] = useState('');
   const [previousImageFile, setpreviousImageFile] = useState<File | string>('');
+  const storeId = useSelector((state: RootState) => state.auth.store?.id);
 
   useEffect(() => {
     async function asyncCall() {

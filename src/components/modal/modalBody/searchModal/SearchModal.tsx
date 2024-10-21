@@ -27,8 +27,7 @@ const SearchModal = ({ onClose }: SearchModalProps) => {
   const [inputValue, setInputValue] = useInputValue();
   const [searched, setSearched] = useState([]);
 
-  // const storeId = useSelector((state: RootState) => state.auth.store?.id);
-  const storeId = 3;
+  const storeId = useSelector((state: RootState) => state.auth.store?.id);
 
   const searchByPhone = async (input: string) => {
     try {

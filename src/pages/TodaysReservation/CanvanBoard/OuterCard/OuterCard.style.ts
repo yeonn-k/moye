@@ -86,6 +86,12 @@ export const S = {
   `,
   ScrollBox: styled.div`
     overflow: scroll;
+
+    -ms-overflow-style: none;
+
+    ::-webkit-scrollbar {
+      display: none;
+    }
     width: 100%;
     height: 98%;
     display: flex;

@@ -49,6 +49,11 @@ export const S = {
   ItemGrid: styled.div`
     position: absolute;
     overflow: scroll;
+    -ms-overflow-style: none;
+
+    ::-webkit-scrollbar {
+      display: none;
+    }
     height: 100%;
 
     display: grid;

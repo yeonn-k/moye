@@ -51,6 +51,11 @@ export const S = {
     position: absolute;
 
     overflow: scroll;
+    -ms-overflow-style: none;
+
+    ::-webkit-scrollbar {
+      display: none;
+    }
     height: 180px;
     width: 92%;
   `,

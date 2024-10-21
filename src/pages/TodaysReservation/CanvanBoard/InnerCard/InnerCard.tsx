@@ -76,7 +76,6 @@ const InnerCard = ({
           },
         },
       );
-      console.log(res);
     } catch (err) {
       console.error(err);
     }

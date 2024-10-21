@@ -31,8 +31,7 @@ const MonthList = () => {
 
   const dispatch = useDispatch();
 
-  // const storeId = useSelector((state: RootState) => state.auth.store?.id);
-  const storeId = 3;
+  const storeId = useSelector((state: RootState) => state.auth.store?.id);
   const storeName = useSelector(
     (state: RootState) => state.auth.store?.businessName,
   );

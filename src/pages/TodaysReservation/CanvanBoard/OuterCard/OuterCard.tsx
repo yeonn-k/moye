@@ -18,6 +18,7 @@ interface Items {
   endTime: string;
   phone: string;
   status: string;
+  email: string;
 }
 
 const OuterCard = ({

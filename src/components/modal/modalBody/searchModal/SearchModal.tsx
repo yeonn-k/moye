@@ -3,10 +3,9 @@ import { S } from './SearchModal.style.ts';
 import UserInput from '../../../common/UserInput/UserInput.tsx';
 import useInputValue from '../../../../hooks/useInputValue.tsx';
 import axios from 'axios';
-
-import { APIS } from '../../../../config/config.ts';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../store/store.ts';
+import { APIS } from '../../../../config/config.ts';
 
 interface SearchModalProps {
   onClose: () => void;

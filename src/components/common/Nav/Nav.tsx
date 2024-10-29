@@ -1,38 +1,72 @@
-import { Link } from 'react-router-dom';
-import { N } from './Nav';
+import { Link, useNavigate } from 'react-router-dom';
+import { N } from './Nav.style';
+import { useSelector, useDispatch } from 'react-redux';
+import ROUTE_LINK from '../../../routes/RouterLink';
+import { RootState } from '../../../store/store';
+import { logoutAction } from '../../../store/slices/auth/authSlice';
+import OwnerAvatar from '../OwnerAvatar/OwnerAvatar';
+import { APIS } from '../../../config/config';
+import axios from 'axios';
 
 const Nav = () => {
+  const storeId = useSelector((state: RootState) => {
+    if (state.auth.store === null) {
+      return 0;
+    }
+    return state.auth.store.id;
+  });
+  const loginUser = useSelector((state: RootState) => state.auth.user);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const handleLogoutClick = () => {
-    // TODO: 백엔드 연결 후 로그아웃 로직 작성
-    console.log('run: logout');
+    async function logout() {
+      await axios
+        .post(`${APIS.logout}`)
+        .then((res) => alert('로그아웃되었습니다.'))
+        .catch((error) => {
+          console.log('Error: ', error);
+          alert('로그아웃에 실패했습니다.');
+        });
+    }
+    logout();
+    dispatch(logoutAction());
+    navigate('/');
   };
 
   return (
-    <N.NavBar>
+    <N.NavBar $storeId={storeId}>
       <div>
-        <Link to="/">
-          <img className="nav_logo" src="프로젝트로고url" alt="navLogo"></img>
+        <Link to={ROUTE_LINK.OWNER.link}>
+          <N.NavLogo />
         </Link>
       </div>
-      <N.NavMenu>
-        <li>
-          <Link to="/dashboard">Dashboard</Link>
-        </li>
-        <li>
-          <Link to="/list">List</Link>
-        </li>
-        <li>
-          <Link to="/store">Store</Link>
-        </li>
-      </N.NavMenu>
-      <N.UserMenu>
-        <img
-          className="nav_profile"
-          src="유저프로필이미지url"
-          alt="navProfile"
-        ></img>
-        <button onClick={handleLogoutClick}>로그아웃</button>
-      </N.UserMenu>
+      {storeId > 0 && (
+        <N.NavMenuList>
+          <N.NavMenuLink to={`${ROUTE_LINK.TODAY.link}/${storeId}`}>
+            <N.NavMenuItem>Today</N.NavMenuItem>
+          </N.NavMenuLink>
+          <N.NavMenuLink to={`${ROUTE_LINK.MONTH.link}/${storeId}`}>
+            <N.NavMenuItem>Month</N.NavMenuItem>
+          </N.NavMenuLink>
+          <N.NavMenuLink to={`${ROUTE_LINK.STORE.link}/${storeId}`}>
+            <N.NavMenuItem>Store</N.NavMenuItem>
+          </N.NavMenuLink>
+        </N.NavMenuList>
+      )}
+      <N.UserMenuList>
+        <N.UserMenuItem>
+          <OwnerAvatar
+            $avatarUrl={loginUser?.avatarUrl || ''}
+            width="35px"
+            height="35px"
+          />
+        </N.UserMenuItem>
+        <N.UserMenuItem>
+          <N.LogoutButton onClick={handleLogoutClick}>로그아웃</N.LogoutButton>
+        </N.UserMenuItem>
+      </N.UserMenuList>
     </N.NavBar>
   );
 };

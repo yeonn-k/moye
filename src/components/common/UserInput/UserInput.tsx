@@ -1,15 +1,25 @@
-import { S } from './UserInput';
-import useInputValue from '../../../hooks/useInputValue';
+import { S } from './UserInput.style.ts';
 
 interface UserInputProps {
   height?: string;
   width: string;
   color?: string;
   placeholder: string;
+  value: string;
+  onChange: (v: string) => void;
 }
 
-const UserInput = ({ height, width, color, placeholder }: UserInputProps) => {
-  const [inputValue, handleInputChange] = useInputValue();
+const UserInput = ({
+  height,
+  width,
+  color,
+  placeholder,
+  value,
+  onChange,
+}: UserInputProps) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    onChange(e.target.value);
+  };
 
   return (
     <S.UserInput
@@ -17,9 +27,8 @@ const UserInput = ({ height, width, color, placeholder }: UserInputProps) => {
       width={width}
       color={color}
       placeholder={placeholder}
-      onChange={(e) => {
-        handleInputChange(e.target.value);
-      }}
+      onChange={handleInputChange}
+      value={value}
     />
   );
 };

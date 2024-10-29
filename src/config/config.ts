@@ -1,11 +1,17 @@
-export const URL = 'http://localhost:5001';
+import ROUTE_LINK from '../routes/RouterLink';
+export const BASE_URL = `http://localhost:3000/api`;
 
 export const APIS = {
-  login: `${URL}/login`,
-  signup: `${URL}/signup`,
-  today: `${URL}/today`,
-  month: `${URL}/month`,
-  owner: `${URL}/owner`,
-  store: `${URL}/store`,
-  storeEdit: `${URL}/store/edit`,
+  login: `${BASE_URL}${ROUTE_LINK.LOGIN.link}`,
+  signup: `${BASE_URL}${ROUTE_LINK.SIGNUP.link}`,
+  today: `${BASE_URL}${ROUTE_LINK.TODAY.link}`,
+  month: `${BASE_URL}${ROUTE_LINK.MONTH.link}`,
+  owner: `${BASE_URL}${ROUTE_LINK.OWNER.link}`,
+  store: `${BASE_URL}${ROUTE_LINK.STORE.link}`,
+  storeEdit: `${BASE_URL}${ROUTE_LINK.STOREEDIT.link}`,
+  storeRegister: `${BASE_URL}${ROUTE_LINK.STOREREGISTER.link}`,
+  storePictureUpload: `${BASE_URL}/uploads`,
+  getImageBase: `${BASE_URL}/`,
+  users: `${BASE_URL}/users`,
+  logout: `${BASE_URL}/logout`,
 };

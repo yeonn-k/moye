@@ -1,9 +1,13 @@
 import styled from 'styled-components';
 
 export const SD = {
+  Main: styled.div`
+    max-width: 1080px;
+    margin: 0 auto;
+  `,
   TopBar: styled.div`
-    margin: 0px 12px;
-    padding: 8px 12px;
+    margin: 12px 12px;
+    padding: 24px 12px;
     justify-content: space-between;
     display: flex;
     border-style: solid;
@@ -29,23 +33,30 @@ export const SD = {
   `,
   BodyLeft: styled.div`
     padding: 8px 12px;
-    width: 40%;
+    width: 50%;
+    ul {
+      margin: 20px 60px;
+    }
     li {
       margin: 12px 8px;
     }
     span {
       font-weight: bold;
     }
-    img {
-      width: 80%;
-      object-fix: contain;
-      border: 1px solid;
-      margin: 12px 24px;
-    }
+  `,
+  StoreImageContainer: styled.div`
+    width: 100%;
+    height: 520px;
+  `,
+  StoreImage: styled.img`
+    width: 500px;
+    height: 500px;
+    border: none;
+    object-fit: contain;
   `,
   BodyRight: styled.div`
     padding: 8px 12px;
-    width: 60%;
+    width: 50%;
   `,
   OperatingTimeTable: styled.table`
     border: 1px solid ${(props) => props.theme.color.darkGreen};
@@ -68,11 +79,18 @@ export const SD = {
     }
   `,
   Description: styled.div`
+    margin-top: 20px;
     height: 60%;
     span {
       font-size: 28px;
       font-weight: bold;
       color: ${(props) => props.theme.color.green};
+    }
+    div {
+      width: 100%;
+      border-top: 2px solid ${(props) => props.theme.color.green};
+      margin-top: 20px;
+      padding-top: 20px;
     }
   `,
 };

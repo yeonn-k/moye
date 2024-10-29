@@ -1,4 +1,4 @@
-import { S } from './ConfirmModal';
+import { S } from './ConfirmModal.style';
 
 interface ConfirmModalProps {
   onClose: () => void;

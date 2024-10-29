@@ -5,6 +5,7 @@ import { RootState } from '../../store/store.ts';
 import ConfirmModal from './modalBody/ConfirmModal/ConfirmModal.tsx';
 import { closeModal } from '../../store/slices/modal/modalSlice.ts';
 import SearchModal from './modalBody/searchModal/SearchModal.tsx';
+import OwnerAvatarPreviewModal from './modalBody/ownerAvatarPreviewModal/OwnerAvatarPreviewModal.tsx';
 
 const Modal = () => {
   const modalRoot = document.getElementById('modal-root')!;
@@ -21,6 +22,10 @@ const Modal = () => {
         return <ConfirmModal onClose={handleModalCloseButtonClick} />;
       case 'search':
         return <SearchModal onClose={handleModalCloseButtonClick} />;
+      case 'ownerAvatarPreview':
+        return (
+          <OwnerAvatarPreviewModal onClose={handleModalCloseButtonClick} />
+        );
       default:
         return null;
     }

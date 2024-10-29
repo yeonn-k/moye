@@ -1,19 +1,6 @@
-import api from '../api';
-
-interface Store {
-  address: string;
-  businessName: string;
-  businessRegistrationNumber: string;
-  contact: string;
-  id: number;
-  name: string;
-  registerDate: string;
-  registerUser: string;
-  seatCount: number;
-  tableCount: number;
-  updateDate: string;
-  updateUser: string;
-}
+import { Store } from '../../store/slices/auth/authSlice';
+import axios from 'axios';
+import { APIS } from '../../config/config';
 
 interface SignupRequest {
   email: string;
@@ -37,10 +24,7 @@ interface LoginRequest {
 interface LoginResponse {
   status: number;
   data: {
-    body: {
-      access: string;
-      refresh: string;
-    };
+    body: string;
   };
 }
 
@@ -52,6 +36,7 @@ interface GetUserResponse {
   status: number;
   data: {
     body: {
+      id: string;
       name: string;
       phone: string;
     };
@@ -59,7 +44,7 @@ interface GetUserResponse {
 }
 
 interface GetStoresRequest {
-  userId: number;
+  userId: string;
 }
 
 interface GetStoresResponse {
@@ -78,62 +63,74 @@ export const signUpService = async ({
   password,
 }: SignupRequest) => {
   try {
-    const response: SignupResponse = await api.post('/users', {
+    const response: SignupResponse = await axios.post(APIS.users, {
       email,
       name,
       phone,
       password,
     });
-    if (response.status === 200) {
+    if (response.status === 201) {
       return response.data;
-    } else {
-      return null;
     }
   } catch (e) {
-    console.error('회원가입 에러: ', e);
+    if (axios.isAxiosError(e) && e.response) {
+      throw new Error(e.response.data.message);
+    } else {
+      if (e instanceof Error) {
+        throw new Error(e.message);
+      }
+    }
   }
 };
 
 export const loginService = async ({ email, password }: LoginRequest) => {
   try {
-    const response: LoginResponse = await api.post('/login', {
+    const response: LoginResponse = await axios.post(APIS.login, {
       email,
       password,
     });
     if (response.status === 200) {
       return response;
-    } else {
-      return null;
     }
   } catch (e) {
-    console.error('로그인 에러: ', e);
+    if (axios.isAxiosError(e) && e.response) {
+      throw new Error(e.response.data.message);
+    } else {
+      if (e instanceof Error) {
+        throw new Error(e.message);
+      }
+    }
   }
 };
 
 export const getUserByEmailService = async ({ email }: GetUserRequest) => {
   try {
-    const response: GetUserResponse = await api.get(`/users?email=${email}`);
+    const response: GetUserResponse = await axios.get(
+      `${APIS.users}?email=${email}`,
+    );
     if (response.status === 200) {
       return response.data;
-    } else {
-      return null;
     }
   } catch (e) {
-    console.error('회원 조회 에러: ', e);
+    if (e instanceof Error) {
+      console.error(e);
+      throw new Error(e.message);
+    }
   }
 };
 
 export const getStoresByIdService = async ({ userId }: GetStoresRequest) => {
   try {
-    const response: GetStoresResponse = await api.get(`/users/${userId}`);
+    const response: GetStoresResponse = await axios.get(
+      `${APIS.users}/${userId}`,
+    );
     if (response.status === 200) {
       return response.data.body.stores;
     }
   } catch (e) {
-    console.error('가게 조회 에러', e);
+    if (e instanceof Error) {
+      console.error(e);
+      throw new Error(e.message);
+    }
   }
-};
-
-export const logout = async () => {
-  await api.post('/logout');
 };

@@ -1,21 +1,40 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface LoginUser {
-  id: number;
+  id: string | null;
   email: string;
   name: string | null;
   phone: string | null;
   avatarUrl: string | null;
 }
 
+export interface Store {
+  address: string;
+  businessName: string;
+  businessRegistrationNumber: string;
+  contact: string;
+  id: number;
+  name: string;
+  registerDate: string;
+  registerUser: string;
+  seatCount: number;
+  tableCount: number;
+  updateDate: string;
+  updateUser: string;
+}
+
 export interface AuthState {
-  token: string | null;
   user: LoginUser | null;
+  isStoreSelected: boolean;
+  isLoggedIn: boolean;
+  store: Pick<Store, 'id' | 'businessName' | 'name'> | null;
 }
 
 const initialState: AuthState = {
-  token: null,
   user: null,
+  isStoreSelected: false,
+  isLoggedIn: false,
+  store: null,
 };
 
 const authSlice = createSlice({
@@ -24,10 +43,10 @@ const authSlice = createSlice({
   reducers: {
     loginAction(
       state,
-      action: PayloadAction<{ token: string; user: LoginUser }>,
+      action: PayloadAction<{ user: LoginUser; isLoggedIn: boolean }>,
     ) {
-      state.token = action.payload.token;
       state.user = action.payload.user;
+      state.isLoggedIn = action.payload.isLoggedIn;
     },
     updateUserProfileAction(state, action: PayloadAction<Partial<LoginUser>>) {
       if (state.user) {
@@ -38,12 +57,34 @@ const authSlice = createSlice({
       }
     },
     logoutAction(state) {
-      state.token = null;
-      state.user = null;
+      Object.assign(state, initialState);
+    },
+
+    setIsStoreSelected(state, action: PayloadAction<boolean>) {
+      state.isStoreSelected = action.payload;
+    },
+    setStore(
+      state,
+      action: PayloadAction<Pick<Store, 'id' | 'businessName' | 'name'>>,
+    ) {
+      state.store = {
+        id: action.payload.id,
+        businessName: action.payload.businessName,
+        name: action.payload.name,
+      };
+    },
+    setStoreReset(state) {
+      state.store = null;
     },
   },
 });
 
-export const { loginAction, logoutAction, updateUserProfileAction } =
-  authSlice.actions;
+export const {
+  loginAction,
+  logoutAction,
+  updateUserProfileAction,
+  setIsStoreSelected,
+  setStore,
+  setStoreReset,
+} = authSlice.actions;
 export default authSlice.reducer;

@@ -1,5 +1,5 @@
 import Calendar from 'react-calendar';
-import { S } from './CalendarWrap';
+import { S } from './CalendarWrap.style.ts';
 
 interface MonthListProps {
   selected: string;
@@ -7,6 +7,9 @@ interface MonthListProps {
 }
 
 const CalendarWrap = ({ selected, items }: MonthListProps) => {
+  const disabledTiles = () => {
+    return;
+  };
   const tileContent = ({ date }: { date: Date }) => {
     const dateKey = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 
@@ -20,15 +23,27 @@ const CalendarWrap = ({ selected, items }: MonthListProps) => {
           </div>
         </S.Item>
       );
+
     if (items[dateKey]) {
       const { ACCEPT, PENDING, CANCEL } = items[dateKey];
-
       return (
-        <S.ItemBox>
-          {renderItem(ACCEPT, S.AcceptIcon)}
-          {renderItem(PENDING, S.PendingIcon)}
-          {renderItem(CANCEL, S.CancelIcon)}
-        </S.ItemBox>
+        <>
+          {selected === '전체' || selected === '' ? (
+            <S.ItemBox>
+              {renderItem(ACCEPT, S.AcceptIcon)}
+              {renderItem(PENDING, S.PendingIcon)}
+              {renderItem(CANCEL, S.CancelIcon)}
+            </S.ItemBox>
+          ) : selected === '예약 확정' && ACCEPT > 0 ? (
+            <S.ItemBox>{renderItem(ACCEPT, S.AcceptIcon)}</S.ItemBox>
+          ) : selected === '대기중' && PENDING > 0 ? (
+            <S.ItemBox>{renderItem(PENDING, S.PendingIcon)}</S.ItemBox>
+          ) : selected === '예약 취소' && CANCEL > 0 ? (
+            <S.ItemBox>{renderItem(CANCEL, S.CancelIcon)}</S.ItemBox>
+          ) : (
+            ''
+          )}
+        </>
       );
     }
 
@@ -42,6 +57,7 @@ const CalendarWrap = ({ selected, items }: MonthListProps) => {
         locale="en"
         calendarType="hebrew"
         tileContent={tileContent}
+        onClickDay={disabledTiles}
       />
     </S.CalendarBox>
   );

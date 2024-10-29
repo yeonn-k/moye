@@ -60,12 +60,10 @@ const TodaysReservation = () => {
   };
 
   const checkTime = () => {
-    if (minute === 0 && second === 0) {
+    if (minute === 0) {
       setOClock(true);
-      setIsRerender(true);
-    } else if (minute === 30 && second === 0) {
+    } else if (minute === 30) {
       setThirty(true);
-      setIsRerender(true);
     } else {
       setOClock(false);
       setThirty(false);
@@ -73,7 +71,7 @@ const TodaysReservation = () => {
   };
 
   useEffect(() => {
-    const interval = setInterval(checkTime, 15000);
+    const interval = setInterval(checkTime, 60000);
     return () => clearInterval(interval);
   }, []);
 

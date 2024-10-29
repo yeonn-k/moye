@@ -1,4 +1,4 @@
-# Project Todo
+# Project Moye
 
 ## 🧚‍♂️ 개발 기간 및 인원
 
@@ -6,11 +6,11 @@
 - 개발 인원 : 프론트엔드 3명(김지연, 배익현, 이민호) / 백엔드 1명(한바울)
 
 ## 🪴 서비스 소개
-- 서비스명 : Moye
+- 서비스명 : Moye( 모두의 예약 )
   - 가게의 입장에서, 손님들의 예약을 한눈에 파악하고 관리하는 것을 돕습니다.
 
 ## ✨ 구현 기능
-### 1. Today's reservation
+### 📊 Today's reservation
 1. **Timeline**
   - 타임라인 구현하기
     - grid 영역 잡기
@@ -61,12 +61,12 @@
   - 새로고침 버튼: `post` 통신 후 재렌더링을 위한 버튼이다.
 
 ---
-### 2. 이메일 보내기
+### 📧 이메일 보내기
   - Kanvan board에서 '대기중'인 예약을 '수락'하거나 '거절'하는 통신을 했을 때, 등록된 고객의 이메일에 메일이 발송된다.
   - 미리 작성된 html 코드와 필요한 정보를 post를 위한 request 에 담아 보낸다.
 
 ---
-### 3. Monthly reservation
+### 🗓️ Monthly reservation
 1. **달력**
   - [react-calendar](https://projects.wojtekmaj.pl/react-calendar/) 라이브러리 사용
   - data 구조가 { ACCEPT: n, PENDING: n, CANCEL: n } 으로 객체 형태
@@ -110,7 +110,7 @@
   ```
 
 ---
-### 4. 공용 컴포넌트
+### 🗳️ 공용 컴포넌트
 1. Confirm button
   - 버튼은 공용 컴포넌트로 제작하여 모든 페이지에서 활용할 수 있도록 했고, 크기나 색상 등은 페이지에 맞게 활용할 수 있도록 `width`, `height`, `action`을 props로 받는다.
   - props로 받은 action이 'confirm' 인지, 'cancle'인지에 따라 색상이 바뀐다.
@@ -123,7 +123,7 @@
     - input 값을 저장하는 기능은 input 컴포넌트 onChange에 hook으로 달아주어서 모든 페이지에서 따로 처리없이 사용 가능하다.
 
 ---
-### 5. 모달
+### 🟩 모달
     - 모달의 상태를 redux를 통해 전역에서 관리한다.
     - modalType의 기본값을 ''로 선언하고, 필요시 modalType을 전달하여 사용한다.
       ```

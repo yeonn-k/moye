@@ -1,4 +1,5 @@
-# Project Moye
+![waving](https://capsule-render.vercel.app/api?type=waving&height=200&fontAlignY=40&text=moye&color=gradient)
+
 
 ## 🧚‍♂️ 개발 기간 및 인원
 

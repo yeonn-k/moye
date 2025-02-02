@@ -44,7 +44,7 @@
         });
         ```
 
-2. **Kanvan board**
+2. **Kanban board**
   - data로 받은 `status`, `startTime`을 현재 시간과 비교하여 '확정', '대기', '완료' 로 구분하여 배열을 생성
       ```javascript
       if (item.status === 'ACCEPT' && start() <= now()) {

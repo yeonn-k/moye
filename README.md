@@ -125,9 +125,9 @@
 
 ---
 ### 🟩 모달
-    - 모달의 상태를 redux를 통해 전역에서 관리한다.
-    - modalType의 기본값을 ''로 선언하고, 필요시 modalType을 전달하여 사용한다.
-      ```
+  - 모달의 상태를 redux를 통해 전역에서 관리한다.
+  - modalType의 기본값을 ''로 선언하고, 필요시 modalType을 전달하여 사용한다.
+      ```javascript
       // src/components/modal/Modal.tsx
       reducers: {
         openModal(state, action: PayloadAction<string>) {
